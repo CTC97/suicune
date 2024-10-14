@@ -1,0 +1,6 @@
+version: 2.0
+shards:
+  sdl:
+    git: https://github.com/ctc97/suicune-sdl.cr.git
+    version: 0.1.0+git.commit.599f07b472cba46113af15dde17ea32c3910f1d1
+

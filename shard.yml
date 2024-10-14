@@ -1,0 +1,14 @@
+name: suicune
+version: 0.1.0
+
+authors:
+  - CTC97 <wavylandny@gmail.com>
+
+# description: |
+#   Short description of suicune
+
+dependencies:
+  sdl:
+    github: ctc97/suicune-sdl.cr
+
+license: MIT
