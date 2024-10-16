@@ -67,6 +67,8 @@ class Client
         @window = SDL::Window.new(title, width, height)
         @renderer = SDL::Renderer.new(@window)
 
+        # look into <https://github.com/schovi/baked_file_system> for embedding files in binary
+
         @suicune = SDL::IMG.load("res/suicune.png")
         @suicune.alpha_mod = 88
         # @suicune = @suicune.convert(@window.surface)
