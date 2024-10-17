@@ -97,6 +97,8 @@ class Client
             SDL::Rect.new(i * 32, 0, 32, 38)
         end
         @old_man_frame = 0
+        @old_man_x = 32 * 3
+        @old_man_y = 32 * 3
 
         # tilemap
         @tilemap_resource = SDL::IMG.load("res/tilemap.png")
@@ -121,9 +123,10 @@ class Client
             if delta_time > 1000/@fps
 
                 data_packet = ({
-                    player: {
-                        x: @suicune_x,
-                        y: @suicune_y
+                    "old_man": {
+                        x: @old_man_x,
+                        y: @old_man_y,
+                        frame: @old_man_frame
                     }
                 }).to_json
 
@@ -184,12 +187,13 @@ class Client
                 @renderer.copy(@nurse_joy, current_clip, SDL::Rect[x.to_i, y.to_i, current_clip.w, current_clip.h])
 
                 # old man
-                old_man_frame = @old_man_frames[0]
-                @renderer.copy(@old_man, @old_man_frames[0], SDL::Rect[old_man_x, old_man_y, old_man_frame.w, old_man_frame.h])
+               # old_man_frame = @old_man_frames[0]
+                old_man_clip = @old_man_frames[(@old_man_frame / @slowdown).to_i]
+                @renderer.copy(@old_man, old_man_clip, SDL::Rect[old_man_x, old_man_y, old_man_clip.w, old_man_clip.h])
 
                 @renderer.present
 
-                @nurse_joy_frame = (@nurse_joy_frame + 1) % (@nurse_joy_frames.size * @slowdown)
+                @old_man_frame = (@old_man_frame + 1) % (@old_man_frames.size * @slowdown)
 
 
                 # psuedocode for game loop:
