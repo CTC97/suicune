@@ -14,12 +14,17 @@ class Client
     @suicune : SDL::Surface
     @nurse_joy : SDL::Surface
     @old_man : SDL::Surface
+    @player_id : Int32
+
+    @global_player_stats : Hash(String, Hash(String, Int32))
 
     # manage collisions with tiles via layers on a tilemap
     # user can assign different layers to assign with groups of entities
     @tilemap_resource : SDL::Surface
     @tilemap : Array(Array(Int32))
 
+    @player_id = Random::DEFAULT.rand(Int32)
+    @global_player_stats = Hash(String, Hash(String, Int32)).new
 
     @currentTime : Time::Span
     @lastTime : Time::Span
@@ -66,6 +71,10 @@ class Client
 
         @client = TCPSocket.new("localhost", 1234)
 
+        intro_packet = {
+            "id_intro"=> "#{@player_id}"
+        }
+
         @window = SDL::Window.new(title, width, height)
         @renderer = SDL::Renderer.new(@window)
 
@@ -79,7 +88,10 @@ class Client
 
         @suicune_x = 10
         @suicune_y = 10
-        @suicune_speed = 25
+
+        @nurse_joy_x = 10
+        @nurse_joy_y = 10
+        @nurse_joy_speed = 25
         @bounds = 1
 
         # nurse joy
@@ -90,6 +102,7 @@ class Client
             SDL::Rect.new(i * 32, 0, 32, 42)
         end
         @nurse_joy_frame = 0
+        @nurse_joy_dir = 0
 
         # old man
         @old_man = SDL::IMG.load("res/old_man.png")
@@ -108,6 +121,33 @@ class Client
         @slowdown = 6
     end
 
+    def ingest_packet(data_packet : JSON::Any)
+        packet = data_packet.as_h
+        #puts @global_player_stats
+        if packet.has_key?("player_stats")
+            player_packet = packet["player_stats"].as_h
+            player_packet.keys.each do |player_id|
+                if player_id != "#{@player_id}"
+                    stats = Hash(String, Int32).new
+
+                    player_data = player_packet[player_id].as_h
+                    player_data.each do |key, value|
+                        if value.is_a?(Int32)
+                            stats[key] = value
+                        elsif value.is_a?(JSON::Any)
+                            begin
+                                stats[key] = value.as_i
+                            rescue
+                            end
+                        end
+                    end
+
+                    @global_player_stats[player_id] = stats
+                end
+            end
+        end
+    end
+
     def run
         while @running
             @currentTime = Time.monotonic
@@ -122,18 +162,18 @@ class Client
 
                 data_packet = ({
                     player: {
-                        x: @suicune_x,
-                        y: @suicune_y
+                        "#{@player_id}"=> {
+                            x: @nurse_joy_x,
+                            y: @nurse_joy_y,
+                            frame: @nurse_joy_dir
+                        },
                     }
                 }).to_json
 
                 @client.puts data_packet
                 server_response = @client.gets || ""
                 server_data_packet = JSON.parse(server_response)
-
-                old_man_x = server_data_packet["old_man"]["x"].as_i
-                old_man_y = server_data_packet["old_man"]["y"].as_i
-                puts "#{old_man_x}, #{old_man_y}"
+                ingest_packet(server_data_packet)
 
                 @window.title = "suicune 0.0.a [#{@experiencedFps} FPS]"
                 @lastTime = @currentTime
@@ -146,21 +186,25 @@ class Client
                         #@window.title = "suicune 0.0.a < [#{@experiencedFps} FPS] | [#{event.type}] >"
                         case event.sym
                         when .a?
-                            if @suicune_x - @suicune_speed - @bounds >= 0
-                                @suicune_x -= @suicune_speed
+                            if @nurse_joy_x - @nurse_joy_speed - @bounds >= 0
+                                @nurse_joy_x -= @nurse_joy_speed
                             end
+                            @nurse_joy_dir = 2
                         when .d?
-                            if @suicune_x + @suicune.width + @suicune_speed + @bounds <= @window.width
-                                @suicune_x += @suicune_speed
+                            if @nurse_joy_x + @nurse_joy.width + @nurse_joy_speed + @bounds <= @window.width
+                                @nurse_joy_x += @nurse_joy_speed
                             end
+                            @nurse_joy_dir = 0
                         when .s?
-                            if @suicune_y + @suicune.height + @suicune_speed + @bounds <= @window.height
-                                @suicune_y += @suicune_speed
+                            if @nurse_joy_y + @nurse_joy.height + @nurse_joy_speed + @bounds <= @window.height
+                                @nurse_joy_y += @nurse_joy_speed
                             end
+                            @nurse_joy_dir = 3
                         when .w?
-                            if @suicune_y - @bounds - @suicune_speed >= 0
-                                @suicune_y -= @suicune_speed
+                            if @nurse_joy_y - @bounds - @nurse_joy_speed >= 0
+                                @nurse_joy_y -= @nurse_joy_speed
                             end
+                            @nurse_joy_dir = 1
                         end
                     end
                 end
@@ -178,14 +222,19 @@ class Client
                 @renderer.copy(@suicune, nil, SDL::Rect[@suicune_x, @suicune_y, 64, 64])
 
                 # nurse joy
-                current_clip = @nurse_joy_frames[(@nurse_joy_frame / @slowdown).to_i]
-                x = (@window.width - current_clip.w) / 2
-                y = (@window.height - current_clip.h) / 2
-                @renderer.copy(@nurse_joy, current_clip, SDL::Rect[x.to_i, y.to_i, current_clip.w, current_clip.h])
+                puts "nurse joy frame #{@nurse_joy_frame}"
+                current_clip = @nurse_joy_frames[@nurse_joy_dir]
+
+                @renderer.copy(@nurse_joy, current_clip, SDL::Rect[@nurse_joy_x.to_i, @nurse_joy_y.to_i, current_clip.w, current_clip.h])
 
                 # old man
-                old_man_frame = @old_man_frames[0]
-                @renderer.copy(@old_man, @old_man_frames[0], SDL::Rect[old_man_x, old_man_y, old_man_frame.w, old_man_frame.h])
+                #old_man_frame = @old_man_frames[0]
+
+                @global_player_stats.each do |key, value|
+                   puts value
+                   @renderer.copy(@nurse_joy, @nurse_joy_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_clip.w, current_clip.h])
+                end
+                #@renderer.copy(@old_man, @old_man_frames[0], SDL::Rect[old_man_x, old_man_y, old_man_frame.w, old_man_frame.h])
 
                 @renderer.present
 
