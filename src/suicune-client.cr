@@ -4,6 +4,8 @@ require "json"
 require "../lib/sdl/src/sdl"
 require "../lib/sdl/src/image"
 
+require "./player"
+
 #const currentTime = Date.now();
 #const timeElapsed = currentTime - GameRuntime.gameState.engine1.timePreviousLoop;
 #const newLag = GameRuntime.gameState.engine1.lag + timeElapsed;
@@ -13,8 +15,8 @@ require "../lib/sdl/src/image"
 class Client
     @suicune : SDL::Surface
     @nurse_joy : SDL::Surface
-    @old_man : SDL::Surface
-    @player_id : Int32
+
+    @player : Player
 
     @global_player_stats : Hash(String, Hash(String, Int32))
 
@@ -23,7 +25,6 @@ class Client
     @tilemap_resource : SDL::Surface
     @tilemap : Array(Array(Int32))
 
-    @player_id = Random::DEFAULT.rand(Int32)
     @global_player_stats = Hash(String, Hash(String, Int32)).new
 
     @currentTime : Time::Span
@@ -71,9 +72,21 @@ class Client
 
         @client = TCPSocket.new("localhost", 1234)
 
-        intro_packet = {
-            "id_intro"=> "#{@player_id}"
-        }
+        @player = Player.new
+
+        # used for other players
+        @nurse_joy = SDL::IMG.load("res/nurse_joy.png")
+        @nurse_joy_frames = StaticArray(SDL::Rect, 4).new do |i|
+            # i * width, 0, width, height
+            SDL::Rect.new(i * 32, 0, 32, 42)
+        end
+        @nurse_joy_frame = 0
+        @nurse_joy_dir = 0
+
+        intro_packet = ({
+            "id_intro"=> "#{@player.player_id}"
+        }).to_json
+        @client.puts intro_packet
 
         @window = SDL::Window.new(title, width, height)
         @renderer = SDL::Renderer.new(@window)
@@ -89,36 +102,12 @@ class Client
         @suicune_x = 10
         @suicune_y = 10
 
-        @nurse_joy_x = 10
-        @nurse_joy_y = 10
-        @nurse_joy_speed = 25
-        @bounds = 1
-
-        # nurse joy
-        @nurse_joy = SDL::IMG.load("res/nurse_joy.png")
-        #
-        @nurse_joy_frames = StaticArray(SDL::Rect, 4).new do |i|
-            # i * width, 0, width, height
-            SDL::Rect.new(i * 32, 0, 32, 42)
-        end
-        @nurse_joy_frame = 0
-        @nurse_joy_dir = 0
-
-        # old man
-        @old_man = SDL::IMG.load("res/old_man.png")
-        @old_man_frames = StaticArray(SDL::Rect, 4).new do |i|
-            SDL::Rect.new(i * 32, 0, 32, 38)
-        end
-        @old_man_frame = 0
-
         # tilemap
         @tilemap_resource = SDL::IMG.load("res/tilemap.png")
         @tilemap_tiles = StaticArray(SDL::Rect, 6).new do |i|
             # params here represent - (i * w, 0, w, h)
             SDL::Rect.new(i * 32, 0, 32, 32)
         end
-
-        @slowdown = 6
     end
 
     def ingest_packet(data_packet : JSON::Any)
@@ -127,7 +116,7 @@ class Client
         if packet.has_key?("player_stats")
             player_packet = packet["player_stats"].as_h
             player_packet.keys.each do |player_id|
-                if player_id != "#{@player_id}"
+                if player_id != "#{@player.player_id}"
                     stats = Hash(String, Int32).new
 
                     player_data = player_packet[player_id].as_h
@@ -145,6 +134,9 @@ class Client
                     @global_player_stats[player_id] = stats
                 end
             end
+        elsif packet.has_key?("disconnect")
+            disconnected_player_id = packet["disconnect"].to_s
+            @global_player_stats.delete(disconnected_player_id)
         end
     end
 
@@ -162,10 +154,10 @@ class Client
 
                 data_packet = ({
                     player: {
-                        "#{@player_id}"=> {
-                            x: @nurse_joy_x,
-                            y: @nurse_joy_y,
-                            frame: @nurse_joy_dir
+                        "#{@player.player_id}"=> {
+                            x: @player.x,
+                            y: @player.y,
+                            frame: @player.dir
                         },
                     }
                 }).to_json
@@ -182,31 +174,10 @@ class Client
                     case event
                     when SDL::Event::Quit
                         @running = false
-                    when SDL::Event::Keyboard
-                        #@window.title = "suicune 0.0.a < [#{@experiencedFps} FPS] | [#{event.type}] >"
-                        case event.sym
-                        when .a?
-                            if @nurse_joy_x - @nurse_joy_speed - @bounds >= 0
-                                @nurse_joy_x -= @nurse_joy_speed
-                            end
-                            @nurse_joy_dir = 2
-                        when .d?
-                            if @nurse_joy_x + @nurse_joy.width + @nurse_joy_speed + @bounds <= @window.width
-                                @nurse_joy_x += @nurse_joy_speed
-                            end
-                            @nurse_joy_dir = 0
-                        when .s?
-                            if @nurse_joy_y + @nurse_joy.height + @nurse_joy_speed + @bounds <= @window.height
-                                @nurse_joy_y += @nurse_joy_speed
-                            end
-                            @nurse_joy_dir = 3
-                        when .w?
-                            if @nurse_joy_y - @bounds - @nurse_joy_speed >= 0
-                                @nurse_joy_y -= @nurse_joy_speed
-                            end
-                            @nurse_joy_dir = 1
-                        end
                     end
+
+                    # player update
+                    @player.update(event, @window.width, @window.height)
                 end
 
 
@@ -218,41 +189,23 @@ class Client
                     end
                 end
 
-                # suicune
+                # suicune splash
                 @renderer.copy(@suicune, nil, SDL::Rect[@suicune_x, @suicune_y, 64, 64])
 
-                # nurse joy
-                puts "nurse joy frame #{@nurse_joy_frame}"
-                current_clip = @nurse_joy_frames[@nurse_joy_dir]
+                # player
+                current_player_frame = @player.current_sprite_frame
+                @renderer.copy(@player.sprite, current_player_frame, SDL::Rect[@player.x.to_i, @player.y.to_i, current_player_frame.w, current_player_frame.h])
 
-                @renderer.copy(@nurse_joy, current_clip, SDL::Rect[@nurse_joy_x.to_i, @nurse_joy_y.to_i, current_clip.w, current_clip.h])
-
-                # old man
-                #old_man_frame = @old_man_frames[0]
-
+                # other players
                 @global_player_stats.each do |key, value|
                    puts value
-                   @renderer.copy(@nurse_joy, @nurse_joy_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_clip.w, current_clip.h])
+                   # TODO: Update the width and height parameters here, these will have to be passed to client from server via other client's player object
+                   # Ultimately the other players will be rendered beneath the player, but that can't happen until we remove current_player_frame dependency.
+                   @renderer.copy(@nurse_joy, @nurse_joy_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_player_frame.w, current_player_frame.h])
                 end
-                #@renderer.copy(@old_man, @old_man_frames[0], SDL::Rect[old_man_x, old_man_y, old_man_frame.w, old_man_frame.h])
+
 
                 @renderer.present
-
-                @nurse_joy_frame = (@nurse_joy_frame + 1) % (@nurse_joy_frames.size * @slowdown)
-
-
-                # psuedocode for game loop:
-
-                # Frame rate management
-                #current_time = SDL::get_ticks
-                #frame_time = current_time - last_frame_time
-
-                #if frame_delay > frame_time
-                #SDL::delay(frame_delay - frame_time)
-                #end
-
-                #last_frame_time = SDL::get_ticks
-                #sleep(1/60)
             end
         end
     end
@@ -264,5 +217,5 @@ class Client
     end
 end
 
-client = Client.new("suicune v0.0.1", 640, 640, 60)
+client = Client.new("suicune v0.0.1", 640, 640, 30)
 client.run
