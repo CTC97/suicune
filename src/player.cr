@@ -17,23 +17,32 @@ class Player
 
     @slowdown = 6
 
+    @collision_map : Array(Array(Bool))
+
+    # TODO - Add parameters to player
+    #   number of frames
+    #   sprite height, width
+    #   resource location
     def initialize()
         @player_id = Random::DEFAULT.rand(Int32)
         @x = 0
         @y = 0
-        @speed = 16
+        @speed = 32
 
         @bounds = 0
 
-        @sprite = SDL::IMG.load("res/nurse_joy.png")
+        @sprite = SDL::IMG.load("res/togepi.png")
 
-        @frames = StaticArray(SDL::Rect, 4).new do |i|
+        # 12 is number of frames
+        @frames = StaticArray(SDL::Rect, 16).new do |i|
             # i * width, 0, width, height
-            SDL::Rect.new(i * 32, 0, 32, 42)
+            SDL::Rect.new(i * 32, 0, 32, 32)
         end
 
         @frame = 0
         @dir = 0
+
+        @collision_map = Array(Array(Bool)).new()
     end
 
     # need to pass in window width
@@ -58,37 +67,53 @@ class Player
         #    end
         #    @dir = 2
         #end
+        # 
+        tile_x = (@x/32).round.to_i
+        tile_y = (@y/32).round.to_i
+        puts "(#{@x}, #{@y}) => (#{tile_x}, #{tile_y})"
+        
 
         case event
         when SDL::Event::Keyboard
             case event.sym
             when .a?
-                if @x - update_speed - @bounds >= 0
+                intended_tile_x = tile_x - 1
+                if @x - update_speed - @bounds >= 0 && !check_collision(intended_tile_x, tile_y)
                     @x -= update_speed
                 end
-                @dir = 2
+                @dir = 4
             when .d?
-                puts (@x)
-                puts (@x + @sprite.width)
-                if @x + @frames[0].w + update_speed + @bounds <= window_width
+                intended_tile_x = tile_x + 1
+                if @x + @frames[0].w + update_speed + @bounds <= window_width && !check_collision(intended_tile_x, tile_y)
                     @x += update_speed
                 end
-                @dir = 0
+                @dir = 8
             when .s?
-                if @y + @frames[0].h + update_speed + @bounds <= window_height
+                intended_tile_y = tile_y + 1
+                if @y + @frames[0].h + update_speed + @bounds <= window_height && !check_collision(tile_x, intended_tile_y) 
                     @y += update_speed
                 end
-                @dir = 3
+                @dir = 0
             when .w?
-                if @y - @bounds - update_speed >= 0
+                intended_tile_y = tile_y - 1
+                if @y - @bounds - update_speed >= 0 && !check_collision(tile_x, intended_tile_y)
                     @y -= update_speed
                 end
-                @dir = 1
+                @dir = 12
             end
         end
 
 
         @frame = (@frame + 1) % (@frames.size * @slowdown)
+    end
+
+    def set_collision_map(collision_map : Array(Array(Bool)), collision_tile_size : Int32)
+        @collision_map = collision_map
+        @collision_tile_size = collision_tile_size
+    end
+
+    def check_collision(x : Int32, y : Int32)
+        @collision_map[x][y]
     end
 
     def current_sprite_frame

@@ -15,7 +15,7 @@ require "./tilemap"
 
 class Client
     @suicune : SDL::Surface
-    @nurse_joy : SDL::Surface
+    @other_player : SDL::Surface
 
     @player : Player
 
@@ -49,13 +49,13 @@ class Client
         @player = Player.new
 
         # used for other players
-        @nurse_joy = SDL::IMG.load("res/nurse_joy.png")
-        @nurse_joy_frames = StaticArray(SDL::Rect, 4).new do |i|
+        @other_player = SDL::IMG.load("res/togepi.png")
+        @other_player_frames = StaticArray(SDL::Rect, 16).new do |i|
             # i * width, 0, width, height
-            SDL::Rect.new(i * 32, 0, 32, 42)
+            SDL::Rect.new(i * 32, 0, 32, 32)
         end
-        @nurse_joy_frame = 0
-        @nurse_joy_dir = 0
+        @other_player_frame = 0
+        @other_player_dir = 0
 
         intro_packet = ({
             "id_intro"=> "#{@player.player_id}"
@@ -77,27 +77,28 @@ class Client
         @suicune_y = 10
 
         # tilemap
-        
-        tile_grid = [[0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 5, 0],
-        [0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-        [0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-        [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 5, 1, 0],
-        [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 5, 2, 0, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0],
-        [1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0],
-        [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 1, 0],
-        [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
-        [0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0],
-        [0, 0, 0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0],
-        [0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 2, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 5, 0],
-        [0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 0, 5, 1, 0, 0],
-        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0],
-        [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5]]
+        tile_grid = [
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 5, 0],
+            [0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 5, 1, 0],
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 5, 2, 0, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0],
+            [1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 1, 0],
+            [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+            [0, 0, 0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0],
+            [0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 2, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 5, 0],
+            [0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 0, 5, 1, 0, 0],
+            [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5]
+        ]
 
         @tilemap = Tilemap.new(
                 "res/tilemap.png", 
@@ -106,9 +107,8 @@ class Client
                 5,
                 [1, 2]
             );
-        
 
-        
+        @player.set_collision_map(@tilemap.collision_map, 32)
     end
 
     def ingest_packet(data_packet : JSON::Any)
@@ -202,7 +202,7 @@ class Client
                    puts value
                    # TODO: Update the width and height parameters here, these will have to be passed to client from server via other client's player object
                    # Ultimately the other players will be rendered beneath the player, but that can't happen until we remove current_player_frame dependency.
-                   @renderer.copy(@nurse_joy, @nurse_joy_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_player_frame.w, current_player_frame.h])
+                   @renderer.copy(@other_player, @other_player_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_player_frame.w, current_player_frame.h])
                 end
 
 
