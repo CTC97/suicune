@@ -1,12 +1,14 @@
 require "../lib/sdl/src/sdl"
 require "../lib/sdl/src/image"
+require "../lib/sdl/src/lib_sdl/keyboard"
+require "../lib/sdl/src/lib_sdl/keycode"
 
 class Player
 
     @player_id : Int32
 
-    @x : Int32
-    @y : Int32
+    @x : Float32
+    @y : Float32
     @speed : Int32
 
     @sprite : SDL::Surface
@@ -19,9 +21,9 @@ class Player
         @player_id = Random::DEFAULT.rand(Int32)
         @x = 10
         @y = 10
-        @speed = 10
+        @speed = 32
 
-        @bounds = 1
+        @bounds = 0
 
         @sprite = SDL::IMG.load("res/nurse_joy.png")
 
@@ -35,34 +37,60 @@ class Player
     end
 
     # need to pass in window width
-    def update(event : SDL::Event, window_width : Int32, window_height : Int32)
+    def update(event : SDL::Event, window_width : Int32, window_height : Int32, delta_time : Float)
+        #puts "delta_time: #{delta_time}"
+        update_speed = @speed * delta_time * 10
+        #puts "update_speed: #{update_speed}"
+
+
+
+        # keys = LibSDL.get_keyboard_state(nil)
+        # SDL_Scancodes - https://wiki.libsdl.org/SDL3/SDL_Scancode
+        # A - 4
+        # D - 7
+        # S - 22
+        # W - 26
+
+        # puts keys[4]
+
+        # A
+        #if keys[4] == 1
+        #    if @x - update_speed - @bounds >= 0
+        #        @x -= update_speed
+        #    end
+        #    @dir = 2
+        #end
+
         case event
         when SDL::Event::Keyboard
             case event.sym
             when .a?
-                if @x - @speed - @bounds >= 0
-                    @x -= @speed
+                if @x - update_speed - @bounds >= 0
+                    @x -= update_speed
                 end
                 @dir = 2
             when .d?
-                if @x + @sprite.width + @speed + @bounds <= window_width
-                    @x += @speed
+                puts (@x)
+                puts (@x + @sprite.width)
+                if @x + @frames[0].w + update_speed + @bounds <= window_width
+                    @x += update_speed
                 end
                 @dir = 0
             when .s?
-                if @y + @sprite.height + @speed + @bounds <= window_height
-                    @y += @speed
+                if @y + @frames[0].h + update_speed + @bounds <= window_height
+                    @y += update_speed
                 end
                 @dir = 3
             when .w?
-                if @y - @bounds - @speed >= 0
-                    @y -= @speed
+                if @y - @bounds - update_speed >= 0
+                    @y -= update_speed
                 end
                 @dir = 1
             end
         end
 
-         @frame = (@frame + 1) % (@frames.size * @slowdown)
+
+        @frame = (@frame + 1) % (@frames.size * @slowdown)
     end
 
     def current_sprite_frame
@@ -78,11 +106,11 @@ class Player
     end
 
     def x
-        @x
+        @x.to_i
     end
 
     def y
-        @y
+        @y.to_i
     end
 
     def frame

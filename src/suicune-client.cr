@@ -177,7 +177,7 @@ class Client
                     end
 
                     # player update
-                    @player.update(event, @window.width, @window.height)
+                    @player.update(event, @window.width, @window.height, delta_time.to_f / 1000)
                 end
 
 
@@ -194,7 +194,7 @@ class Client
 
                 # player
                 current_player_frame = @player.current_sprite_frame
-                @renderer.copy(@player.sprite, current_player_frame, SDL::Rect[@player.x.to_i, @player.y.to_i, current_player_frame.w, current_player_frame.h])
+                @renderer.copy(@player.sprite, current_player_frame, SDL::Rect[@player.x, @player.y, current_player_frame.w, current_player_frame.h])
 
                 # other players
                 @global_player_stats.each do |key, value|
