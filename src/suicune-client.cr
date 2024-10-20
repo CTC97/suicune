@@ -31,6 +31,8 @@ class Client
     @fps : Int32
     @experiencedFps : Float32
 
+    @camera : SDL::Rect
+
     def initialize(title : String, width : Int32, height : Int32, fps : Int32)
         @fps = fps
         @experiencedFps = fps.to_f32
@@ -73,33 +75,35 @@ class Client
 
         @running = true
 
-        @suicune_x = 10
-        @suicune_y = 10
+        @suicune_x = 8
+        @suicune_y = 8
 
         # tilemap
         tile_grid = [
-            [0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 5, 0],
-            [0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-            [0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 5, 1, 0],
-            [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 5, 2, 0, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0],
-            [1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0],
-            [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 1, 0],
-            [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
-            [0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0],
-            [0, 0, 0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0],
-            [0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 2, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 5, 0],
-            [0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 0, 5, 1, 0, 0],
-            [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0],
-            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5]
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 5, 0, 0],
+            [0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 5, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 5, 2, 0, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 1, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+            [0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 0, 0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 2, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 5, 0, 0],
+            [0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 0, 5, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0]
         ]
-
+        
         @tilemap = Tilemap.new(
                 "res/tilemap.png", 
                 tile_grid,
@@ -109,6 +113,8 @@ class Client
             );
 
         @player.set_collision_map(@tilemap.collision_map, 32)
+
+        @camera = SDL::Rect.new(0,0,640,704)
     end
 
     def ingest_packet(data_packet : JSON::Any)
@@ -149,8 +155,7 @@ class Client
 
             #@experiencedFps = (@experiencedFps * 0.9) + ((1000.0 / delta_time) * 0.1)
             @experiencedFps = (1000 / delta_time).to_f32.round(2)
-
-
+            
             if delta_time > 1000/@fps
 
                 data_packet = ({
@@ -171,6 +176,7 @@ class Client
                 @window.title = "suicune 0.0.a [#{@experiencedFps} FPS]"
                 @lastTime = @currentTime
                 while event = SDL::Event.poll
+                    
 
                     case event
                     when SDL::Event::Quit
@@ -184,14 +190,25 @@ class Client
 
                 clear_screen
 
+               
+
+                #puts "Camera:(#{@camera.x}, #{@camera.y})"
+                
+                
+
+               # @camera.x = (@player.x - 320).clamp(0, @window.width)
+               # @camera.y = (@player.y - 320).clamp(0, @window.height)
+               # @renderer.viewport = @camera
+
                 @tilemap.tile_grid.each_with_index do |row, i|
                     row.each_with_index do |value, j|
-                        @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[i*@tilemap.tile_size, j*@tilemap.tile_size, @tilemap.tile_size, @tilemap.tile_size])
+                        #@renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[i*@tilemap.tile_size, j*@tilemap.tile_size, @tilemap.tile_size, @tilemap.tile_size])
+                        @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[i*@tilemap.tile_size + @camera.x, j*@tilemap.tile_size + @camera.y, @tilemap.tile_size, @tilemap.tile_size])
                     end
                 end
 
                 # suicune splash
-                @renderer.copy(@suicune, nil, SDL::Rect[@suicune_x, @suicune_y, 64, 64])
+                @renderer.copy(@suicune, nil, SDL::Rect[0, 0, 32, 32])
 
                 # player
                 current_player_frame = @player.current_sprite_frame
@@ -218,5 +235,5 @@ class Client
     end
 end
 
-client = Client.new("suicune v0.0.1", 640, 640, 30)
+client = Client.new("suicune v0.0.1", 640, 640, 60)
 client.run

@@ -68,9 +68,8 @@ class Player
         #    @dir = 2
         #end
         # 
-        tile_x = (@x/32).round.to_i
-        tile_y = (@y/32).round.to_i
-        puts "(#{@x}, #{@y}) => (#{tile_x}, #{tile_y})"
+        tile_x = (@x/(@collision_tile_size || 1)).round.to_i
+        tile_y = (@y/(@collision_tile_size || 1)).round.to_i
         
 
         case event
