@@ -5,6 +5,7 @@ require "../lib/sdl/src/sdl"
 require "../lib/sdl/src/image"
 
 require "./player"
+require "./tilemap"
 
 #const currentTime = Date.now();
 #const timeElapsed = currentTime - GameRuntime.gameState.engine1.timePreviousLoop;
@@ -20,10 +21,7 @@ class Client
 
     @global_player_stats : Hash(String, Hash(String, Int32))
 
-    # manage collisions with tiles via layers on a tilemap
-    # user can assign different layers to assign with groups of entities
-    @tilemap_resource : SDL::Surface
-    @tilemap : Array(Array(Int32))
+    @tilemap : Tilemap
 
     @global_player_stats = Hash(String, Hash(String, Int32)).new
 
@@ -36,30 +34,6 @@ class Client
     def initialize(title : String, width : Int32, height : Int32, fps : Int32)
         @fps = fps
         @experiencedFps = fps.to_f32
-
-        @tilemap = @tilemap = [
-            [0, 5, 1, 0, 0, 0, 5, 0, 0, 5, 2, 0, 0, 4, 0, 3, 0, 0, 2, 0],
-            [0, 0, 0, 0, 0, 0, 4, 4, 1, 3, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0],
-            [0, 5, 0, 0, 2, 0, 1, 0, 3, 0, 3, 0, 4, 0, 2, 2, 4, 0, 0, 0],
-            [5, 0, 0, 0, 0, 0, 0, 2, 1, 5, 0, 0, 1, 5, 2, 0, 0, 4, 0, 0],
-            [0, 0, 0, 5, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 1, 3, 0, 0, 0, 0],
-            [0, 1, 3, 0, 0, 0, 3, 0, 0, 0, 0, 5, 0, 0, 4, 0, 1, 0, 0, 0],
-            [0, 1, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 2, 5, 0, 0, 0, 4, 2, 0],
-            [0, 5, 0, 2, 0, 0, 5, 5, 0, 1, 0, 0, 0, 0, 1, 0, 5, 0, 0, 0],
-            [0, 0, 1, 0, 0, 0, 4, 5, 0, 0, 1, 0, 0, 5, 0, 0, 0, 0, 0, 3],
-            [0, 3, 3, 0, 0, 4, 5, 2, 0, 0, 0, 0, 1, 2, 5, 0, 0, 0, 5, 4],
-            [5, 0, 4, 0, 4, 4, 1, 4, 0, 0, 0, 3, 0, 0, 0, 0, 0, 5, 1, 5],
-            [0, 4, 0, 0, 1, 0, 0, 5, 0, 0, 0, 5, 1, 1, 0, 0, 0, 3, 5, 0],
-            [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 5, 0, 5, 5, 3, 5, 3, 2],
-            [1, 5, 0, 0, 0, 5, 4, 0, 5, 0, 0, 0, 3, 0, 1, 0, 1, 2, 0, 4],
-            [0, 0, 0, 0, 2, 1, 2, 0, 3, 0, 5, 4, 0, 5, 0, 5, 5, 5, 2, 0],
-            [0, 0, 0, 5, 0, 5, 1, 0, 0, 0, 3, 1, 0, 5, 0, 1, 0, 0, 0, 5],
-            [0, 5, 0, 4, 0, 0, 0, 0, 3, 0, 4, 5, 0, 4, 0, 5, 0, 0, 0, 4],
-            [0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 2, 5, 2, 0, 0, 0, 0, 0, 3, 0],
-            [0, 0, 0, 5, 2, 0, 0, 0, 0, 5, 4, 0, 0, 5, 0, 1, 0, 0, 0, 0]
-        ]
-
 
         @currentTime = Time.monotonic
         @lastTime = Time.monotonic
@@ -103,11 +77,38 @@ class Client
         @suicune_y = 10
 
         # tilemap
-        @tilemap_resource = SDL::IMG.load("res/tilemap.png")
-        @tilemap_tiles = StaticArray(SDL::Rect, 6).new do |i|
-            # params here represent - (i * w, 0, w, h)
-            SDL::Rect.new(i * 32, 0, 32, 32)
-        end
+        
+        tile_grid = [[0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 5, 0],
+        [0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 5, 1, 0],
+        [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 5, 2, 0, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0],
+        [1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 1, 0],
+        [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+        [0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+        [0, 0, 0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 2, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 5, 0],
+        [0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 0, 5, 1, 0, 0],
+        [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0],
+        [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5]]
+
+        @tilemap = Tilemap.new(
+                "res/tilemap.png", 
+                tile_grid,
+                32,
+                5,
+                [1, 2]
+            );
+        
+
+        
     end
 
     def ingest_packet(data_packet : JSON::Any)
@@ -183,9 +184,9 @@ class Client
 
                 clear_screen
 
-                @tilemap.each_with_index do |row, i|
+                @tilemap.tile_grid.each_with_index do |row, i|
                     row.each_with_index do |value, j|
-                        @renderer.copy(@tilemap_resource, @tilemap_tiles[value], SDL::Rect[i*32, j*32, 32, 32])
+                        @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[i*@tilemap.tile_size, j*@tilemap.tile_size, @tilemap.tile_size, @tilemap.tile_size])
                     end
                 end
 

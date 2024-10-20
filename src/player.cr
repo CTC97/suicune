@@ -19,9 +19,9 @@ class Player
 
     def initialize()
         @player_id = Random::DEFAULT.rand(Int32)
-        @x = 10
-        @y = 10
-        @speed = 32
+        @x = 0
+        @y = 0
+        @speed = 16
 
         @bounds = 0
 
@@ -39,11 +39,9 @@ class Player
     # need to pass in window width
     def update(event : SDL::Event, window_width : Int32, window_height : Int32, delta_time : Float)
         #puts "delta_time: #{delta_time}"
-        update_speed = @speed * delta_time * 10
+        update_speed = @speed
         #puts "update_speed: #{update_speed}"
-
-
-
+        
         # keys = LibSDL.get_keyboard_state(nil)
         # SDL_Scancodes - https://wiki.libsdl.org/SDL3/SDL_Scancode
         # A - 4
