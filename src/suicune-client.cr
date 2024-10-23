@@ -163,7 +163,7 @@ class Client
                         "#{@player.player_id}"=> {
                             x: @player.x,
                             y: @player.y,
-                            frame: @player.dir
+                            frame: @player.current_frame
                         },
                     }
                 }).to_json
@@ -175,17 +175,17 @@ class Client
 
                 @window.title = "suicune 0.0.a [#{@experiencedFps} FPS]"
                 @lastTime = @currentTime
-                while event = SDL::Event.poll
+                event = SDL::Event.poll
                     
 
-                    case event
-                    when SDL::Event::Quit
-                        @running = false
-                    end
-
-                    # player update
-                    @player.update(event, @window.width, @window.height, delta_time.to_f / 1000)
+                case event
+                when SDL::Event::Quit
+                    @running = false
                 end
+
+                # player update
+                @player.update(event, @window.width, @window.height, delta_time.to_f / 1000)
+            
 
 
                 clear_screen
@@ -195,10 +195,13 @@ class Client
                 #puts "Camera:(#{@camera.x}, #{@camera.y})"
                 
                 
-
+                # https://www.youtube.com/watch?v=QeN1ygJD5y4&ab_channel=Let%27sMakeGames
                # @camera.x = (@player.x - 320).clamp(0, @window.width)
                # @camera.y = (@player.y - 320).clamp(0, @window.height)
                # @renderer.viewport = @camera
+               # 
+               @renderer.scale = {2,2}
+
 
                 @tilemap.tile_grid.each_with_index do |row, i|
                     row.each_with_index do |value, j|
@@ -219,6 +222,7 @@ class Client
                    puts value
                    # TODO: Update the width and height parameters here, these will have to be passed to client from server via other client's player object
                    # Ultimately the other players will be rendered beneath the player, but that can't happen until we remove current_player_frame dependency.
+                  
                    @renderer.copy(@other_player, @other_player_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_player_frame.w, current_player_frame.h])
                 end
 
