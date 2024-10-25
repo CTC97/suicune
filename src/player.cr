@@ -37,10 +37,11 @@ class Player
 
         @bounds = 0
 
-        @sprite = SDL::IMG.load("res/togepi.png")
+        #@sprite = SDL::IMG.load("res/togepi.png")
+        @sprite = SDL::IMG.load("res/cleffa.png")
 
-        # 12 is number of frames
-        @frames = Array(SDL::Rect).new(16) do |i|
+        @num_frames = 8
+        @frames = Array(SDL::Rect).new(@num_frames) do |i|
             SDL::Rect.new(i * 32, 0, 32, 32)
         end
         #@animation_dict = {} of String => Array(SDL::Rect)
@@ -53,11 +54,18 @@ class Player
 
         @collision_map = Array(Array(Bool)).new()
 
-        define_animation(@frames, [4,5,6,7], "left")
-        define_animation(@frames, [8,9,10,11], "right")
-        define_animation(@frames, [0,1,2,3], "down")
-        define_animation(@frames, [12,13,14,15], "up")
-        @animation_speed = 0.25;
+        # togepi
+        # define_animation(@frames, [4,5,6,7], "left")
+        # define_animation(@frames, [8,9,10,11], "right")
+        # define_animation(@frames, [0,1,2,3], "down")
+        # define_animation(@frames, [12,13,14,15], "up")
+        # 
+        # igglybuff
+        define_animation(@frames, [2,3], "left")
+        define_animation(@frames, [4,5], "right")
+        define_animation(@frames, [0,1], "down")
+        define_animation(@frames, [6,7], "up")
+        @animation_speed = 0.12;
         play_animation("up")
     end
 

@@ -51,13 +51,25 @@ class Client
         @player = Player.new
 
         # used for other players
-        @other_player = SDL::IMG.load("res/togepi.png")
-        @other_player_frames = StaticArray(SDL::Rect, 16).new do |i|
+        # TODO:
+        #   Parameterize other players based on incoming information
+        #   Other players must pass which spritesheet they're using along with current frame
+        # @other_player = SDL::IMG.load("res/togepi.png")
+        # @other_player_frames = StaticArray(SDL::Rect, 16).new do |i|
+        #     # i * width, 0, width, height
+        #     SDL::Rect.new(i * 32, 0, 32, 32)
+        # end
+        # @other_player_frame = 0
+        # @other_player_dir = 0
+        
+        @other_player = SDL::IMG.load("res/igglybuff.png")
+        @other_player_frames = StaticArray(SDL::Rect, 8).new do |i|
             # i * width, 0, width, height
             SDL::Rect.new(i * 32, 0, 32, 32)
         end
         @other_player_frame = 0
         @other_player_dir = 0
+        
 
         intro_packet = ({
             "id_intro"=> "#{@player.player_id}"
