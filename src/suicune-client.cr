@@ -1,8 +1,8 @@
 require "socket"
 require "json"
 
-require "../lib/sdl/src/sdl"
-require "../lib/sdl/src/image"
+require "./sprite.cr"
+
 
 require "./player"
 require "./tilemap"
@@ -50,25 +50,11 @@ class Client
 
         @player = Player.new
 
-        # used for other players
-        # TODO:
-        #   Parameterize other players based on incoming information
-        #   Other players must pass which spritesheet they're using along with current frame
-        # @other_player = SDL::IMG.load("res/togepi.png")
-        # @other_player_frames = StaticArray(SDL::Rect, 16).new do |i|
-        #     # i * width, 0, width, height
-        #     SDL::Rect.new(i * 32, 0, 32, 32)
-        # end
-        # @other_player_frame = 0
-        # @other_player_dir = 0
-        
         @other_player = SDL::IMG.load("res/igglybuff.png")
         @other_player_frames = StaticArray(SDL::Rect, 8).new do |i|
             # i * width, 0, width, height
             SDL::Rect.new(i * 32, 0, 32, 32)
         end
-        @other_player_frame = 0
-        @other_player_dir = 0
         
 
         intro_packet = ({
@@ -130,8 +116,8 @@ class Client
     end
 
     def ingest_packet(data_packet : JSON::Any)
+        
         packet = data_packet.as_h
-        #puts @global_player_stats
         if packet.has_key?("player_stats")
             player_packet = packet["player_stats"].as_h
             player_packet.keys.each do |player_id|
@@ -161,6 +147,7 @@ class Client
 
     def run
         while @running
+            
             @currentTime = Time.monotonic
 
             delta_time = (@currentTime - @lastTime).milliseconds
@@ -169,10 +156,10 @@ class Client
             @experiencedFps = (1000 / delta_time).to_f32.round(2)
             
             if delta_time > 1000/@fps
-
                 data_packet = ({
                     player: {
                         "#{@player.player_id}"=> {
+                            sprite: @player.poke_sprite.index,
                             x: @player.x,
                             y: @player.y,
                             frame: @player.current_frame
@@ -231,13 +218,11 @@ class Client
 
                 # other players
                 @global_player_stats.each do |key, value|
-                   puts value
-                   # TODO: Update the width and height parameters here, these will have to be passed to client from server via other client's player object
-                   # Ultimately the other players will be rendered beneath the player, but that can't happen until we remove current_player_frame dependency.
-                  
-                   @renderer.copy(@other_player, @other_player_frames[value["frame"]], SDL::Rect[value["x"] || 150, value["y"] || 150, current_player_frame.w, current_player_frame.h])
+                    sprite_to_render = Pokedex.pokemon_sprites[value["sprite"]]
+                    sprite_frame = sprite_to_render.frames[value["frame"]]
+                    @renderer.copy(sprite_to_render.surface, sprite_frame, SDL::Rect[value["x"] || 150, value["y"] || 150, sprite_frame.w, sprite_frame.h])
                 end
-
+                
 
                 @renderer.present
             end
