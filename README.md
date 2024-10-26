@@ -1,11 +1,19 @@
-### suicune.cr - multiplayer engine
+### suicune.cr - pure crystal multiplayer engine 
 
-![Screen Recording 2024-10-22 at 10 50 29 PM](https://github.com/user-attachments/assets/816c12ec-2088-45b1-8448-1542f5d6dfbf)
+![Untitled (1)](https://github.com/user-attachments/assets/86795496-d456-4aa3-807c-3a2eeaa48fae)
+
 
 Currently has functionality for:
 - Basic player functionality
 - Multiplayer connection
-- Tilesets/tilemaps
-- Spritesheets
+- Tilesets/Tilemaps
+- Spriting/Spritesheets
 - Animations
 - Collisions
+
+```
+By CTC97
+Presented by Wavyland, NY
+```
+
+![suicune](https://github.com/user-attachments/assets/cbdcea76-13d6-4617-a22c-cc196b719296)
