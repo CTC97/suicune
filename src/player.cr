@@ -49,32 +49,35 @@ class Player
 
         case event
         when SDL::Event::Keyboard
-            case event.sym
-            when .a?
-                intended_tile_x = tile_x - 1
-                if @x - update_speed - @bounds >= 0 && !check_collision(intended_tile_x, tile_y)
-                    @x -= update_speed
+            if event.type == LibSDL::EventType::KEYDOWN
+                case event.sym
+                    when .a?
+                        intended_tile_x = tile_x - 1
+                        if @x - update_speed - @bounds >= 0 && !check_collision(intended_tile_x, tile_y)
+                            @x -= update_speed
+                        end
+                        @poke_sprite.play_animation("left")
+                    when .d?
+                        intended_tile_x = tile_x + 1
+                        if @x + @poke_sprite.frames[0].w + update_speed + @bounds <= window_width && !check_collision(intended_tile_x, tile_y)
+                            @x += update_speed
+                        end
+                        @poke_sprite.play_animation("right")
+                    when .s?
+                        intended_tile_y = tile_y + 1
+                        if @y + @poke_sprite.frames[0].h + update_speed + @bounds <= window_height && !check_collision(tile_x, intended_tile_y) 
+                            @y += update_speed
+                        end
+                        @poke_sprite.play_animation("down")
+                    when .w?
+                        intended_tile_y = tile_y - 1
+                        if @y - @bounds - update_speed >= 0 && !check_collision(tile_x, intended_tile_y)
+                            @y -= update_speed
+                        end
+                        @poke_sprite.play_animation("up")
+                    end
                 end
-                @poke_sprite.play_animation("left")
-            when .d?
-                intended_tile_x = tile_x + 1
-                if @x + @poke_sprite.frames[0].w + update_speed + @bounds <= window_width && !check_collision(intended_tile_x, tile_y)
-                    @x += update_speed
-                end
-                @poke_sprite.play_animation("right")
-            when .s?
-                intended_tile_y = tile_y + 1
-                if @y + @poke_sprite.frames[0].h + update_speed + @bounds <= window_height && !check_collision(tile_x, intended_tile_y) 
-                    @y += update_speed
-                end
-                @poke_sprite.play_animation("down")
-            when .w?
-                intended_tile_y = tile_y - 1
-                if @y - @bounds - update_speed >= 0 && !check_collision(tile_x, intended_tile_y)
-                    @y -= update_speed
-                end
-                @poke_sprite.play_animation("up")
-            end
+           
         end
 
         @poke_sprite.frame += 1
