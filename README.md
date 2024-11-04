@@ -1,7 +1,6 @@
 ### suicune.cr - pure crystal multiplayer engine 
 
-![Untitled (1)](https://github.com/user-attachments/assets/86795496-d456-4aa3-807c-3a2eeaa48fae)
-
+![Untitleda480](https://github.com/user-attachments/assets/254aa384-7274-4280-8d3e-47c2712667aa)
 
 Currently has functionality for:
 - Basic player functionality
