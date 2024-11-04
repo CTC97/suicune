@@ -99,7 +99,30 @@ class Client
             [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0],
             [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
             [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
-            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0]
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 1, 0, 0, 0, 0, 2, 0, 0, 5, 0, 0],
+            [0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 2, 0, 0, 0, 5, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 5, 0, 0, 0, 5, 1, 0, 0],
+            [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 5, 2, 0, 0, 2, 0, 0, 0, 2, 2, 0, 2, 0, 0, 0, 0, 2, 0],
+            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [1, 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 5, 1, 0, 0],
+            [0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+            [0, 2, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+            [0, 0, 0, 2, 0, 0, 1, 2, 0, 1, 0, 0, 1, 2, 0, 0, 0, 2, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 2, 0, 0, 0],
+            [0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 5, 0, 0],
+            [0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 0, 5, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
+            [2, 0, 2, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 5, 0],
+            
         ]
         
         @tilemap = Tilemap.new(
@@ -112,7 +135,7 @@ class Client
 
         @player.set_collision_map(@tilemap.collision_map, 32)
 
-        @camera = SDL::Rect.new(0,0,640,704)
+        @camera = SDL::Rect.new(0,0,320,352)
     end
 
     def ingest_packet(data_packet : JSON::Any)
@@ -199,31 +222,50 @@ class Client
                # @camera.y = (@player.y - 320).clamp(0, @window.height)
                # @renderer.viewport = @camera
                # 
-               @renderer.scale = {2,2}
+               scale = 2
+               @renderer.scale = {scale, scale}
+               
+
+                @camera.x = (@player.x - (@window.width / (2*scale)).to_i)
+                @camera.y = (@player.y - (@window.height / (2*scale)).to_i)
+
+                #@renderer.viewport = @camera
+
+              # puts "#{@camera.x}, #{@camera.y}"
+                
+               
 
 
                 @tilemap.tile_grid.each_with_index do |row, i|
                     row.each_with_index do |value, j|
-                        #@renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[i*@tilemap.tile_size, j*@tilemap.tile_size, @tilemap.tile_size, @tilemap.tile_size])
-                        @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[i*@tilemap.tile_size + @camera.x, j*@tilemap.tile_size + @camera.y, @tilemap.tile_size, @tilemap.tile_size])
+                        @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[j*@tilemap.tile_size - @camera.x, i*@tilemap.tile_size - @camera.y, @tilemap.tile_size, @tilemap.tile_size])
                     end
                 end
 
                 # suicune splash
                 @renderer.copy(@suicune, nil, SDL::Rect[0, 0, 32, 32])
 
-                # player
-                current_player_frame = @player.current_sprite_frame
-                @renderer.copy(@player.sprite, current_player_frame, SDL::Rect[@player.x, @player.y, current_player_frame.w, current_player_frame.h])
+                puts "camera: #{@camera.x/32}, #{@camera.y/32}"
 
-                # other players
                 @global_player_stats.each do |key, value|
                     sprite_to_render = Pokedex.pokemon_sprites[value["sprite"]]
                     sprite_frame = sprite_to_render.frames[value["frame"]]
-                    @renderer.copy(sprite_to_render.surface, sprite_frame, SDL::Rect[value["x"] || 150, value["y"] || 150, sprite_frame.w, sprite_frame.h])
+                    other_player_x = value["x"] - @camera.x
+                    other_player_y = value["y"] - @camera.y
+                    @renderer.copy(sprite_to_render.surface, sprite_frame, SDL::Rect[other_player_x, other_player_y, sprite_frame.w, sprite_frame.h])
                 end
-                
 
+                # player
+                current_player_frame = @player.current_sprite_frame
+                @renderer.copy(@player.sprite, current_player_frame, SDL::Rect[@player.x - @camera.x, @player.y - @camera.y, current_player_frame.w, current_player_frame.h])
+
+
+            
+                puts "current player: #{@player.x/32}, #{@player.y/32}"
+                # other players
+                
+                
+                
                 @renderer.present
             end
         end
@@ -231,7 +273,7 @@ class Client
 
 
     private def clear_screen
-        @renderer.draw_color = SDL::Color[208, 236, 234, 255] # clear screen in white
+        @renderer.draw_color = SDL::Color[132, 90, 255, 255]
         @renderer.clear
     end
 end
