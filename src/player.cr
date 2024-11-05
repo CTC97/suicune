@@ -99,6 +99,7 @@ class Player
     end
 
     def check_collision(x : Int32, y : Int32)
+        return true if (y < 0 || y >= @collision_map.size ) || (x < 0 || x >= @collision_map[y].size)
         @collision_map[y][x]
     end
 
