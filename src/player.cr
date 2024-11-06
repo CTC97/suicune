@@ -27,7 +27,7 @@ class Player
         @player_id = Random::DEFAULT.rand(Int32)
         @x = 0
         @y = 0
-        @speed = 32
+        @speed = 8
 
         @bounds = 0
 
@@ -43,8 +43,8 @@ class Player
     def update(event : SDL::Event?, window_width : Int32, window_height : Int32, delta_time : Float)
         update_speed = @speed
 
-        tile_x = (@x/(@collision_tile_size || 1)).round.to_i
-        tile_y = (@y/(@collision_tile_size || 1)).round.to_i
+        tile_x = (@x/(@collision_tile_size || 1))
+        tile_y = (@y/(@collision_tile_size || 1))
         
 
         case event
@@ -56,28 +56,28 @@ class Player
                         # TODO - need to update the below bounds checks with MAP bounds, not window bounds
 
                         #@x - update_speed - @bounds >= 0 && 
-                        if !check_collision(intended_tile_x, tile_y)
+                        if !(check_collision(intended_tile_x.ceil.to_i, tile_y.floor.to_i) || check_collision(intended_tile_x.ceil.to_i, tile_y.ceil.to_i))
                             @x -= update_speed
                         end
                         @poke_sprite.play_animation("left")
                     when .d?
                         intended_tile_x = tile_x + 1
                         #@x + @poke_sprite.frames[0].w + update_speed + @bounds <= window_width &&
-                        if !check_collision(intended_tile_x, tile_y)
+                        if !(check_collision(intended_tile_x.floor.to_i, tile_y.floor.to_i) || check_collision(intended_tile_x.floor.to_i, tile_y.ceil.to_i))
                             @x += update_speed
                         end
                         @poke_sprite.play_animation("right")
                     when .s?
                         intended_tile_y = tile_y + 1
                         #@y + @poke_sprite.frames[0].h + update_speed + @bounds <= window_height && 
-                        if !check_collision(tile_x, intended_tile_y) 
+                        if !(check_collision(tile_x.floor.to_i, intended_tile_y.floor.to_i) || check_collision(tile_x.ceil.to_i, intended_tile_y.floor.to_i))
                             @y += update_speed
                         end
                         @poke_sprite.play_animation("down")
                     when .w?
                         intended_tile_y = tile_y - 1
                         #@y - @bounds - update_speed >= 0 && 
-                        if !check_collision(tile_x, intended_tile_y)
+                        if !(check_collision(tile_x.floor.to_i, intended_tile_y.ceil.to_i) || check_collision(tile_x.ceil.to_i, intended_tile_y.ceil.to_i))
                             @y -= update_speed
                         end
                         @poke_sprite.play_animation("up")
