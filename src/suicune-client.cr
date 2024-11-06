@@ -33,11 +33,11 @@ class Client
     @experiencedFps : Float32
 
     @camera : SDL::Rect
+    @render_distance : Int32
 
     def initialize(title : String, width : Int32, height : Int32, fps : Int32)
         @fps = fps
         @experiencedFps = fps.to_f32
-
         @currentTime = Time.monotonic
         @lastTime = Time.monotonic
 
@@ -57,6 +57,7 @@ class Client
             SDL::Rect.new(i * 32, 0, 32, 32)
         end
         
+        @render_distance = 5
 
         intro_packet = ({
             "id_intro"=> "#{@player.player_id}"
@@ -79,7 +80,7 @@ class Client
 
         # tilemap
         # TO DO : SIGNIFICANT PERFORMANCE DROPOFF AFTER 32, MUST FIND OUT WHY, THIS WONT DO
-        chunk = Chunk.new(32, 32, 0..5)
+        chunk = Chunk.new(400, 400, 0..5)
         
         @tilemap = Tilemap.new(
                 "res/tilemap.png", 
@@ -89,7 +90,7 @@ class Client
                 [1, 2]
             );
 
-        @player.set_collision_map(@tilemap.collision_map, 32)
+        @player.set_collision_map(@tilemap.collision_map, @tilemap.tile_size)
 
         @camera = SDL::Rect.new(0,0,320,352)
     end
@@ -178,14 +179,13 @@ class Client
                # @camera.y = (@player.y - 320).clamp(0, @window.height)
                # @renderer.viewport = @camera
                # 
-               scale = 2
-               @renderer.scale = {scale, scale}
+               @renderer.scale = {@player.scale, @player.scale}
                
 
                smooth_factor = 0.9 # Adjust this value for different smoothness levels (0.1 is smooth, closer to 1 is snappier)
 
-               @camera.x = @player.x - (@window.width / (2 * scale)).to_i
-               @camera.y = @player.y - (@window.height / (2 * scale)).to_i
+               @camera.x = @player.x - (@window.width / (2 * @player.scale)).to_i
+               @camera.y = @player.y - (@window.height / (2 * @player.scale)).to_i
                
                #@camera.x = lerp(@camera.x, target_camera_x, smooth_factor)
                #@camera.y = lerp(@camera.y, target_camera_y, smooth_factor)
@@ -199,21 +199,27 @@ class Client
 
                 @tilemap.tile_grid.each_with_index do |row, i|
                     row.each_with_index do |value, j|
-                        @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[j*@tilemap.tile_size - @camera.x, i*@tilemap.tile_size - @camera.y, @tilemap.tile_size, @tilemap.tile_size])
+                        if ((j - @player.tile_x).abs <= @render_distance && (i - @player.tile_y).abs <= @render_distance)
+                            @renderer.copy(@tilemap.tilemap_resource, @tilemap.resource_tiles[value], SDL::Rect[j*@tilemap.tile_size - @camera.x, i*@tilemap.tile_size - @camera.y, @tilemap.tile_size, @tilemap.tile_size])
+                        end
                     end
                 end
 
                 # suicune splash
-                @renderer.copy(@suicune, nil, SDL::Rect[0, 0, 32, 32])
+                
 
                 #puts "camera: #{@camera.x/32}, #{@camera.y/32}"
 
                 @global_player_stats.each do |key, value|
+
                     sprite_to_render = Pokedex.pokemon_sprites[value["sprite"]]
                     sprite_frame = sprite_to_render.frames[value["frame"]]
                     other_player_x = value["x"] - @camera.x
                     other_player_y = value["y"] - @camera.y
-                    @renderer.copy(sprite_to_render.surface, sprite_frame, SDL::Rect[other_player_x, other_player_y, sprite_frame.w, sprite_frame.h])
+                    #puts "#{(value["x"] / @tilemap.tile_size)}, #{(value["y"] / @tilemap.tile_size)}"
+                    if (((value["x"]/(@tilemap.tile_size)) - @player.tile_x).abs <= @render_distance && ((value["y"]/(@tilemap.tile_size)) - @player.tile_y).abs <= @render_distance)
+                        @renderer.copy(sprite_to_render.surface, sprite_frame, SDL::Rect[other_player_x, other_player_y, sprite_frame.w, sprite_frame.h])
+                    end
                 end
 
                 # player
@@ -221,7 +227,8 @@ class Client
                 @renderer.copy(@player.sprite, current_player_frame, SDL::Rect[@player.x - @camera.x, @player.y - @camera.y, current_player_frame.w, current_player_frame.h])
 
 
-            
+                @renderer.scale = {2, 2}
+                @renderer.copy(@suicune, nil, SDL::Rect[0, 0, 32, 32])
                 #puts "current player: #{@player.x/32}, #{@player.y/32}"
                 # other players
                 

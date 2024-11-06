@@ -12,6 +12,7 @@ class Sprite
     property animation_dict : Hash(String, Array(Int32))
     property current_animation : Array(Int32)
     property animation_speed : Float64
+    property original_animation_speed : Float64
     property frame : Int32
 
     property sprite_name : String
@@ -28,6 +29,8 @@ class Sprite
         @frame = 0
 
         @sprite_name = path.split(".png")[0]
+
+        @original_animation_speed = @animation_speed
     end
 
     def frames
