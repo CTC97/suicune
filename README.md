@@ -1,6 +1,7 @@
 ### suicune.cr - pure crystal multiplayer engine 
 
-![Untitleda480](https://github.com/user-attachments/assets/254aa384-7274-4280-8d3e-47c2712667aa)
+![Screen Recording 2024-11-05 at 11 05 21 PM](https://github.com/user-attachments/assets/4f1d092c-20fa-43df-a69a-55445ee9a731)
+*The above demonstrates client based scaling + render distances, but has issues w/ chunk communication and collision*
 
 Currently has functionality for:
 - Basic player functionality
