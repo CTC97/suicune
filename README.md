@@ -1,4 +1,4 @@
-### suicune.cr - pure crystal multiplayer engine 
+### suicune.cr - pure crystal multiplayer engine
 
 ![Screen Recording 2024-11-05 at 11 05 21 PM](https://github.com/user-attachments/assets/4f1d092c-20fa-43df-a69a-55445ee9a731)
 
@@ -21,3 +21,6 @@ Presented by Wavyland, NY
 ```
 
 ![suicune](https://github.com/user-attachments/assets/cbdcea76-13d6-4617-a22c-cc196b719296)
+
+Requirements:
+```brew install sdl2_image```
