@@ -15,12 +15,12 @@ Currently has functionality for:
 - Render Distance Management
 - Chunk Generation (Broken)
 
+Requirements:
+```brew install sdl2_image```
+
 ```
 By CTC97
 Presented by Wavyland, NY
 ```
 
 ![suicune](https://github.com/user-attachments/assets/cbdcea76-13d6-4617-a22c-cc196b719296)
-
-Requirements:
-```brew install sdl2_image```
