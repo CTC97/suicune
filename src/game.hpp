@@ -1,0 +1,48 @@
+#pragma once
+
+#include <memory>
+#include <string>
+#include "raylib.h"
+
+namespace barley
+{
+
+    class Scene;
+
+    class Game
+    {
+    public:
+        Game(const std::string &title, int window_width, int window_height);
+        ~Game();
+
+        void run();
+        bool is_running() const;
+        void quit();
+
+        void set_fullscreen(bool enabled);
+        void set_resizable(bool enabled);
+        void set_fps(int fps);
+
+        int get_window_width() const;
+        int get_window_height() const;
+
+        void set_scene(std::unique_ptr<Scene> scene);
+
+    private:
+        std::string title;
+        int window_width;
+        int window_height;
+
+        bool fullscreen = false;
+        bool resizable = false;
+        int targetFps = 60;
+
+        bool running = false;
+
+        std::unique_ptr<Scene> current_scene;
+
+        void begin_frame();
+        void end_frame();
+    };
+
+}
