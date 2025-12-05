@@ -18,7 +18,10 @@ namespace barley
         }
     }
 
-    Scene::~Scene() = default;
+    Scene::~Scene()
+    {
+        UnloadTexture(barley_min);
+    }
 
     void Scene::draw()
     {

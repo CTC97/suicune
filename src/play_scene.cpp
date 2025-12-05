@@ -20,7 +20,7 @@ namespace barley
 
     void PlayScene::draw()
     {
-        DrawText("PlayScene", 50, 50, 20, BLACK);
+        Scene::draw();
     }
 
 }
