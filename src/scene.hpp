@@ -1,5 +1,7 @@
 #pragma once
 
+#include "raylib.h"
+
 namespace barley
 {
 
@@ -12,10 +14,12 @@ namespace barley
         virtual ~Scene();
 
         virtual void update(float dt) = 0;
-        virtual void draw() = 0;
+        virtual void draw();
 
     protected:
         Game &game;
+
+        Texture2D barley_min;
     };
 
 }

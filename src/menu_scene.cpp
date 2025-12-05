@@ -8,21 +8,30 @@ namespace barley
     {
     }
 
-    MenuScene::~MenuScene() = default;
+    MenuScene::~MenuScene()
+    {
+        for (auto &item : items)
+        {
+            if (item.is_image())
+            {
+                UnloadTexture(std::get<Texture2D>(item.get_label()));
+            }
+        }
+    }
 
     void MenuScene::add_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback)
     {
-        options.emplace_back(label, x, y, callback);
+        items.emplace_back(label, x, y, callback);
     }
 
-    const std::vector<MenuItem> &MenuScene::get_options() const
+    const std::vector<MenuItem> &MenuScene::get_items() const
     {
-        return options;
+        return items;
     }
 
-    std::vector<MenuItem> &MenuScene::get_options()
+    std::vector<MenuItem> &MenuScene::get_items()
     {
-        return options;
+        return items;
     }
 
     int MenuScene::get_selected_index() const
@@ -32,7 +41,7 @@ namespace barley
 
     void MenuScene::set_selected_index(int index)
     {
-        if (options.empty())
+        if (items.empty())
         {
             selected_index = 0;
             return;
@@ -40,8 +49,8 @@ namespace barley
 
         if (index < 0)
             index = 0;
-        else if (index >= static_cast<int>(options.size()))
-            index = static_cast<int>(options.size()) - 1;
+        else if (index >= static_cast<int>(items.size()))
+            index = static_cast<int>(items.size()) - 1;
 
         selected_index = index;
     }
@@ -50,12 +59,12 @@ namespace barley
     {
         (void)dt;
 
-        auto &options = get_options();
-        if (options.empty())
+        auto &items = get_items();
+        if (items.empty())
             return;
 
         int index = get_selected_index();
-        int count = static_cast<int>(options.size());
+        int count = static_cast<int>(items.size());
 
         // Move selection down
         if (IsKeyPressed(KEY_DOWN))
@@ -76,22 +85,22 @@ namespace barley
         }
 
         // Update selection states
-        for (size_t i = 0; i < options.size(); ++i)
+        for (size_t i = 0; i < items.size(); ++i)
         {
             if (static_cast<int>(i) != get_selected_index())
             {
-                options[i].set_selected(false);
+                items[i].set_selected(false);
             }
             else
             {
-                options[i].set_selected(true);
+                items[i].set_selected(true);
             }
         }
 
         // Activate selected option
         if (IsKeyPressed(KEY_ENTER))
         {
-            const auto &option = options[get_selected_index()];
+            const auto &option = items[get_selected_index()];
             if (option.get_callback())
             {
                 option.get_callback()();
@@ -101,11 +110,9 @@ namespace barley
 
     void MenuScene::draw()
     {
-        DrawText("barley.", 6, game.get_window_height() - 15, 10, WHITE);
+        const auto &items = get_items();
 
-        const auto &options = get_options();
-
-        for (const auto &item : options)
+        for (const auto &item : items)
         {
             if (item.is_text())
             {
@@ -113,7 +120,6 @@ namespace barley
             }
             else if (item.is_image())
             {
-                printf("Drawing texture at (%d, %d)\n", item.get_x(), item.get_y());
                 DrawTexture(std::get<Texture2D>(item.get_label()), item.get_x(), item.get_y(), WHITE);
             }
 
@@ -122,5 +128,7 @@ namespace barley
                 DrawText(">", item.get_x() - 30, item.get_y(), 20, WHITE);
             }
         }
+
+        Scene::draw();
     }
 }
