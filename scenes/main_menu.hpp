@@ -11,8 +11,8 @@ namespace barley
         MainMenu(Game &game);
         ~MainMenu() override;
 
-        void update(float dt) override;
         void draw() override;
+        using MenuScene::update;
     };
 
 }
