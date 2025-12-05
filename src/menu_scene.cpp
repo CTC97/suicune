@@ -67,7 +67,7 @@ namespace barley
         int count = static_cast<int>(items.size());
 
         // Move selection down
-        if (IsKeyPressed(KEY_DOWN))
+        if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_LEFT))
         {
             index++;
             if (index >= count)
@@ -76,7 +76,7 @@ namespace barley
         }
 
         // Move selection up
-        if (IsKeyPressed(KEY_UP))
+        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_RIGHT))
         {
             index--;
             if (index < 0)
