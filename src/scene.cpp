@@ -22,7 +22,7 @@ namespace barley
 
     void Scene::draw()
     {
-        DrawTexture(barley_min, 0, game.get_window_height() - 32, WHITE);
+        DrawTexture(barley_min, game.get_window_width() - 32, game.get_window_height() - 32, WHITE);
     }
 
 }
