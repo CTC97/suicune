@@ -9,13 +9,14 @@ namespace barley
     MainMenu::MainMenu(Game &game)
         : MenuScene(game)
     {
-        add_option("Play", 20, 20, []()
+        Texture2D playTexture = LoadTexture("res/sprites/play_sprite.png");
+        add_option(playTexture, (game.get_window_width() - playTexture.width) / 2, 200, []()
                    { printf("Play option selected!\n"); });
 
         // add_option("Options", 20, 20, [this]()
         //            { this->game.set_scene(std::make_unique<OptionMenu>(this->game)); });
 
-        add_option("Quit", 40, 40, [this]()
+        add_option("Quit", (game.get_window_width() - MeasureText("Quit", 20)) / 2, 300, [this]()
                    { this->game.quit(); });
     }
 
@@ -24,7 +25,5 @@ namespace barley
     void MainMenu::draw()
     {
         MenuScene::draw();
-
-        DrawText("Welcome to the Main Menu!", 10, 10, 20, RAYWHITE);
     }
 }

@@ -10,9 +10,9 @@ namespace barley
 
     MenuScene::~MenuScene() = default;
 
-    void MenuScene::add_option(const std::string &text, int x, int y, const std::function<void()> &callback)
+    void MenuScene::add_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback)
     {
-        options.push_back(MenuItem{text, x, y, callback});
+        options.emplace_back(label, x, y, callback);
     }
 
     const std::vector<MenuItem> &MenuScene::get_options() const
@@ -75,13 +75,26 @@ namespace barley
             set_selected_index(index);
         }
 
+        // Update selection states
+        for (size_t i = 0; i < options.size(); ++i)
+        {
+            if (static_cast<int>(i) != get_selected_index())
+            {
+                options[i].set_selected(false);
+            }
+            else
+            {
+                options[i].set_selected(true);
+            }
+        }
+
         // Activate selected option
         if (IsKeyPressed(KEY_ENTER))
         {
             const auto &option = options[get_selected_index()];
-            if (option.callback)
+            if (option.get_callback())
             {
-                option.callback();
+                option.get_callback()();
             }
         }
     }
@@ -91,13 +104,23 @@ namespace barley
         DrawText("barley.", 6, game.get_window_height() - 15, 10, WHITE);
 
         const auto &options = get_options();
-        int selected = get_selected_index();
 
-        for (int i = 0; i < static_cast<int>(options.size()); ++i)
+        for (const auto &item : options)
         {
-            int y = 180 + i * 30;
-            Color color = (i == selected) ? MAROON : DARKGRAY;
-            DrawText(options[i].text.c_str(), 300, y, 20, color);
+            if (item.is_text())
+            {
+                DrawText(std::get<std::string>(item.get_label()).c_str(), item.get_x(), item.get_y(), 20, WHITE);
+            }
+            else if (item.is_image())
+            {
+                printf("Drawing texture at (%d, %d)\n", item.get_x(), item.get_y());
+                DrawTexture(std::get<Texture2D>(item.get_label()), item.get_x(), item.get_y(), WHITE);
+            }
+
+            if (item.is_selected())
+            {
+                DrawText(">", item.get_x() - 30, item.get_y(), 20, WHITE);
+            }
         }
     }
 }

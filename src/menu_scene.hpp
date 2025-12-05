@@ -6,16 +6,11 @@
 #include <functional>
 #include "raylib.h"
 #include "../src/game.hpp"
+#include <variant>
+#include "menu_item.hpp"
 
 namespace barley
 {
-
-    struct MenuItem
-    {
-        std::string text;
-        int x, y;
-        std::function<void()> callback;
-    };
 
     class MenuScene : public Scene
     {
@@ -27,7 +22,7 @@ namespace barley
         void draw() override;
 
     protected:
-        void add_option(const std::string &text, int x, int y, const std::function<void()> &callback);
+        void add_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback);
 
         const std::vector<MenuItem> &get_options() const;
         std::vector<MenuItem> &get_options();
