@@ -15,7 +15,10 @@ namespace barley
     void PlayScene::update(float dt)
     {
         (void)dt;
-        // game logic will go here later
+        if (player)
+        {
+            player->update();
+        }
     }
 
     void PlayScene::set_tilemap(std::unique_ptr<Tilemap> map)
@@ -33,6 +36,11 @@ namespace barley
         if (tilemap)
         {
             tilemap->draw();
+        }
+
+        if (player)
+        {
+            player->draw();
         }
 
         EndMode2D();

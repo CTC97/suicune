@@ -4,6 +4,7 @@
 #include "scene.hpp"
 #include "spritesheet.hpp"
 #include "tilemap.hpp"
+#include "player.hpp"
 
 namespace barley
 {
@@ -24,6 +25,8 @@ namespace barley
         virtual Camera2D &get_camera() = 0;
 
         std::unique_ptr<Tilemap> tilemap;
+
+        std::unique_ptr<Player> player;
     };
 
 }

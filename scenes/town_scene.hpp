@@ -12,7 +12,7 @@ namespace barley
         ~TownScene() override;
 
         void draw() override;
-        using PlayScene::update;
+        void update(float dt) override;
 
     protected:
         Camera2D &get_camera() override;

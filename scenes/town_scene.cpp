@@ -1,4 +1,5 @@
 #include "town_scene.hpp"
+#include "../src/game.hpp"
 
 namespace barley
 {
@@ -28,16 +29,25 @@ namespace barley
 
         auto map = std::make_unique<Tilemap>(*sheet, map_data[0].size(), map_data.size(), map_data);
 
-        // attach them
-        // If PlayScene doesn't own the Spritesheet, TownScene must keep it alive
+        // Attach + if PlayScene doesn't own the Spritesheet, TownScene must keep it alive
         spritesheet = std::move(sheet);
         set_tilemap(std::move(map));
+
+        player = std::make_unique<Player>(16, 16);
+        camera.target = player->get_position();
     }
 
     TownScene::~TownScene() = default;
 
+    void TownScene::update(float dt)
+    {
+        PlayScene::update(dt);
+    }
+
     void TownScene::draw()
     {
+        camera.target = player->get_position();
+        camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
         PlayScene::draw();
     }
 
