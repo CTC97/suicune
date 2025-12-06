@@ -1,6 +1,9 @@
 #pragma once
 
+#include <memory>
 #include "scene.hpp"
+#include "spritesheet.hpp"
+#include "tilemap.hpp"
 
 namespace barley
 {
@@ -13,6 +16,11 @@ namespace barley
 
         void update(float dt) override;
         void draw() override;
+
+        void set_tilemap(std::unique_ptr<Tilemap> map);
+
+    protected:
+        std::unique_ptr<Tilemap> tilemap;
     };
 
 }

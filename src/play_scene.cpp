@@ -18,9 +18,19 @@ namespace barley
         // game logic will go here later
     }
 
+    void PlayScene::set_tilemap(std::unique_ptr<Tilemap> map)
+    {
+        tilemap = std::move(map);
+    }
+
     void PlayScene::draw()
     {
         Scene::draw();
+        if (tilemap)
+        {
+            printf("Drawing tilemap\n");
+            tilemap->draw();
+        }
     }
 
 }

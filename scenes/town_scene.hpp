@@ -14,8 +14,8 @@ namespace barley
         void draw() override;
         using PlayScene::update;
 
-        // private:
-        //     Texture2D bg_texture;
+    private:
+        std::unique_ptr<Spritesheet> spritesheet;
     };
 
 }
