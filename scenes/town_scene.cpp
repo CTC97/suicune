@@ -35,6 +35,20 @@ namespace barley
 
         player = std::make_unique<Player>(16, 16);
         camera.target = player->get_position();
+
+        /*
+
+        I really want to make it so that we do something like:
+
+            Spritesheet tile_sheet(...);
+            Tilemap tilemap(tile_sheet, ...);
+            set_tilemap(&tilemap);
+
+            Spritesheet player_sheet(...);
+            Player player(player_sheet, 5, 5, ...);
+            set_player(&player);
+
+        */
     }
 
     TownScene::~TownScene() = default;
