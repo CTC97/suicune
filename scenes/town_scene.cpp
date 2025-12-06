@@ -6,6 +6,11 @@ namespace barley
     TownScene::TownScene(Game &game)
         : PlayScene(game)
     {
+        camera.target = {0.0f, 0.0f};
+        camera.offset = {0.0f, 0.0f};
+        camera.rotation = 0.0f;
+        camera.zoom = 3.0f;
+
         auto sheet = std::make_unique<Spritesheet>(
             "res/sprites/tilesheet.png",
             16,
@@ -34,5 +39,10 @@ namespace barley
     void TownScene::draw()
     {
         PlayScene::draw();
+    }
+
+    Camera2D &TownScene::get_camera()
+    {
+        return camera;
     }
 }

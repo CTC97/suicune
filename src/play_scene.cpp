@@ -26,11 +26,16 @@ namespace barley
     void PlayScene::draw()
     {
         Scene::draw();
+        Camera2D &camera = get_camera();
+
+        BeginMode2D(camera);
+
         if (tilemap)
         {
-            printf("Drawing tilemap\n");
             tilemap->draw();
         }
+
+        EndMode2D();
     }
 
 }

@@ -5,7 +5,7 @@ using namespace barley;
 
 int main()
 {
-    Game game("Barley Test", 800, 450);
+    Game game("Barley Test", 1200, 700);
 
     game.set_scene(std::make_unique<MainMenu>(game));
 

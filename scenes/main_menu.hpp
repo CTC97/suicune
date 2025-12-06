@@ -15,8 +15,8 @@ namespace barley
         void draw() override;
         using MenuScene::update;
 
-    private:
-        Texture2D bg_texture;
+        // private:
+        //     Texture2D bg_texture;
     };
 
 }
