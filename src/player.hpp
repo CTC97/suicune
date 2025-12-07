@@ -7,6 +7,14 @@
 
 namespace barley
 {
+    enum Direction
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    };
+
     class Player
     {
 
@@ -19,8 +27,12 @@ namespace barley
 
         Vector2 get_position();
 
+        Direction get_current_direction();
+
     private:
         int x;
         int y;
+
+        Direction current_direction;
     };
 }

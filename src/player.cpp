@@ -4,6 +4,7 @@ namespace barley
 {
     Player::Player(int x, int y) : x(x), y(y)
     {
+        current_direction = DOWN;
     }
 
     Player::~Player()
@@ -17,13 +18,25 @@ namespace barley
 
         const int speed = 1;
         if (IsKeyDown(KEY_RIGHT))
+        {
             new_x += speed;
+            current_direction = RIGHT;
+        }
         else if (IsKeyDown(KEY_LEFT))
+        {
             new_x -= speed;
+            current_direction = LEFT;
+        }
         else if (IsKeyDown(KEY_UP))
+        {
             new_y -= speed;
+            current_direction = UP;
+        }
         else if (IsKeyDown(KEY_DOWN))
+        {
             new_y += speed;
+            current_direction = DOWN;
+        }
 
         int tileSize = tilemap.get_tile_size();
 
@@ -70,5 +83,10 @@ namespace barley
     Vector2 Player::get_position()
     {
         return {static_cast<float>(x), static_cast<float>(y)};
+    }
+
+    Direction Player::get_current_direction()
+    {
+        return current_direction;
     }
 }
