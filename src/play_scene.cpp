@@ -15,9 +15,15 @@ namespace barley
     void PlayScene::update(float dt)
     {
         (void)dt;
+
+        for (const auto &entity : entities)
+        {
+            entity_collision_map[entity->get_position().y][entity->get_position().x] = true;
+        }
+
         if (player)
         {
-            player->update(*tilemap);
+            player->update(*tilemap, entity_collision_map);
         }
     }
 
@@ -57,6 +63,11 @@ namespace barley
                                       [entity](const std::unique_ptr<Entity> &e)
                                       { return e.get() == entity; }),
                        entities.end());
+    }
+
+    void PlayScene::initialize_entity_collision_map()
+    {
+        entity_collision_map.resize(tilemap->get_map_height(), std::vector<bool>(tilemap->get_map_width(), false));
     }
 
 }

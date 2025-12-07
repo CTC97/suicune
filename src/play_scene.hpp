@@ -23,6 +23,8 @@ namespace barley
         void add_entity(std::unique_ptr<Entity> entity);
         void remove_entity(Entity *entity);
 
+        void initialize_entity_collision_map();
+
     protected:
         // Derived scenes must provide a camera
         virtual Camera2D &get_camera() = 0;
@@ -31,6 +33,8 @@ namespace barley
         std::unique_ptr<Player> player;
 
         std::vector<std::unique_ptr<Entity>> entities;
+
+        std::vector<std::vector<bool>> entity_collision_map;
     };
 
 }

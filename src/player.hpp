@@ -14,7 +14,7 @@ namespace barley
         Player(int x, int y);
         ~Player();
 
-        void update(const Tilemap &tilemap);
+        void update(const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map);
         void draw();
 
         Vector2 get_position();

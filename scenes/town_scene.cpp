@@ -29,6 +29,8 @@ namespace barley
         tilemap = std::make_unique<Tilemap>(*tilemap_spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
         tilemap->set_collision_tiles({3});
 
+        initialize_entity_collision_map();
+
         player = std::make_unique<Player>(16, 16);
         camera.target = player->get_position();
 
@@ -38,6 +40,7 @@ namespace barley
             16);
 
         add_entity(std::make_unique<Entity>(*entity_spritesheet, 0, 0));
+        add_entity(std::make_unique<Entity>(*entity_spritesheet, 4, 4));
     }
 
     TownScene::~TownScene() = default;

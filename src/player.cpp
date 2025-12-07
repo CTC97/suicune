@@ -10,7 +10,7 @@ namespace barley
     {
     }
 
-    void Player::update(const Tilemap &tilemap)
+    void Player::update(const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map)
     {
         int new_x = x;
         int new_y = y;
@@ -45,7 +45,7 @@ namespace barley
             // Now safe to convert to tile coords
             int tx = px / tileSize;
             int ty = py / tileSize;
-            return tilemap.is_tile_free(tx, ty);
+            return tilemap.is_tile_free(tx, ty) && !entity_collision_map[ty][tx];
         };
 
         bool can_move =
