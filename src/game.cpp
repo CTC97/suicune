@@ -3,8 +3,8 @@
 
 namespace barley
 {
-    Game::Game(const std::string &title, int window_width, int window_height)
-        : title(title), window_width(window_width), window_height(window_height)
+    Game::Game(const std::string &title, int window_width, int window_height, int tile_size)
+        : title(title), window_width(window_width), window_height(window_height), tile_size(tile_size)
     {
         InitWindow(window_width, window_height, title.c_str());
         running = true;
@@ -107,6 +107,11 @@ namespace barley
     int Game::get_window_height() const
     {
         return window_height;
+    }
+
+    int Game::get_tile_size() const
+    {
+        return tile_size;
     }
 
     void Game::set_scene(std::unique_ptr<Scene> scene)

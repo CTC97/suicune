@@ -25,6 +25,8 @@ namespace barley
 
         void initialize_entity_collision_map();
 
+        void check_interaction();
+
     protected:
         // Derived scenes must provide a camera
         virtual Camera2D &get_camera() = 0;

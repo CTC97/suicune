@@ -17,7 +17,7 @@ namespace barley
         // DrawRectangle(x, y, 16, 16, RED);
     }
 
-    Vector2 Entity::get_position()
+    Vector2 Entity::get_position() const
     {
         return {static_cast<float>(x), static_cast<float>(y)};
     }

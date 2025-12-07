@@ -38,15 +38,15 @@ namespace barley
             current_direction = DOWN;
         }
 
-        int tileSize = tilemap.get_tile_size();
+        int tile_size = tilemap.get_tile_size();
 
         int left = new_x;
         int right = new_x + 16 - 1;
         int top = new_y;
         int bottom = new_y + 16 - 1;
 
-        int map_pixel_width = tilemap.get_map_width() * tileSize;
-        int map_pixel_height = tilemap.get_map_height() * tileSize;
+        int map_pixel_width = tilemap.get_map_width() * tile_size;
+        int map_pixel_height = tilemap.get_map_height() * tile_size;
 
         auto is_free_pixel = [&](int px, int py)
         {
@@ -56,8 +56,8 @@ namespace barley
                 return false; // treat outside as not free
 
             // Now safe to convert to tile coords
-            int tx = px / tileSize;
-            int ty = py / tileSize;
+            int tx = px / tile_size;
+            int ty = py / tile_size;
             return tilemap.is_tile_free(tx, ty) && !entity_collision_map[ty][tx];
         };
 

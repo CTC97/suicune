@@ -15,7 +15,7 @@ namespace barley
         virtual void update();
         void draw();
 
-        Vector2 get_position();
+        Vector2 get_position() const;
 
         void set_solid(bool solid);
         bool is_solid() const;

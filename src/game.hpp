@@ -12,7 +12,7 @@ namespace barley
     class Game
     {
     public:
-        Game(const std::string &title, int window_width, int window_height);
+        Game(const std::string &title, int window_width, int window_height, int tile_size);
         ~Game();
 
         void run();
@@ -26,12 +26,16 @@ namespace barley
         int get_window_width() const;
         int get_window_height() const;
 
+        int get_tile_size() const;
+
         void set_scene(std::unique_ptr<Scene> scene);
 
     private:
         std::string title;
         int window_width;
         int window_height;
+
+        int tile_size;
 
         bool fullscreen = false;
         bool resizable = false;
