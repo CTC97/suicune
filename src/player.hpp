@@ -3,6 +3,7 @@
 #include <string>
 #include "raylib.h"
 #include "spritesheet.hpp"
+#include "tilemap.hpp"
 
 namespace barley
 {
@@ -13,7 +14,7 @@ namespace barley
         Player(int x, int y);
         ~Player();
 
-        void update();
+        void update(const Tilemap &tilemap);
         void draw();
 
         Vector2 get_position();

@@ -17,7 +17,7 @@ namespace barley
         (void)dt;
         if (player)
         {
-            player->update();
+            player->update(*tilemap);
         }
     }
 

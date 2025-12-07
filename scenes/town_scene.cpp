@@ -10,7 +10,7 @@ namespace barley
         camera.target = {0.0f, 0.0f};
         camera.offset = {0.0f, 0.0f};
         camera.rotation = 0.0f;
-        camera.zoom = 3.0f;
+        camera.zoom = 4.0f;
 
         auto sheet = std::make_unique<Spritesheet>(
             "res/sprites/tilesheet.png",
@@ -19,15 +19,16 @@ namespace barley
 
         // build your tilemap
         std::vector<std::vector<int>> map_data = {
-            {2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0},
+            {2, 3, 2, 3, 2, 0, 2, 0, 2, 0, 2, 3},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
         };
 
-        auto map = std::make_unique<Tilemap>(*sheet, map_data[0].size(), map_data.size(), map_data);
+        auto map = std::make_unique<Tilemap>(*sheet, 16, map_data[0].size(), map_data.size(), map_data);
+        map->set_collision_tiles({3});
 
         // Attach + if PlayScene doesn't own the Spritesheet, TownScene must keep it alive
         spritesheet = std::move(sheet);
