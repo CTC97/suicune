@@ -21,11 +21,6 @@ namespace barley
         }
     }
 
-    void PlayScene::set_tilemap(std::unique_ptr<Tilemap> map)
-    {
-        tilemap = std::move(map);
-    }
-
     void PlayScene::draw()
     {
         Scene::draw();

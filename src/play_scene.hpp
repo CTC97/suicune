@@ -18,14 +18,11 @@ namespace barley
         void update(float dt) override;
         void draw() override;
 
-        void set_tilemap(std::unique_ptr<Tilemap> map);
-
     protected:
         // Derived scenes must provide a camera
         virtual Camera2D &get_camera() = 0;
 
         std::unique_ptr<Tilemap> tilemap;
-
         std::unique_ptr<Player> player;
     };
 

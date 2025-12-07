@@ -12,12 +12,11 @@ namespace barley
         camera.rotation = 0.0f;
         camera.zoom = 4.0f;
 
-        auto sheet = std::make_unique<Spritesheet>(
+        spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/tilesheet.png",
             16,
             16);
 
-        // build your tilemap
         std::vector<std::vector<int>> map_data = {
             {2, 3, 2, 3, 2, 0, 2, 0, 2, 0, 2, 3},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -27,29 +26,11 @@ namespace barley
             {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
         };
 
-        auto map = std::make_unique<Tilemap>(*sheet, 16, map_data[0].size(), map_data.size(), map_data);
-        map->set_collision_tiles({3});
-
-        // Attach + if PlayScene doesn't own the Spritesheet, TownScene must keep it alive
-        spritesheet = std::move(sheet);
-        set_tilemap(std::move(map));
+        tilemap = std::make_unique<Tilemap>(*spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
+        tilemap->set_collision_tiles({3});
 
         player = std::make_unique<Player>(16, 16);
         camera.target = player->get_position();
-
-        /*
-
-        I really want to make it so that we do something like:
-
-            Spritesheet tile_sheet(...);
-            Tilemap tilemap(tile_sheet, ...);
-            set_tilemap(&tilemap);
-
-            Spritesheet player_sheet(...);
-            Player player(player_sheet, 5, 5, ...);
-            set_player(&player);
-
-        */
     }
 
     TownScene::~TownScene() = default;
