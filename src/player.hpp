@@ -1,9 +1,9 @@
 #pragma once
 
-#include <string>
 #include "raylib.h"
 #include "spritesheet.hpp"
 #include "tilemap.hpp"
+#include "entity.hpp"
 
 namespace barley
 {

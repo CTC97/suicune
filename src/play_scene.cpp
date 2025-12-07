@@ -38,7 +38,25 @@ namespace barley
             player->draw();
         }
 
+        for (const auto &entity : entities)
+        {
+            entity->draw();
+        }
+
         EndMode2D();
+    }
+
+    void PlayScene::add_entity(std::unique_ptr<Entity> entity)
+    {
+        entities.push_back(std::move(entity));
+    }
+
+    void PlayScene::remove_entity(Entity *entity)
+    {
+        entities.erase(std::remove_if(entities.begin(), entities.end(),
+                                      [entity](const std::unique_ptr<Entity> &e)
+                                      { return e.get() == entity; }),
+                       entities.end());
     }
 
 }

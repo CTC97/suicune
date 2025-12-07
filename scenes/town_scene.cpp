@@ -12,7 +12,7 @@ namespace barley
         camera.rotation = 0.0f;
         camera.zoom = 4.0f;
 
-        spritesheet = std::make_unique<Spritesheet>(
+        tilemap_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/tilesheet.png",
             16,
             16);
@@ -26,11 +26,18 @@ namespace barley
             {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
         };
 
-        tilemap = std::make_unique<Tilemap>(*spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
+        tilemap = std::make_unique<Tilemap>(*tilemap_spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
         tilemap->set_collision_tiles({3});
 
         player = std::make_unique<Player>(16, 16);
         camera.target = player->get_position();
+
+        entity_spritesheet = std::make_unique<Spritesheet>(
+            "res/sprites/entity.png",
+            16,
+            16);
+
+        add_entity(std::make_unique<Entity>(*entity_spritesheet, 0, 0));
     }
 
     TownScene::~TownScene() = default;
