@@ -18,7 +18,11 @@ namespace barley
 
         for (const auto &entity : entities)
         {
-            entity_collision_map[entity->get_position().y][entity->get_position().x] = true;
+            const int tile_size = game.get_tile_size();
+            const int entity_tile_x = static_cast<int>(entity->get_position().x) / tile_size;
+            const int entity_tile_y = static_cast<int>(entity->get_position().y) / tile_size;
+
+            entity_collision_map[entity_tile_x][entity_tile_y] = true;
         }
 
         if (player)
@@ -69,7 +73,7 @@ namespace barley
         int target_x = player_tile_x;
         int target_y = player_tile_y;
 
-        printf("Player at tile (%d, %d) facing direction %d\n", player_tile_x, player_tile_y, current_player_direction);
+        // printf("Player at tile (%d, %d) facing direction %d\n", player_tile_x, player_tile_y, current_player_direction);
 
         switch (current_player_direction)
         {
@@ -93,24 +97,26 @@ namespace barley
             [this, target_x, target_y](const std::unique_ptr<Entity> &e)
             {
                 const Vector2 pos = e->get_position();
+                // printf("Entity position: (%.2f, %.2f)\n", pos.x, pos.y);
                 int tile_x = static_cast<int>(pos.x) / game.get_tile_size();
                 int tile_y = static_cast<int>(pos.y) / game.get_tile_size();
 
-                printf("Checking entity at tile (%d, %d) against target tile (%d, %d)\n", tile_x, tile_y, target_x, target_y);
+                // printf("\tChecking entity at tile (%d, %d) against target tile (%d, %d)\n", tile_x, tile_y, target_x, target_y);
 
-                return pos.x == target_x && pos.y == target_y;
+                return std::abs(tile_x - target_x) < 2 && std::abs(tile_y - target_y) < 2;
             });
 
         if (target_search != entities.end())
         {
             // Entity &target_entity = **target_search;
-            printf("Interacted with entity at tile (%d, %d)\n", target_x, target_y);
+            // printf("\t\tInteracted with entity at tile (%d, %d)\n", target_x, target_y);
             // Here you can add more interaction logic, e.g., call a method on the entity
         }
         else
         {
-            printf("No entity to interact with at tile (%d, %d)\n", target_x, target_y);
+            // printf("\t\tNo entity to interact with at tile (%d, %d)\n", target_x, target_y);
         }
+        // printf("---\n");
     }
 
     void PlayScene::add_entity(std::unique_ptr<Entity> entity)

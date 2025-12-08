@@ -2,7 +2,7 @@
 
 namespace barley
 {
-    Player::Player(int x, int y) : x(x), y(y)
+    Player::Player(Spritesheet &spritesheet, int x, int y) : spritesheet(spritesheet), x(x), y(y)
     {
         current_direction = DOWN;
     }
@@ -76,8 +76,7 @@ namespace barley
 
     void Player::draw()
     {
-        // Draw the player (e.g., use raylib to draw the player sprite)
-        DrawRectangle(x, y, 16, 16, RED); // Example: Draw a red square as the player
+        spritesheet.draw_sprite(0, x, y);
     }
 
     Vector2 Player::get_position()

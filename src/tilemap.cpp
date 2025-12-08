@@ -28,7 +28,7 @@ namespace barley
             for (int x = 0; x < map_width; ++x)
             {
                 int tile_index = map[y][x];
-                spritesheet.draw_sprite(tile_index, x, y);
+                spritesheet.draw_sprite(tile_index, x * tile_size, y * tile_size);
             }
         }
     }

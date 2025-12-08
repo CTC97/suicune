@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdio>
+#include <stdexcept>
+#include <string>
 #include "raylib.h"
 
 namespace barley

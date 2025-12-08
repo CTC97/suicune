@@ -19,7 +19,7 @@ namespace barley
     {
 
     public:
-        Player(int x, int y);
+        Player(Spritesheet &spritesheet, int x, int y);
         ~Player();
 
         void update(const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map);
@@ -30,6 +30,8 @@ namespace barley
         Direction get_current_direction();
 
     private:
+        Spritesheet &spritesheet;
+
         int x;
         int y;
 

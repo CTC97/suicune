@@ -18,12 +18,12 @@ namespace barley
             16);
 
         std::vector<std::vector<int>> map_data = {
-            {2, 3, 2, 3, 2, 0, 2, 0, 2, 0, 2, 3},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-            {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
+            {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2},
+            {2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0},
+            {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2},
+            {2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0},
+            {0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2},
+            {2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0},
         };
 
         tilemap = std::make_unique<Tilemap>(*tilemap_spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
@@ -31,16 +31,21 @@ namespace barley
 
         initialize_entity_collision_map();
 
-        player = std::make_unique<Player>(16, 16);
+        player_spritesheet = std::make_unique<Spritesheet>(
+            "res/sprites/Sprite-0001.png",
+            16,
+            16);
+
+        player = std::make_unique<Player>(*player_spritesheet, 16, 16);
         camera.target = player->get_position();
 
         entity_spritesheet = std::make_unique<Spritesheet>(
-            "res/sprites/entity.png",
+            "res/sprites/Sprite-0001.png",
             16,
             16);
 
         add_entity(std::make_unique<Entity>(*entity_spritesheet, 0, 0));
-        add_entity(std::make_unique<Entity>(*entity_spritesheet, 4, 4));
+        add_entity(std::make_unique<Entity>(*entity_spritesheet, 64, 64));
     }
 
     TownScene::~TownScene() = default;
