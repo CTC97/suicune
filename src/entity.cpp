@@ -31,4 +31,9 @@ namespace barley
     {
         return solid;
     }
+
+    void Entity::interact()
+    {
+        printf("generic interaction...\n");
+    }
 }

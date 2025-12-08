@@ -1,5 +1,6 @@
 #include "town_scene.hpp"
 #include "../src/game.hpp"
+#include "../entities/nurse_joy.hpp"
 
 namespace barley
 {
@@ -39,13 +40,18 @@ namespace barley
         player = std::make_unique<Player>(*player_spritesheet, 16, 16);
         camera.target = player->get_position();
 
-        entity_spritesheet = std::make_unique<Spritesheet>(
+        nurse_joy_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/Sprite-0001.png",
             16,
             16);
 
-        add_entity(std::make_unique<Entity>(*entity_spritesheet, 0, 0));
-        add_entity(std::make_unique<Entity>(*entity_spritesheet, 64, 64));
+        old_man_spritesheet = std::make_unique<Spritesheet>(
+            "res/sprites/Sprite-0002.png",
+            16,
+            16);
+
+        add_entity(std::make_unique<NurseJoy>(*nurse_joy_spritesheet, 0, 0));
+        add_entity(std::make_unique<Entity>(*old_man_spritesheet, 64, 64));
     }
 
     TownScene::~TownScene() = default;

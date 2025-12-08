@@ -20,6 +20,8 @@ namespace barley
         void set_solid(bool solid);
         bool is_solid() const;
 
+        virtual void interact();
+
     private:
         Spritesheet &spritesheet;
         // int width;

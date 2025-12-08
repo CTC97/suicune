@@ -73,8 +73,6 @@ namespace barley
         int target_x = player_tile_x;
         int target_y = player_tile_y;
 
-        // printf("Player at tile (%d, %d) facing direction %d\n", player_tile_x, player_tile_y, current_player_direction);
-
         switch (current_player_direction)
         {
         case 0:
@@ -97,26 +95,17 @@ namespace barley
             [this, target_x, target_y](const std::unique_ptr<Entity> &e)
             {
                 const Vector2 pos = e->get_position();
-                // printf("Entity position: (%.2f, %.2f)\n", pos.x, pos.y);
                 int tile_x = static_cast<int>(pos.x) / game.get_tile_size();
                 int tile_y = static_cast<int>(pos.y) / game.get_tile_size();
-
-                // printf("\tChecking entity at tile (%d, %d) against target tile (%d, %d)\n", tile_x, tile_y, target_x, target_y);
 
                 return std::abs(tile_x - target_x) < 2 && std::abs(tile_y - target_y) < 2;
             });
 
         if (target_search != entities.end())
         {
-            // Entity &target_entity = **target_search;
-            // printf("\t\tInteracted with entity at tile (%d, %d)\n", target_x, target_y);
-            // Here you can add more interaction logic, e.g., call a method on the entity
+            Entity &target_entity = **target_search;
+            target_entity.interact();
         }
-        else
-        {
-            // printf("\t\tNo entity to interact with at tile (%d, %d)\n", target_x, target_y);
-        }
-        // printf("---\n");
     }
 
     void PlayScene::add_entity(std::unique_ptr<Entity> entity)

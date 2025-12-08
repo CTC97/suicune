@@ -20,7 +20,8 @@ namespace barley
     private:
         Camera2D camera{};
         std::unique_ptr<Spritesheet> tilemap_spritesheet;
-        std::unique_ptr<Spritesheet> entity_spritesheet;
+        std::unique_ptr<Spritesheet> nurse_joy_spritesheet;
+        std::unique_ptr<Spritesheet> old_man_spritesheet;
         std::unique_ptr<Spritesheet> player_spritesheet;
     };
 
