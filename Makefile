@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 
-SRC = main.cpp $(wildcard scenes/*.cpp) $(wildcard entities/*.cpp) $(wildcard src/*.cpp)
+barley_src = main.cpp $(wildcard scenes/*.cpp) $(wildcard entities/*.cpp) $(wildcard barley_src/*.cpp)
 OUT = barley
 
 # macOS defaults (your current platform)
@@ -13,7 +13,7 @@ LIBS = -L$(RAY_LIB) -lraylib \
        -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 
 all:
-	$(CXX) $(CXXFLAGS) -I$(RAY_INC) $(SRC) -o $(OUT) $(LIBS)
+	$(CXX) $(CXXFLAGS) -I$(RAY_INC) $(barley_src) -o $(OUT) $(LIBS)
 
 clean:
 	rm -f $(OUT)

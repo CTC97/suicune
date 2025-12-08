@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../src/entity.hpp"
+#include "../barley_src/entity.hpp"
 
 namespace barley
 {

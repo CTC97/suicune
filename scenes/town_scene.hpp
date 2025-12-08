@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../src/play_scene.hpp"
+#include "../barley_src/play_scene.hpp"
 
 namespace barley
 {

@@ -1,4 +1,4 @@
-#include "src/game.hpp"
+#include "barley_src/game.hpp"
 #include "scenes/main_menu.hpp"
 
 using namespace barley;

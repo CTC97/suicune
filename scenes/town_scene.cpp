@@ -1,5 +1,5 @@
 #include "town_scene.hpp"
-#include "../src/game.hpp"
+#include "../barley_src/game.hpp"
 #include "../entities/nurse_joy.hpp"
 
 namespace barley

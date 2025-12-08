@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../src/menu_scene.hpp"
-#include "../src/game.hpp"
+#include "../barley_src/menu_scene.hpp"
+#include "../barley_src/game.hpp"
 
 namespace barley
 {
