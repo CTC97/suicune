@@ -7,6 +7,7 @@
 
 namespace barley
 {
+    // maybe this should go at entity level?
     enum Direction
     {
         UP,
@@ -15,26 +16,22 @@ namespace barley
         RIGHT
     };
 
-    class Player
+    class Player : public Entity
     {
 
     public:
         Player(Spritesheet &spritesheet, int x, int y);
         ~Player();
 
-        void update(const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map);
-        void draw();
+        // suppresses hidden override warning
+        using Entity::update;
 
-        Vector2 get_position();
+        // put this at the Entity level if we want moving entities later
+        void update(const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map);
 
         Direction get_current_direction();
 
     private:
-        Spritesheet &spritesheet;
-
-        int x;
-        int y;
-
         Direction current_direction;
     };
 }

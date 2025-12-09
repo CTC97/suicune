@@ -2,7 +2,7 @@
 
 namespace barley
 {
-    Player::Player(Spritesheet &spritesheet, int x, int y) : spritesheet(spritesheet), x(x), y(y)
+    Player::Player(Spritesheet &spritesheet, int x, int y) : Entity(spritesheet, x, y)
     {
         current_direction = DOWN;
     }
@@ -72,16 +72,6 @@ namespace barley
             x = new_x;
             y = new_y;
         }
-    }
-
-    void Player::draw()
-    {
-        spritesheet.draw_sprite(0, x, y);
-    }
-
-    Vector2 Player::get_position()
-    {
-        return {static_cast<float>(x), static_cast<float>(y)};
     }
 
     Direction Player::get_current_direction()

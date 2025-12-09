@@ -14,7 +14,6 @@ namespace barley
     void Entity::draw()
     {
         spritesheet.draw_sprite(0, x, y);
-        // DrawRectangle(x, y, 16, 16, RED);
     }
 
     Vector2 Entity::get_position() const

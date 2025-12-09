@@ -13,7 +13,7 @@ namespace barley
         virtual ~Entity() = default;
 
         virtual void update();
-        void draw();
+        virtual void draw();
 
         Vector2 get_position() const;
 
@@ -22,7 +22,7 @@ namespace barley
 
         virtual void interact();
 
-    private:
+    protected:
         Spritesheet &spritesheet;
         // int width;
         // int height;
