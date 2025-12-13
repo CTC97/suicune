@@ -46,4 +46,56 @@ namespace barley
 
         DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
     }
+
+    void Spritesheet::define_animation(const std::string &name, const Animation &animation)
+    {
+        animations[name] = animation;
+    }
+
+    void Spritesheet::play_animation(const std::string &name)
+    {
+        if (animations.find(name) != animations.end())
+        {
+            current_animation = name;
+            animation_timer = 0.0f;
+            current_frame_index = 0;
+        }
+    }
+
+    void Spritesheet::update_animation(float dt)
+    {
+        if (animations.find(current_animation) == animations.end())
+            return;
+
+        const Animation &animation = animations[current_animation];
+        animation_timer += dt;
+
+        if (animation_timer >= animation.frame_duration)
+        {
+            animation_timer -= animation.frame_duration;
+            current_frame_index++;
+
+            if (current_frame_index >= animation.frame_indices.size())
+            {
+                if (animation.loop)
+                {
+                    current_frame_index = 0;
+                }
+                else
+                {
+                    current_frame_index = animation.frame_indices.size() - 1; // Stay on the last frame
+                }
+            }
+        }
+    }
+
+    void Spritesheet::draw_current_frame(float x, float y)
+    {
+        if (animations.find(current_animation) == animations.end())
+            return;
+
+        const Animation &animation = animations[current_animation];
+        int frame_index = animation.frame_indices[current_frame_index];
+        draw_sprite(frame_index, x, y);
+    }
 }

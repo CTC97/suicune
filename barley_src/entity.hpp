@@ -12,8 +12,10 @@ namespace barley
         Entity(Spritesheet &spritesheet, /*int width, int height,*/ int x, int y);
         virtual ~Entity() = default;
 
-        virtual void update();
+        virtual void update(float dt);
         virtual void draw();
+
+        void play_animation(const std::string &animation_name);
 
         Vector2 get_position() const;
 

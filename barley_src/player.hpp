@@ -27,7 +27,7 @@ namespace barley
         using Entity::update;
 
         // put this at the Entity level if we want moving entities later
-        void update(const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map);
+        void update(float dt, const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map);
 
         Direction get_current_direction();
 

@@ -23,11 +23,13 @@ namespace barley
             const int entity_tile_y = static_cast<int>(entity->get_position().y) / tile_size;
 
             entity_collision_map[entity_tile_x][entity_tile_y] = true;
+
+            entity->update(dt);
         }
 
         if (player)
         {
-            player->update(*tilemap, entity_collision_map);
+            player->update(dt, *tilemap, entity_collision_map);
         }
 
         if (IsKeyPressed(KEY_ENTER))

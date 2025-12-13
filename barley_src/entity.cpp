@@ -7,13 +7,19 @@ namespace barley
     {
     }
 
-    void Entity::update()
+    void Entity::update(float dt)
     {
+        spritesheet.update_animation(dt);
     }
 
     void Entity::draw()
     {
-        spritesheet.draw_sprite(0, x, y);
+        spritesheet.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
+    }
+
+    void Entity::play_animation(const std::string &animation_name)
+    {
+        spritesheet.play_animation(animation_name);
     }
 
     Vector2 Entity::get_position() const

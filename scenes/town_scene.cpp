@@ -37,21 +37,32 @@ namespace barley
             16,
             16);
 
+        player_spritesheet->define_animation("still", {{0}, 1.0f, true});
+
         player = std::make_unique<Player>(*player_spritesheet, 16, 16);
+        player->play_animation("still");
         camera.target = player->get_position();
 
         nurse_joy_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/Sprite-0001.png",
             16,
             16);
+        nurse_joy_spritesheet->define_animation("still", {{0}, 1.0f, true});
 
         old_man_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/Sprite-0002.png",
             16,
             16);
+        old_man_spritesheet->define_animation("still", {{0}, 1.0f, true});
 
-        add_entity(std::make_unique<NurseJoy>(*nurse_joy_spritesheet, 0, 0));
-        add_entity(std::make_unique<Entity>(*old_man_spritesheet, 64, 64));
+        auto nurse_joy = std::make_unique<NurseJoy>(*nurse_joy_spritesheet, 0, 0);
+        nurse_joy->play_animation("still");
+
+        auto old_man = std::make_unique<Entity>(*old_man_spritesheet, 64, 64);
+        old_man->play_animation("still");
+
+        add_entity(std::move(nurse_joy));
+        add_entity(std::move(old_man));
     }
 
     TownScene::~TownScene() = default;
