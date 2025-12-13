@@ -33,11 +33,15 @@ namespace barley
         initialize_entity_collision_map();
 
         player_spritesheet = std::make_unique<Spritesheet>(
-            "res/sprites/Sprite-0001.png",
+            "res/sprites/bw_player.png",
             16,
             16);
 
         player_spritesheet->define_animation("still", {{0}, 1.0f, true});
+        player_spritesheet->define_animation("walk_down", {{1, 2}, 0.2f, true});
+        player_spritesheet->define_animation("walk_up", {{7, 8}, 0.2f, true});
+        player_spritesheet->define_animation("walk_right", {{4, 5}, 0.2f, true});
+        player_spritesheet->define_animation("walk_left", {{9, 10}, 0.2f, true});
 
         player = std::make_unique<Player>(*player_spritesheet, 16, 16);
         player->play_animation("still");
@@ -69,6 +73,16 @@ namespace barley
 
     void TownScene::update(float dt)
     {
+        if (IsKeyDown(KEY_RIGHT))
+            player->play_animation("walk_right");
+        else if (IsKeyDown(KEY_LEFT))
+            player->play_animation("walk_left");
+        else if (IsKeyDown(KEY_UP))
+            player->play_animation("walk_up");
+        else if (IsKeyDown(KEY_DOWN))
+            player->play_animation("walk_down");
+        else
+            player->play_animation("still");
         PlayScene::update(dt);
     }
 

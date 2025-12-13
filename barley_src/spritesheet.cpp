@@ -36,7 +36,6 @@ namespace barley
     void Spritesheet::draw_sprite(int frame_index, float global_x, float global_y)
     {
         int columns = texture.width / frame_width;
-        // //printf("\tColumns: %d\n", columns);
         int frame_x = (frame_index % columns) * frame_width;
         int frame_y = (frame_index / columns) * frame_height;
 
@@ -54,6 +53,9 @@ namespace barley
 
     void Spritesheet::play_animation(const std::string &name)
     {
+        if (name == current_animation)
+            return;
+
         if (animations.find(name) != animations.end())
         {
             current_animation = name;
@@ -97,5 +99,10 @@ namespace barley
         const Animation &animation = animations[current_animation];
         int frame_index = animation.frame_indices[current_frame_index];
         draw_sprite(frame_index, x, y);
+    }
+
+    std::string Spritesheet::get_current_animation() const
+    {
+        return current_animation;
     }
 }

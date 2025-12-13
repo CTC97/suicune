@@ -16,6 +16,7 @@ namespace barley
         virtual void draw();
 
         void play_animation(const std::string &animation_name);
+        std::string get_current_animation() const;
 
         Vector2 get_position() const;
 

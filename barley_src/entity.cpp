@@ -22,6 +22,11 @@ namespace barley
         spritesheet.play_animation(animation_name);
     }
 
+    std::string Entity::get_current_animation() const
+    {
+        return spritesheet.get_current_animation();
+    }
+
     Vector2 Entity::get_position() const
     {
         return {static_cast<float>(x), static_cast<float>(y)};

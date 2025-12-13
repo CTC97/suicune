@@ -33,6 +33,7 @@ namespace barley
         void play_animation(const std::string &name);
         void update_animation(float dt);
         void draw_current_frame(float x, float y);
+        std::string get_current_animation() const;
 
     private:
         Texture2D texture;
