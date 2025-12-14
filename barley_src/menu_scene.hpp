@@ -5,11 +5,11 @@
 #include <vector>
 #include <functional>
 #include "raylib.h"
-#include "../barley_src/game.hpp"
+#include "../suicune_src/game.hpp"
 #include <variant>
 #include "menu_item.hpp"
 
-namespace barley
+namespace suicune
 {
 
     class MenuScene : public Scene

@@ -1,6 +1,6 @@
 #include "menu_scene.hpp"
 
-namespace barley
+namespace suicune
 {
 
     MenuScene::MenuScene(Game &game)

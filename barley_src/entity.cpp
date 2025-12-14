@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-namespace barley
+namespace suicune
 {
     Entity::Entity(Spritesheet &spritesheet, /*int width, int height,*/ int x, int y)
         : spritesheet(spritesheet), /*width(width), height(height),*/ x(x), y(y)

@@ -1,6 +1,6 @@
 #include "player.hpp"
 
-namespace barley
+namespace suicune
 {
     Player::Player(Spritesheet &spritesheet, int x, int y) : Entity(spritesheet, x, y)
     {

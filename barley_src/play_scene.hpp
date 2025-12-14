@@ -8,7 +8,7 @@
 #include "player.hpp"
 #include "entity.hpp"
 
-namespace barley
+namespace suicune
 {
 
     class PlayScene : public Scene

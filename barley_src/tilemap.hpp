@@ -3,7 +3,7 @@
 #include <vector>
 #include "spritesheet.hpp"
 
-namespace barley
+namespace suicune
 {
     class Tilemap
     {

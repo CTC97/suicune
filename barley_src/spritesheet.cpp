@@ -1,6 +1,6 @@
 #include "spritesheet.hpp"
 
-namespace barley
+namespace suicune
 {
 
     Spritesheet::Spritesheet(const char *file_path, int frame_width, int frame_height)

@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 
-namespace barley
+namespace suicune
 {
 
     class Game;
@@ -19,7 +19,7 @@ namespace barley
     protected:
         Game &game;
 
-        Texture2D barley_min;
+        Texture2D suicune_min;
     };
 
 }

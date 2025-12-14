@@ -1,7 +1,7 @@
 #include "game.hpp"
 #include "scene.hpp"
 
-namespace barley
+namespace suicune
 {
     Game::Game(const std::string &title, int window_width, int window_height, int tile_size)
         : title(title), window_width(window_width), window_height(window_height), tile_size(tile_size)

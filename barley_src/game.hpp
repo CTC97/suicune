@@ -5,7 +5,7 @@
 #include "raylib.h"
 #include "dialog_manager.hpp"
 
-namespace barley
+namespace suicune
 {
 
     class Scene;

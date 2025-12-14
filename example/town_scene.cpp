@@ -1,7 +1,7 @@
 #include "town_scene.hpp"
-#include "../barley_src/game.hpp"
+#include "../suicune_src/game.hpp"
 
-namespace barley
+namespace suicune
 {
 
     TownScene::TownScene(Game &game)

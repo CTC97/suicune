@@ -2,30 +2,30 @@
 #include "game.hpp"
 #include <iostream>
 
-namespace barley
+namespace suicune
 {
 
     Scene::Scene(Game &game) : game(game)
     {
-        barley_min = LoadTexture("barley_src/res/sprites/barley_min.png");
-        if (barley_min.id == 0)
+        suicune_min = LoadTexture("suicune_src/res/sprites/suicune_min.png");
+        if (suicune_min.id == 0)
         {
-            std::cerr << "Failed to load texture: barley_min" << std::endl;
+            std::cerr << "Failed to load texture: suicune_min" << std::endl;
         }
         else
         {
-            std::cout << "Texture loaded successfully: barley_min (ID: " << barley_min.id << ")" << std::endl;
+            std::cout << "Texture loaded successfully: suicune_min (ID: " << suicune_min.id << ")" << std::endl;
         }
     }
 
     Scene::~Scene()
     {
-        UnloadTexture(barley_min);
+        UnloadTexture(suicune_min);
     }
 
     void Scene::draw()
     {
-        DrawTexture(barley_min, game.get_window_width() - 32, game.get_window_height() - 32, WHITE);
+        DrawTexture(suicune_min, game.get_window_width() - 32, game.get_window_height() - 32, WHITE);
     }
 
 }

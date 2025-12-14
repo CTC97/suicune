@@ -2,7 +2,7 @@
 #include "game.hpp"
 #include "raylib.h"
 
-namespace barley
+namespace suicune
 {
 
     PlayScene::PlayScene(Game &game)
