@@ -74,7 +74,15 @@ namespace barley
         if (dialog_manager->is_active())
         {
             printf("Drawing dialog manager\n");
-            dialog_manager->draw();
+
+            const int window_width = GetScreenWidth();
+            const int window_height = GetScreenHeight();
+            const int dialog_box_width = dialog_manager->get_dialog_box_texture().width;
+            const int dialog_box_height = dialog_manager->get_dialog_box_texture().height;
+
+            dialog_manager->draw(
+                (window_width - dialog_box_width) / 2.0f,
+                window_height - dialog_box_height - 20.0f);
         }
     }
 

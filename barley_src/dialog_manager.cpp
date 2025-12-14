@@ -59,16 +59,24 @@ namespace barley
         }
     }
 
-    void DialogManager::draw()
+    void DialogManager::draw(float base_x, float base_y)
     {
         if (!active)
             return;
 
-        DrawRectangle(50, 400, 700, 150, DARKGRAY);
+        // Draw dialog box background (placeholder rendering)
+        if (dialog_box_texture.id != 0) // Check if the texture is valid
+        {
+            DrawTexture(dialog_box_texture, base_x, base_y, WHITE); // Example position and color
+        }
+        else
+        {
+            throw std::runtime_error("The dialog manager tried to draw but the dialog box texture could not be found.");
+        }
 
         // Draw the current text (placeholder rendering)
         printf("Drawing current text: %s\n", current_text.c_str());
-        DrawText(current_text.c_str(), 50, 400, 20, WHITE);
+        DrawText(current_text.c_str(), base_x + text_padding_x, base_y + text_padding_y, 20, WHITE);
 
         // Optionally, draw options if available
         const DialogNode &current_node = dialog_nodes[current_node_index];
@@ -77,7 +85,7 @@ namespace barley
             int y_offset = 450;
             for (const auto &option : current_node.options)
             {
-                DrawText(option.label.c_str(), 50, y_offset, 20, GRAY);
+                DrawText(option.label.c_str(), base_x + text_padding_x, base_y + y_offset + text_padding_y, 20, GRAY);
                 y_offset += 30;
             }
         }
@@ -130,5 +138,21 @@ namespace barley
             return &dialog_nodes[current_node_index];
         }
         return nullptr;
+    }
+
+    void DialogManager::set_dialog_box_texture(const std::string &texture_path)
+    {
+        dialog_box_texture = LoadTexture(texture_path.c_str());
+    }
+
+    Texture2D DialogManager::get_dialog_box_texture() const
+    {
+        return dialog_box_texture;
+    }
+
+    void DialogManager::set_text_padding(int padding_x, int padding_y)
+    {
+        text_padding_x = padding_x;
+        text_padding_y = padding_y;
     }
 }

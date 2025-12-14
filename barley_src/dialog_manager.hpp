@@ -29,14 +29,17 @@ namespace barley
 
         void start_dialog(const std::vector<DialogNode> &nodes);
         void update(float dt);
-        void draw();
+        void draw(float base_x, float base_y);
         bool is_active() const;
 
         const DialogNode *get_current_node() const;
 
-    private:
-        void step_dialog();
+        void set_dialog_box_texture(const std::string &texture_path);
+        Texture2D get_dialog_box_texture() const;
 
+        void set_text_padding(int padding_x, int padding_y);
+
+    private:
         // State
         std::vector<DialogNode> dialog_nodes; // Current dialog sequence
         int current_node_index;               // Index of the current dialog node
@@ -48,5 +51,12 @@ namespace barley
         float text_speed; // Speed of text reveal
         float text_timer; // Timer for text animation
         int char_index;   // Index of the next character to display
+
+        int text_padding_x = 0; // Horizontal padding for text inside dialog box
+        int text_padding_y = 0; // Vertical padding for text inside dialog box
+
+        Texture2D dialog_box_texture; // Texture for dialog box background
+
+        void step_dialog();
     };
 }

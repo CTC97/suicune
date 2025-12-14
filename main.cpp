@@ -9,5 +9,8 @@ int main()
 
     game.set_scene(std::make_unique<MainMenu>(game));
 
+    game.get_dialog_manager().set_dialog_box_texture("res/sprites/dialog_box.png");
+    game.get_dialog_manager().set_text_padding(44, 44);
+
     game.run();
 }
