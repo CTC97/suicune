@@ -1,6 +1,5 @@
 #include "town_scene.hpp"
 #include "../barley_src/game.hpp"
-#include "../entities/nurse_joy.hpp"
 
 namespace barley
 {
@@ -53,20 +52,18 @@ namespace barley
             16);
         nurse_joy_spritesheet->define_animation("still", {{0}, 1.0f, true});
 
-        old_man_spritesheet = std::make_unique<Spritesheet>(
-            "res/sprites/Sprite-0002.png",
-            16,
-            16);
-        old_man_spritesheet->define_animation("still", {{0}, 1.0f, true});
-
-        auto nurse_joy = std::make_unique<NurseJoy>(*nurse_joy_spritesheet, 0, 0);
+        auto nurse_joy = std::make_unique<Entity>(*nurse_joy_spritesheet, 64, 64);
+        nurse_joy->set_dialog({{
+                                   "Welcome to the Pokémon Center! We heal your Pokémon here.",
+                                   "Nurse Joy",
+                               },
+                               {
+                                   "Please take care of your Pokémon and have a great journey!",
+                                   "Nurse Joy",
+                               }});
         nurse_joy->play_animation("still");
 
-        auto old_man = std::make_unique<Entity>(*old_man_spritesheet, 64, 64);
-        old_man->play_animation("still");
-
         add_entity(std::move(nurse_joy));
-        add_entity(std::move(old_man));
     }
 
     TownScene::~TownScene() = default;

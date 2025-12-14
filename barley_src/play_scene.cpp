@@ -16,25 +16,33 @@ namespace barley
     {
         (void)dt;
 
-        for (const auto &entity : entities)
+        DialogManager *dialog_manager = &game.get_dialog_manager();
+        if (!dialog_manager->is_active())
         {
-            const int tile_size = game.get_tile_size();
-            const int entity_tile_x = static_cast<int>(entity->get_position().x) / tile_size;
-            const int entity_tile_y = static_cast<int>(entity->get_position().y) / tile_size;
+            for (const auto &entity : entities)
+            {
+                const int tile_size = game.get_tile_size();
+                const int entity_tile_x = static_cast<int>(entity->get_position().x) / tile_size;
+                const int entity_tile_y = static_cast<int>(entity->get_position().y) / tile_size;
 
-            entity_collision_map[entity_tile_x][entity_tile_y] = true;
+                entity_collision_map[entity_tile_x][entity_tile_y] = true;
 
-            entity->update(dt);
+                entity->update(dt);
+            }
+
+            if (player)
+            {
+                player->update(dt, *tilemap, entity_collision_map);
+            }
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                check_interaction();
+            }
         }
-
-        if (player)
+        else
         {
-            player->update(dt, *tilemap, entity_collision_map);
-        }
-
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            check_interaction();
+            dialog_manager->update(dt);
         }
     }
 
@@ -61,6 +69,13 @@ namespace barley
         }
 
         EndMode2D();
+
+        DialogManager *dialog_manager = &game.get_dialog_manager();
+        if (dialog_manager->is_active())
+        {
+            printf("Drawing dialog manager\n");
+            dialog_manager->draw();
+        }
     }
 
     void PlayScene::check_interaction()
@@ -112,6 +127,7 @@ namespace barley
 
     void PlayScene::add_entity(std::unique_ptr<Entity> entity)
     {
+        entity->set_dialog_manager(&game.get_dialog_manager());
         entities.push_back(std::move(entity));
     }
 

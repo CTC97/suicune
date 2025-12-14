@@ -118,4 +118,9 @@ namespace barley
     {
         current_scene = std::move(scene);
     }
+
+    DialogManager &Game::get_dialog_manager()
+    {
+        return dialog_manager;
+    }
 }

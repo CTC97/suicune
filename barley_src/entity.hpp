@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "spritesheet.hpp"
+#include "dialog_manager.hpp"
 
 namespace barley
 {
@@ -25,6 +26,9 @@ namespace barley
 
         virtual void interact();
 
+        void set_dialog_manager(DialogManager *dialog_manager);
+        void set_dialog(const std::vector<DialogNode> &dialog);
+
     protected:
         Spritesheet &spritesheet;
         // int width;
@@ -32,5 +36,8 @@ namespace barley
         bool solid = true;
         int x;
         int y;
+
+        DialogManager *dm = nullptr;             // Pointer to the shared DialogManager
+        std::vector<DialogNode> dialog_sequence; // Entity-specific dialog
     };
 }

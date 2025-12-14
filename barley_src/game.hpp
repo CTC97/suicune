@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include "raylib.h"
+#include "dialog_manager.hpp"
 
 namespace barley
 {
@@ -30,6 +31,8 @@ namespace barley
 
         void set_scene(std::unique_ptr<Scene> scene);
 
+        DialogManager &get_dialog_manager();
+
     private:
         std::string title;
         int window_width;
@@ -44,6 +47,8 @@ namespace barley
         bool running = false;
 
         std::unique_ptr<Scene> current_scene;
+
+        DialogManager dialog_manager;
 
         void begin_frame();
         void end_frame();

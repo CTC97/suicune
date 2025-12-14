@@ -44,6 +44,22 @@ namespace barley
 
     void Entity::interact()
     {
-        printf("generic interaction...\n");
+        printf("Interacted with entity at (%d, %d)\n", x, y);
+        printf("Dialog sequence has %zu nodes\n", dialog_sequence.size());
+        printf("dialog manager: %p\n", dm);
+        if (dm && !dialog_sequence.empty())
+        {
+            dm->start_dialog(dialog_sequence);
+        }
+    }
+
+    void Entity::set_dialog_manager(DialogManager *dialog_manager)
+    {
+        dm = dialog_manager;
+    }
+
+    void Entity::set_dialog(const std::vector<DialogNode> &dialog)
+    {
+        dialog_sequence = dialog;
     }
 }
