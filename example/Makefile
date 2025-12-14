@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 
-barley_src = main.cpp $(wildcard scenes/*.cpp) $(wildcard entities/*.cpp) $(wildcard barley_src/*.cpp)
+barley_src = $(wildcard *.cpp) $(wildcard ../barley_src/*.cpp)
 OUT = barley
 
 # macOS defaults (your current platform)
