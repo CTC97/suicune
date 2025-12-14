@@ -44,9 +44,6 @@ namespace barley
 
     void Entity::interact()
     {
-        printf("Interacted with entity at (%d, %d)\n", x, y);
-        printf("Dialog sequence has %zu nodes\n", dialog_sequence.size());
-        printf("dialog manager: %p\n", dm);
         if (dm && !dialog_sequence.empty())
         {
             dm->start_dialog(dialog_sequence);
