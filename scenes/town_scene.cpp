@@ -54,13 +54,8 @@ namespace barley
 
         auto nurse_joy = std::make_unique<Entity>(*nurse_joy_spritesheet, 64, 64);
         nurse_joy->set_dialog({{
-                                   "Welcome to the Pokémon Center! We heal your Pokémon here.",
-                                   "Nurse Joy",
-                               },
-                               {
-                                   "Please take care of your Pokémon and have a great journey!",
-                                   "Nurse Joy",
-                               }});
+            "Welcome to the Pokémon Center! We heal your Pokémon here. We restore your tired Pokémon to full health. Would you like me to heal your Pokémon? Your Pokémon are looking great! Keep up the good work! Remember, a strong bond with your Pokémon is the key to success.",
+        }});
         nurse_joy->play_animation("still");
 
         add_entity(std::move(nurse_joy));
