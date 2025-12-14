@@ -17,19 +17,37 @@ namespace barley
         (void)dt;
 
         DialogManager *dialog_manager = &game.get_dialog_manager();
+
         if (!dialog_manager->is_active())
         {
+            // 1. Clear entity collision map each frame
+            for (auto &row : entity_collision_map)
+            {
+                std::fill(row.begin(), row.end(), false);
+            }
+
+            const int tile_size = game.get_tile_size();
+
+            // 2. Mark entity positions correctly (y first, then x)
             for (const auto &entity : entities)
             {
-                const int tile_size = game.get_tile_size();
-                const int entity_tile_x = static_cast<int>(entity->get_position().x) / tile_size;
-                const int entity_tile_y = static_cast<int>(entity->get_position().y) / tile_size;
+                const int entity_tile_x =
+                    static_cast<int>(entity->get_position().x) / tile_size;
+                const int entity_tile_y =
+                    static_cast<int>(entity->get_position().y) / tile_size;
 
-                entity_collision_map[entity_tile_x][entity_tile_y] = true;
+                if (entity_tile_y >= 0 &&
+                    entity_tile_y < static_cast<int>(entity_collision_map.size()) &&
+                    entity_tile_x >= 0 &&
+                    entity_tile_x < static_cast<int>(entity_collision_map[0].size()))
+                {
+                    entity_collision_map[entity_tile_y][entity_tile_x] = true;
+                }
 
                 entity->update(dt);
             }
 
+            // 3. Update player with fresh collision data
             if (player)
             {
                 player->update(dt, *tilemap, entity_collision_map);
@@ -73,8 +91,6 @@ namespace barley
         DialogManager *dialog_manager = &game.get_dialog_manager();
         if (dialog_manager->is_active())
         {
-            printf("Drawing dialog manager\n");
-
             const int window_width = GetScreenWidth();
             const int window_height = GetScreenHeight();
             const int dialog_box_width = dialog_manager->get_dialog_box_texture().width;
