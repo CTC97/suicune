@@ -1,6 +1,6 @@
 #include "menu_item.hpp"
 
-namespace barley
+namespace suicune
 {
     MenuItem::MenuItem(std::variant<std::string, Texture2D> label, int x, int y, std::function<void()> callback)
         : label(std::move(label)), x(x), y(y), callback(std::move(callback)) {}

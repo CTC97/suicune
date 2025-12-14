@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../barley_src/play_scene.hpp"
+#include "../suicune_src/play_scene.hpp"
 
-namespace barley
+namespace suicune
 {
 
     class TownScene : public PlayScene

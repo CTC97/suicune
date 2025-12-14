@@ -1,7 +1,7 @@
 #include "tilemap.hpp"
 #include <stdexcept> // For std::invalid_argument
 
-namespace barley
+namespace suicune
 {
     // Constructor
     Tilemap::Tilemap(Spritesheet &spritesheet, int tile_size, int map_width, int map_height, std::vector<std::vector<int>> map)

@@ -1,7 +1,7 @@
 #include "main_menu.hpp"
 #include "dream_scene.hpp"
 
-namespace barley
+namespace suicune
 {
 
     MainMenu::MainMenu(Game &game)

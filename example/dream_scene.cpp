@@ -1,9 +1,9 @@
 #include "dream_scene.hpp"
-#include "../barley_src/game.hpp"
+#include "../suicune_src/game.hpp"
 #include <vector>
 #include <random>
 
-namespace barley
+namespace suicune
 {
 
     bool is_position_valid(int x, int y, const std::vector<std::vector<bool>> &collision_map, int tile_size)

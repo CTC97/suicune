@@ -2,7 +2,7 @@
 #include "game.hpp"
 #include "raylib.h"
 
-namespace barley
+namespace suicune
 {
 
     PlayScene::PlayScene(Game &game)
@@ -66,7 +66,7 @@ namespace barley
 
     void PlayScene::draw()
     {
-        Scene::draw();
+
         Camera2D &camera = get_camera();
 
         BeginMode2D(camera);
@@ -100,6 +100,8 @@ namespace barley
                 (window_width - dialog_box_width) / 2.0f,
                 window_height - dialog_box_height - 20.0f);
         }
+
+        Scene::draw();
     }
 
     void PlayScene::check_interaction()

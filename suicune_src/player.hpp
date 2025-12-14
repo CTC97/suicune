@@ -5,7 +5,7 @@
 #include "tilemap.hpp"
 #include "entity.hpp"
 
-namespace barley
+namespace suicune
 {
     // maybe this should go at entity level?
     enum Direction

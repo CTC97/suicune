@@ -2,7 +2,7 @@
 #include "dialog_manager.hpp"
 #include <algorithm>
 
-namespace barley
+namespace suicune
 {
     DialogManager::DialogManager()
         : current_node_index(-1), active(false), text_speed(0.05f), text_timer(0.0f), current_page_index(0), reveal_char_index(0) {}

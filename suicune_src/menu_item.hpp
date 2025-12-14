@@ -5,7 +5,7 @@
 #include <functional>
 #include "raylib.h"
 
-namespace barley
+namespace suicune
 {
     class MenuItem
     {

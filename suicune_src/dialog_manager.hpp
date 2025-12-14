@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <iostream>
 
-namespace barley
+namespace suicune
 {
     struct DialogOption
     {

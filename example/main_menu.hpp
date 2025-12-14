@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../barley_src/menu_scene.hpp"
-#include "../barley_src/game.hpp"
+#include "../suicune_src/menu_scene.hpp"
+#include "../suicune_src/game.hpp"
 
-namespace barley
+namespace suicune
 {
 
     class MainMenu : public MenuScene

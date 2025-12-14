@@ -7,7 +7,7 @@
 #include <vector>
 #include "raylib.h"
 
-namespace barley
+namespace suicune
 {
 
     struct Animation

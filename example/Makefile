@@ -2,8 +2,8 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 
-barley_src = $(wildcard *.cpp) $(wildcard ../barley_src/*.cpp)
-OUT = barley
+suicune_src = $(wildcard *.cpp) $(wildcard ../suicune_src/*.cpp)
+OUT = suicune
 
 # macOS defaults (your current platform)
 RAY_INC = /opt/homebrew/include
@@ -13,7 +13,7 @@ LIBS = -L$(RAY_LIB) -lraylib \
        -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 
 all:
-	$(CXX) $(CXXFLAGS) -I$(RAY_INC) $(barley_src) -o $(OUT) $(LIBS)
+	$(CXX) $(CXXFLAGS) -I$(RAY_INC) $(suicune_src) -o $(OUT) $(LIBS)
 
 clean:
 	rm -f $(OUT)

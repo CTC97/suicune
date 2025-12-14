@@ -9,11 +9,11 @@ PURPLE="\033[38;5;139m"  # #B7AEC8
 LIGHT_PURPLE="\033[38;5;140m"  # #9E97B8
 
 
-# Usage: ./barley-create.sh <project_name>
-# Example: ./barley-create.sh project
+# Usage: ./suicune-create.sh <project_name>
+# Example: ./suicune-create.sh project
 
-REPO_URL="https://github.com/CTC97/barley"      # placeholder for now
-SRC_FOLDER_IN_REPO="barley_src"
+REPO_URL="https://github.com/CTC97/suicune"      # placeholder for now
+SRC_FOLDER_IN_REPO="suicune_src"
 
 project_name="${1:-}"
 
@@ -33,7 +33,7 @@ echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
 cd "$project_name"
 
 echo -e "${PURPLE}Cloning source code...${RESET}"
-tmp_dir=".barley_repo_tmp"
+tmp_dir=".suicune_repo_tmp"
 git clone -q "$REPO_URL" "$tmp_dir"
 echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
 
@@ -45,7 +45,7 @@ if [[ ! -d "$tmp_dir/$SRC_FOLDER_IN_REPO" ]]; then
     exit 1
 fi
 
-mv "$tmp_dir/$SRC_FOLDER_IN_REPO" "./barley_src"
+mv "$tmp_dir/$SRC_FOLDER_IN_REPO" "./suicune_src"
 echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
 
 echo -e "${MEDIUM_BLUE}Cleaning up...${RESET}"
@@ -59,7 +59,7 @@ cat > Makefile <<'MAKEFILE'
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 
-barley_src = $(wildcard *.cpp) $(wildcard ./barley_src/*.cpp) $(wildcard ./src/*.cpp)
+suicune_src = $(wildcard *.cpp) $(wildcard ./suicune_src/*.cpp) $(wildcard ./src/*.cpp)
 OUT = build
 
 # macOS defaults
@@ -80,7 +80,7 @@ LIBS = -L$(RAY_LIB) -lraylib \
        -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 
 all:
-    $(CXX) $(CXXFLAGS) -I$(RAY_INC) $(barley_src) -o $(OUT) $(LIBS)
+    $(CXX) $(CXXFLAGS) -I$(RAY_INC) $(suicune_src) -o $(OUT) $(LIBS)
 
 clean:
     rm -f $(OUT)
@@ -91,14 +91,14 @@ MAKEFILE
 
 echo -e "\t\t${PURPLE}main.cpp${RESET}"
 cat > main.cpp <<'CPP'
-#include "barley_src/game.hpp"
+#include "suicune_src/game.hpp"
 #include "src/main_scene.hpp"
 
-using namespace barley;
+using namespace suicune;
 
 int main()
 {
-    Game game("Barley Test", 1200, 700, 16);
+    Game game("suicune Test", 1200, 700, 16);
 
     game.set_scene(std::make_unique<MainScene>(game));
 
@@ -113,9 +113,9 @@ echo -e "\t\t\t${PURPLE}src/main_scene.hpp${RESET}"
 cat > src/main_scene.hpp <<'CPP'
 #pragma once
 
-#include "../barley_src/play_scene.hpp"
+#include "../suicune_src/play_scene.hpp"
 
-namespace barley
+namespace suicune
 {
     class MainScene : public PlayScene
     {
@@ -138,9 +138,9 @@ CPP
 echo -e "\t\t\t${PURPLE}src/main_scene.cpp${RESET}"
 cat > src/main_scene.cpp <<'CPP'
 #include "main_scene.hpp"
-#include "../barley_src/game.hpp"
+#include "../suicune_src/game.hpp"
 
-namespace barley
+namespace suicune
 {
 
     MainScene::MainScene(Game &game)
