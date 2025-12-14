@@ -59,7 +59,7 @@ cat > Makefile <<'MAKEFILE'
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall
 
-barley_src = $(wildcard *.cpp) $(wildcard ../barley_src/*.cpp)
+barley_src = $(wildcard *.cpp) $(wildcard ./barley_src/*.cpp) $(wildcard ./src/*.cpp)
 OUT = build
 
 # macOS defaults
@@ -80,10 +80,10 @@ LIBS = -L$(RAY_LIB) -lraylib \
        -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 
 all:
-	$(CXX) $(CXXFLAGS) -I$(RAY_INC) $(barley_src) -o $(OUT) $(LIBS)
+    $(CXX) $(CXXFLAGS) -I$(RAY_INC) $(barley_src) -o $(OUT) $(LIBS)
 
 clean:
-	rm -f $(OUT)
+    rm -f $(OUT)
 
 MAKEFILE
 
