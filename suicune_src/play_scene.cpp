@@ -66,7 +66,7 @@ namespace suicune
 
     void PlayScene::draw()
     {
-        Scene::draw();
+
         Camera2D &camera = get_camera();
 
         BeginMode2D(camera);
@@ -100,6 +100,8 @@ namespace suicune
                 (window_width - dialog_box_width) / 2.0f,
                 window_height - dialog_box_height - 20.0f);
         }
+
+        Scene::draw();
     }
 
     void PlayScene::check_interaction()

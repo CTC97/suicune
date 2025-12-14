@@ -7,7 +7,7 @@ namespace suicune
 
     Scene::Scene(Game &game) : game(game)
     {
-        suicune_min = LoadTexture("suicune_src/res/sprites/suicune_min.png");
+        suicune_min = LoadTexture("../suicune_src/res/sprites/suicune_min.png");
         if (suicune_min.id == 0)
         {
             std::cerr << "Failed to load texture: suicune_min" << std::endl;
@@ -25,7 +25,7 @@ namespace suicune
 
     void Scene::draw()
     {
-        DrawTexture(suicune_min, game.get_window_width() - 32, game.get_window_height() - 32, WHITE);
+        DrawTexture(suicune_min, game.get_window_width() - 48, 4, WHITE);
     }
 
 }
