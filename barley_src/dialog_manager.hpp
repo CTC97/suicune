@@ -1,4 +1,3 @@
-// dialog_manager.hpp
 #pragma once
 
 #include <string>
@@ -6,6 +5,10 @@
 #include <memory>
 #include <stdexcept>
 #include "raylib.h"
+#include <sstream>
+#include <algorithm>
+#include <stdexcept>
+#include <iostream>
 
 namespace barley
 {
@@ -40,7 +43,7 @@ namespace barley
 
         void set_text_padding(float padding_x, float padding_y);
 
-        void set_font(int font_size, float spacing = 1.0f);
+        void set_font(const std::string &font_path, int font_size, float spacing = 1.0f);
 
     private:
         std::vector<DialogNode> dialog_nodes;
@@ -52,6 +55,7 @@ namespace barley
         float text_timer;
 
         // Layout
+        Font dialog_font = GetFontDefault(); // Default font
         int font_size = 20;
         float font_spacing = 1.0f;
 
@@ -60,13 +64,13 @@ namespace barley
 
         Texture2D dialog_box_texture;
 
-        // NEW: paging state
-        std::string full_text;          // full node text
-        std::vector<std::string> pages; // each page is a multi-line string with \n
+        // Paging state
+        std::string full_text;
+        std::vector<std::string> pages;
         int current_page_index = 0;
 
-        std::string visible_text;  // revealed portion of current page
-        int reveal_char_index = 0; // reveal position within current page text
+        std::string visible_text;
+        int reveal_char_index = 0;
 
         void step_dialog();
 

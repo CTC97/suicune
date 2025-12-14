@@ -5,28 +5,34 @@
 namespace barley
 {
     DialogManager::DialogManager()
-        : current_node_index(-1),
-          active(false),
-          text_speed(0.05f),
-          text_timer(0.0f)
-    {
-    }
+        : current_node_index(-1), active(false), text_speed(0.05f), text_timer(0.0f), current_page_index(0), reveal_char_index(0) {}
 
     DialogManager::~DialogManager()
     {
+        if (dialog_font.texture.id != GetFontDefault().texture.id)
+        {
+            UnloadFont(dialog_font); // Unload the custom font if it's not the default
+        }
     }
 
-    void DialogManager::set_font(int size, float spacing)
+    void DialogManager::set_font(const std::string &font_path, int size, float spacing)
     {
+        // Unload the previous font if it was custom
+        Font font = LoadFontEx(font_path.c_str(), size, nullptr, 0);
+
+        if (dialog_font.texture.id != GetFontDefault().texture.id)
+        {
+            UnloadFont(dialog_font);
+        }
+
+        dialog_font = font;
         font_size = size;
         font_spacing = spacing;
     }
 
     float DialogManager::line_height() const
     {
-        // Rough-but-consistent line height for default font.
-        // If you later move to MeasureTextEx with a Font, use that.
-        return font_size + font_spacing;
+        return MeasureTextEx(dialog_font, "A", static_cast<float>(font_size), font_spacing).y;
     }
 
     float DialogManager::usable_text_width() const
@@ -83,79 +89,36 @@ namespace barley
     {
         std::vector<std::string> lines;
         std::string current_line;
-        std::string current_word;
+        std::istringstream words(text);
+        std::string word;
 
-        auto flush_word = [&](bool force_new_line)
+        while (words >> word)
         {
-            if (current_word.empty() && !force_new_line)
-                return;
+            std::string test_line = current_line.empty() ? word : current_line + " " + word;
 
-            if (force_new_line)
+            // Use MeasureTextEx to calculate the width of the text
+            float text_width = MeasureTextEx(dialog_font, test_line.c_str(), static_cast<float>(font_size), font_spacing).x;
+
+            if (text_width > max_width)
             {
-                if (!current_word.empty())
-                {
-                    // put whatever word we were building onto current line first
-                    if (current_line.empty())
-                        current_line = current_word;
-                    else
-                        current_line += current_word;
-                    current_word.clear();
-                }
+                // Add the current line to the list and start a new line
                 lines.push_back(current_line);
-                current_line.clear();
-                return;
-            }
-
-            // Try to append word to the current line
-            std::string candidate = current_line.empty() ? current_word : (current_line + " " + current_word);
-            int w = MeasureText(candidate.c_str(), font_size);
-
-            if (w <= (int)max_width || current_line.empty())
-            {
-                current_line = candidate;
+                current_line = word;
             }
             else
             {
-                // push current line and start new with word
-                lines.push_back(current_line);
-                current_line = current_word;
+                current_line = test_line;
             }
-
-            current_word.clear();
-        };
-
-        for (size_t i = 0; i < text.size(); i++)
-        {
-            char c = text[i];
-
-            if (c == '\n')
-            {
-                flush_word(false);
-                lines.push_back(current_line);
-                current_line.clear();
-                continue;
-            }
-
-            if (c == ' ' || c == '\t')
-            {
-                flush_word(false);
-                continue;
-            }
-
-            current_word.push_back(c);
         }
 
-        flush_word(false);
+        // Add the last line
         if (!current_line.empty())
+        {
             lines.push_back(current_line);
-
-        // Handle case where text ends with newline producing empty last line:
-        if (lines.empty())
-            lines.push_back("");
+        }
 
         return lines;
     }
-
     // Groups N lines per page and joins them with '\n'
     std::vector<std::string> DialogManager::split_lines_into_pages(const std::vector<std::string> &lines, int max_lines) const
     {
@@ -256,35 +219,43 @@ namespace barley
             throw std::runtime_error("Dialog box texture missing.");
         }
 
-        DrawText(visible_text.c_str(),
-                 (int)(base_x + text_padding_x),
-                 (int)(base_y + text_padding_y),
-                 font_size,
-                 WHITE);
+        DrawTextEx(
+            dialog_font,                                        // Use the custom font
+            visible_text.c_str(),                               // The text to draw
+            {base_x + text_padding_x, base_y + text_padding_y}, // Position
+            static_cast<float>(font_size),                      // Font size
+            font_spacing,                                       // Spacing between characters
+            WHITE                                               // Text color
+        );
+
+        if (current_page_index < static_cast<int>(pages.size()) - 1)
+        {
+            // add animations for more pages indicator
+        }
 
         // Options: only show when node is on its final page and fully revealed
-        const DialogNode &node = dialog_nodes[current_node_index];
-        const bool on_last_page = (current_page_index == (int)pages.size() - 1);
+        // const DialogNode &node = dialog_nodes[current_node_index];
+        // const bool on_last_page = (current_page_index == (int)pages.size() - 1);
 
-        if (!node.options.empty() && on_last_page)
-        {
-            const std::string &page_text = pages[current_page_index];
-            const bool page_fully_revealed = (reveal_char_index >= (int)page_text.size());
+        // if (!node.options.empty() && on_last_page)
+        // {
+        //     const std::string &page_text = pages[current_page_index];
+        //     const bool page_fully_revealed = (reveal_char_index >= (int)page_text.size());
 
-            if (page_fully_revealed)
-            {
-                int y_offset = (int)(text_padding_y + (compute_max_lines_per_page() + 1) * line_height());
-                for (const auto &option : node.options)
-                {
-                    DrawText(option.label.c_str(),
-                             (int)(base_x + text_padding_x),
-                             (int)(base_y + y_offset),
-                             font_size,
-                             GRAY);
-                    y_offset += (int)line_height();
-                }
-            }
-        }
+        //     if (page_fully_revealed)
+        //     {
+        //         int y_offset = (int)(text_padding_y + (compute_max_lines_per_page() + 1) * line_height());
+        //         for (const auto &option : node.options)
+        //         {
+        //             DrawText(option.label.c_str(),
+        //                      (int)(base_x + text_padding_x),
+        //                      (int)(base_y + y_offset),
+        //                      font_size,
+        //                      GRAY);
+        //             y_offset += (int)line_height();
+        //         }
+        //     }
+        // }
     }
 
     bool DialogManager::is_active() const
