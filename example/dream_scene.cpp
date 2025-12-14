@@ -11,7 +11,7 @@ namespace suicune
         int tile_x = x / tile_size;
         int tile_y = y / tile_size;
 
-        if (tile_x < 0 || tile_x >= collision_map[0].size() || tile_y < 0 || tile_y >= collision_map.size())
+        if (tile_x < 0 || tile_x >= static_cast<int>(collision_map[0].size()) || tile_y < 0 || tile_y >= static_cast<int>(collision_map.size()))
             return false;
 
         return !collision_map[tile_y][tile_x];
@@ -112,7 +112,7 @@ namespace suicune
             } while (!is_position_valid(x, y, entity_collision_map, 16));
 
             auto nurse_joy = std::make_unique<Entity>(*nurse_joy_spritesheet, x, y);
-            nurse_joy->set_dialog({{dialogue_lines[i]}});
+            nurse_joy->set_dialog({{dialogue_lines[i], "Nurse Joy", {}}});
             nurse_joy->play_animation("still");
 
             add_entity(std::move(nurse_joy));
