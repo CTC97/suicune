@@ -208,6 +208,7 @@ namespace suicune
 
     void MainScene::update(float dt)
     {
+        (void)dt;
     }
 
     void MainScene::draw()

@@ -77,7 +77,7 @@ namespace suicune
             animation_timer -= animation.frame_duration;
             current_frame_index++;
 
-            if (current_frame_index >= animation.frame_indices.size())
+            if (current_frame_index >= static_cast<int>(animation.frame_indices.size()))
             {
                 if (animation.loop)
                 {

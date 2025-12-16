@@ -8,7 +8,8 @@ namespace suicune
         : spritesheet(spritesheet), tile_size(tile_size), map_width(map_width), map_height(map_height), map(std::move(map))
     {
         // Validate the dimensions of the map
-        if (this->map.size() != map_height || (map_height > 0 && this->map[0].size() != map_width))
+        if (static_cast<int>(this->map.size()) != map_height ||
+            (map_height > 0 && static_cast<int>(this->map[0].size()) != map_width))
         {
             throw std::invalid_argument("Tile indices dimensions do not match the specified map width and height.");
         }
