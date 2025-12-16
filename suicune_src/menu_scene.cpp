@@ -24,6 +24,12 @@ namespace suicune
         items.emplace_back(label, x, y, callback);
     }
 
+    void MenuScene::add_quit_option(std::variant<std::string, Texture2D> label, int x, int y)
+    {
+        add_option(label, x, y, [this]()
+                   { this->game.quit(); });
+    }
+
     const std::vector<MenuItem> &MenuScene::get_items() const
     {
         return items;

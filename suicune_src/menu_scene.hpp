@@ -30,11 +30,7 @@ namespace suicune
                        { this->game.set_scene(std::make_unique<SceneType>(this->game)); });
         }
 
-        void add_quit_option(std::variant<std::string, Texture2D> label, int x, int y)
-        {
-            add_option(label, x, y, [this]()
-                       { this->game.quit(); });
-        }
+        void add_quit_option(std::variant<std::string, Texture2D> label, int x, int y);
 
         const std::vector<MenuItem> &get_items() const;
         std::vector<MenuItem> &get_items();
