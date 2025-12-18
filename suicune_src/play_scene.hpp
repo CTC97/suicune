@@ -23,8 +23,6 @@ namespace suicune
         void add_entity(std::unique_ptr<Entity> entity);
         void remove_entity(Entity *entity);
 
-        void initialize_entity_collision_map();
-
         void check_interaction();
 
     protected:
@@ -35,8 +33,6 @@ namespace suicune
         std::unique_ptr<Player> player;
 
         std::vector<std::unique_ptr<Entity>> entities;
-
-        std::vector<std::vector<bool>> entity_collision_map;
     };
 
 }

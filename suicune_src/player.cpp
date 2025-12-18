@@ -11,7 +11,7 @@ namespace suicune
     {
     }
 
-    void Player::update(float dt, const Tilemap &tilemap, const std::vector<std::vector<bool>> &entity_collision_map)
+    void Player::update(float dt, const Tilemap &tilemap)
     {
         int new_x = x;
         int new_y = y;
@@ -58,7 +58,7 @@ namespace suicune
             // Now safe to convert to tile coords
             int tx = px / tile_size;
             int ty = py / tile_size;
-            return tilemap.is_tile_free(tx, ty) && !entity_collision_map[ty][tx];
+            return tilemap.is_tile_free(tx, ty);
         };
 
         bool can_move =

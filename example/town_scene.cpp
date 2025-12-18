@@ -29,8 +29,6 @@ namespace suicune
         tilemap = std::make_unique<Tilemap>(*tilemap_spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
         tilemap->set_collision_tiles({3});
 
-        initialize_entity_collision_map();
-
         player_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/bw_player.png",
             16,

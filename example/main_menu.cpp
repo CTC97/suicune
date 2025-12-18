@@ -1,5 +1,5 @@
 #include "main_menu.hpp"
-#include "dream_scene.hpp"
+#include "town_scene.hpp"
 
 namespace suicune
 {
@@ -8,7 +8,7 @@ namespace suicune
         : MenuScene(game)
     {
         Texture2D playTexture = LoadTexture("res/sprites/play_sprite.png");
-        add_transition_option<DreamScene>(playTexture, (game.get_window_width() - playTexture.width) / 2, 200);
+        add_transition_option<TownScene>(playTexture, (game.get_window_width() - playTexture.width) / 2, 200);
 
         add_quit_option("Quit", (game.get_window_width() - MeasureText("Quit", 20)) / 2, 300);
     }

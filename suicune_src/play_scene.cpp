@@ -20,37 +20,51 @@ namespace suicune
 
         if (!dialog_manager->is_active())
         {
-            // 1. Clear entity collision map each frame
-            for (auto &row : entity_collision_map)
-            {
-                std::fill(row.begin(), row.end(), false);
-            }
+            // // 1. Clear entity collision map each frame
+            // for (auto &row : entity_collision_map)
+            // {
+            //     std::fill(row.begin(), row.end(), false);
+            // }
 
-            const int tile_size = game.get_tile_size();
+            // const int tile_size = game.get_tile_size();
 
-            // 2. Mark entity positions correctly (y first, then x)
-            for (const auto &entity : entities)
-            {
-                const int entity_tile_x =
-                    static_cast<int>(entity->get_position().x) / tile_size;
-                const int entity_tile_y =
-                    static_cast<int>(entity->get_position().y) / tile_size;
+            // // 2. Mark entity positions correctly (y first, then x)
+            // for (const auto &entity : entities)
+            // {
+            //     const int entity_tile_x =
+            //         static_cast<int>(entity->get_position().x) / tile_size;
+            //     const int entity_tile_y =
+            //         static_cast<int>(entity->get_position().y) / tile_size;
 
-                if (entity_tile_y >= 0 &&
-                    entity_tile_y < static_cast<int>(entity_collision_map.size()) &&
-                    entity_tile_x >= 0 &&
-                    entity_tile_x < static_cast<int>(entity_collision_map[0].size()))
-                {
-                    entity_collision_map[entity_tile_y][entity_tile_x] = true;
-                }
+            //     if (entity_tile_y >= 0 &&
+            //         entity_tile_y < static_cast<int>(entity_collision_map.size()) &&
+            //         entity_tile_x >= 0 &&
+            //         entity_tile_x < static_cast<int>(entity_collision_map[0].size()))
+            //     {
+            //         entity_collision_map[entity_tile_y][entity_tile_x] = true;
+            //     }
 
-                entity->update(dt);
-            }
+            //     entity->update(dt);
+            // }
+
+            // Handle bounds properly:
+            // get entity position and calculate the pixels that are off bounds based on their location and bound dimensions
+            // need to create bound box type on entity and create helper functions for checking collisions between boxes
 
             // 3. Update player with fresh collision data
+
+            std::vector<BoundBox> entity_bound_boxes;
+
+            // Use a traditional for loop to populate entity_bound_boxes
+            for (const auto &entity : entities)
+            {
+                entity_bound_boxes.push_back(entity->get_bound_box());
+            }
+
             if (player)
             {
-                player->update(dt, *tilemap, entity_collision_map);
+                // need to replace entity collision map with a list of bound boxes
+                player->update(dt, *tilemap);
             }
 
             if (IsKeyPressed(KEY_ENTER))
@@ -163,11 +177,6 @@ namespace suicune
                                       [entity](const std::unique_ptr<Entity> &e)
                                       { return e.get() == entity; }),
                        entities.end());
-    }
-
-    void PlayScene::initialize_entity_collision_map()
-    {
-        entity_collision_map.resize(tilemap->get_map_height(), std::vector<bool>(tilemap->get_map_width(), false));
     }
 
 }

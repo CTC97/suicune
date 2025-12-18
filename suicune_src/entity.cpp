@@ -59,4 +59,14 @@ namespace suicune
     {
         dialog_sequence = dialog;
     }
+
+    void Entity::set_bound_dimensions(int bound_width, int bound_height)
+    {
+        bound_box = {x, y, bound_width, bound_height};
+    }
+
+    BoundBox Entity::get_bound_box() const
+    {
+        return bound_box;
+    }
 }
