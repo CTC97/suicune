@@ -4,22 +4,15 @@
 #include "raylib.h"
 #include "spritesheet.hpp"
 #include "dialog_manager.hpp"
+#include "util.hpp"
 
 namespace suicune
 {
 
-    struct BoundBox
-    {
-        int x;
-        int y;
-        int width;
-        int height;
-    };
-
     class Entity
     {
     public:
-        Entity(Spritesheet &spritesheet, int x, int y);
+        Entity(Spritesheet &spritesheet, int width, int height, int x, int y, bool solid = true);
         virtual ~Entity() = default;
 
         virtual void update(float dt);
@@ -29,6 +22,9 @@ namespace suicune
         std::string get_current_animation() const;
 
         Vector2 get_position() const;
+
+        int get_width();
+        int get_height();
 
         void set_solid(bool solid);
         bool is_solid() const;
@@ -43,13 +39,13 @@ namespace suicune
 
     protected:
         Spritesheet &spritesheet;
-        // int width;
-        // int height;
-        bool solid = true;
+        int width;
+        int height;
         int x;
         int y;
+        bool solid;
 
-        BoundBox bound_box;
+        BoundBox bound_box{0, 0, 0, 0};
 
         DialogManager *dm = nullptr;             // Pointer to the shared DialogManager
         std::vector<DialogNode> dialog_sequence; // Entity-specific dialog

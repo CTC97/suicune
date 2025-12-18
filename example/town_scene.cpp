@@ -40,7 +40,7 @@ namespace suicune
         player_spritesheet->define_animation("walk_right", {{4, 5}, 0.2f, true});
         player_spritesheet->define_animation("walk_left", {{9, 10}, 0.2f, true});
 
-        player = std::make_unique<Player>(*player_spritesheet, 16, 16);
+        player = std::make_unique<Player>(*player_spritesheet, 16, 16, 16, 16);
         player->play_animation("still");
         camera.target = player->get_position();
 
@@ -50,7 +50,7 @@ namespace suicune
             16);
         nurse_joy_spritesheet->define_animation("still", {{0}, 1.0f, true});
 
-        auto nurse_joy = std::make_unique<Entity>(*nurse_joy_spritesheet, 64, 64);
+        auto nurse_joy = std::make_unique<Entity>(*nurse_joy_spritesheet, 16, 16, 64, 64);
         nurse_joy->set_dialog({{
             "Hi-hi! Oh—sorry, I was just humming again, wasn't I? The market always makes me nervous and excited at the same time, like all the colors are whispering secrets and daring me to keep mine tucked safely away. Not that it's a bad secret, mind you—just a personal one, the kind you fold up carefully and keep close to your heart while you smile and help everyone find what they're looking for. I like being seen as just me: the girl who laughs too loud, trips over nothing, and always remembers your favorite candy. Sometimes I wonder if people can tell there's more to me than meets the eye, but then someone waves and asks about the weather, and I relax again. Maybe one day I'll be brave enough to share everything, or maybe I won't need to, because I'm happy like this—walking through town, cheeks warm, heart steady, knowing that even if the world doesn't know all of me, it still lets me belong.",
         }});

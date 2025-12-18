@@ -20,14 +20,14 @@ namespace suicune
     {
 
     public:
-        Player(Spritesheet &spritesheet, int x, int y);
+        Player(Spritesheet &spritesheet, int width, int height, int x, int y);
         ~Player();
 
         // suppresses hidden override warning
         using Entity::update;
 
-        // put this at the Entity level if we want moving entities later
-        void update(float dt, const Tilemap &tilemap);
+        // put this at the Entity level if we want moving entities later --> more likely to be a Mob extension of Entity
+        void update(float dt, const Tilemap &tilemap, const std::vector<BoundBox> &entity_bound_boxes);
 
         Direction get_current_direction();
 

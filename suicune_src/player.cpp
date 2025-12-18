@@ -2,7 +2,7 @@
 
 namespace suicune
 {
-    Player::Player(Spritesheet &spritesheet, int x, int y) : Entity(spritesheet, x, y)
+    Player::Player(Spritesheet &spritesheet, int width, int height, int x, int y) : Entity(spritesheet, width, height, x, y)
     {
         current_direction = DOWN;
     }
@@ -11,8 +11,10 @@ namespace suicune
     {
     }
 
-    void Player::update(float dt, const Tilemap &tilemap)
+    void Player::update(float dt, const Tilemap &tilemap, const std::vector<BoundBox> &entity_bound_boxes)
     {
+        Entity::update(dt);
+
         int new_x = x;
         int new_y = y;
 
@@ -58,6 +60,15 @@ namespace suicune
             // Now safe to convert to tile coords
             int tx = px / tile_size;
             int ty = py / tile_size;
+
+            // Compare player BoundBox to entity_bound_boxes:
+
+            for (const auto &b : entity_bound_boxes)
+            {
+                if (check_bound_box_collision(bound_box, b, 10))
+                    return false;
+            }
+
             return tilemap.is_tile_free(tx, ty);
         };
 
@@ -72,8 +83,6 @@ namespace suicune
             x = new_x;
             y = new_y;
         }
-
-        Entity::update(dt);
     }
 
     Direction Player::get_current_direction()

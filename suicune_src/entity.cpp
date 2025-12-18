@@ -2,19 +2,25 @@
 
 namespace suicune
 {
-    Entity::Entity(Spritesheet &spritesheet, /*int width, int height,*/ int x, int y)
-        : spritesheet(spritesheet), /*width(width), height(height),*/ x(x), y(y)
+    Entity::Entity(Spritesheet &spritesheet, int width, int height, int x, int y, bool solid)
+        : spritesheet(spritesheet), width(width), height(height), x(x), y(y), solid(solid)
     {
+        set_bound_dimensions(width, height);
     }
 
     void Entity::update(float dt)
     {
         spritesheet.update_animation(dt);
+
+        bound_box.x = x + (width - bound_box.width) / 2;
+        bound_box.y = y + (height - bound_box.height) / 2;
     }
 
     void Entity::draw()
     {
         spritesheet.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
+        // Draw the bounding box as a rectangle
+        DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255}); // Red color
     }
 
     void Entity::play_animation(const std::string &animation_name)
@@ -62,7 +68,10 @@ namespace suicune
 
     void Entity::set_bound_dimensions(int bound_width, int bound_height)
     {
-        bound_box = {x, y, bound_width, bound_height};
+        bound_box.width = bound_width;
+        bound_box.height = bound_height;
+        bound_box.x = x + (width - bound_width) / 2;
+        bound_box.y = y + (height - bound_height) / 2;
     }
 
     BoundBox Entity::get_bound_box() const

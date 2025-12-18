@@ -64,7 +64,7 @@ namespace suicune
             if (player)
             {
                 // need to replace entity collision map with a list of bound boxes
-                player->update(dt, *tilemap);
+                player->update(dt, *tilemap, entity_bound_boxes);
             }
 
             if (IsKeyPressed(KEY_ENTER))
