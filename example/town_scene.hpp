@@ -23,6 +23,7 @@ namespace suicune
         std::unique_ptr<Spritesheet> nurse_joy_spritesheet;
         std::unique_ptr<Spritesheet> old_man_spritesheet;
         std::unique_ptr<Spritesheet> player_spritesheet;
+        std::unique_ptr<Spritesheet> pokeball_spritesheet;
     };
 
 }

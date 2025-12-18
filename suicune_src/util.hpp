@@ -34,67 +34,28 @@ namespace suicune
         Direction dir,
         int slack = 0)
     {
-        // Next A edges
-        int aL = next_a.x;
-        int aR = next_a.x + next_a.width;
-        int aT = next_a.y;
-        int aB = next_a.y + next_a.height;
+        int aL = next_a.x, aR = next_a.x + next_a.width;
+        int aT = next_a.y, aB = next_a.y + next_a.height;
 
-        // Prev A edges
-        int paL = prev_a.x;
-        int paR = prev_a.x + prev_a.width;
-        int paT = prev_a.y;
-        int paB = prev_a.y + prev_a.height;
+        int paL = prev_a.x, paR = prev_a.x + prev_a.width;
+        int paT = prev_a.y, paB = prev_a.y + prev_a.height;
 
-        // B edges
-        int bL = b.x;
-        int bR = b.x + b.width;
-        int bT = b.y;
-        int bB = b.y + b.height;
+        int bL = b.x, bR = b.x + b.width;
+        int bT = b.y, bB = b.y + b.height;
 
-        // Overlap on perpendicular axis (using next position)
         bool overlap_x = (aL < bR - slack) && (aR > bL + slack);
         bool overlap_y = (aT < bB - slack) && (aB > bT + slack);
-
-        printf("Checking directional collision: overlap_x=%d, overlap_y=%d\n", overlap_x, overlap_y);
 
         switch (dir)
         {
         case RIGHT:
-            // Were we left of B, and did our right edge cross into B's left edge?
-            if (overlap_y && (paR <= bL) && (aR > bL))
-            {
-                printf("Collision detected moving RIGHT\n");
-                return true;
-            }
-            break;
-
+            return overlap_y && (paR <= bL) && (aR > bL);
         case LEFT:
-            // Were we right of B, and did our left edge cross into B's right edge?
-            if (overlap_y && (paL >= bR) && (aL < bR))
-            {
-                printf("Collision detected moving LEFT\n");
-                return true;
-            }
-            break;
-
+            return overlap_y && (paL >= bR) && (aL < bR);
         case DOWN:
-            // Were we above B, and did our bottom edge cross into B's top edge?
-            if (overlap_x && (paB <= bT) && (aB > bT))
-            {
-                printf("Collision detected moving DOWN\n");
-                return true;
-            }
-            break;
-
+            return overlap_x && (paB <= bT) && (aB > bT);
         case UP:
-            // Were we below B, and did our top edge cross into B's bottom edge?
-            if (overlap_x && (paT >= bB) && (aT < bB))
-            {
-                printf("Collision detected moving UP\n");
-                return true;
-            }
-            break;
+            return overlap_x && (paT >= bB) && (aT < bB);
         }
 
         return false;

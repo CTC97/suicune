@@ -90,14 +90,14 @@ namespace suicune
             tilemap->draw();
         }
 
-        if (player)
-        {
-            player->draw();
-        }
-
         for (const auto &entity : entities)
         {
             entity->draw();
+        }
+
+        if (player)
+        {
+            player->draw();
         }
 
         EndMode2D();

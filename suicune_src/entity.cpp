@@ -18,8 +18,10 @@ namespace suicune
 
     void Entity::draw()
     {
+        printf("Entity Position: x=%d, y=%d\n", x, y);
         spritesheet.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
         // Draw the bounding box as a rectangle
+        printf("Entity BoundBox: x=%d, y=%d, w=%d, h=%d\n", bound_box.x, bound_box.y, bound_box.width, bound_box.height);
         DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255}); // Red color
     }
 

@@ -29,6 +29,7 @@ namespace suicune
         tilemap = std::make_unique<Tilemap>(*tilemap_spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
         tilemap->set_collision_tiles({3});
 
+        // player
         player_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/bw_player.png",
             16,
@@ -44,6 +45,7 @@ namespace suicune
         player->play_animation("still");
         camera.target = player->get_position();
 
+        // nurse joy
         nurse_joy_spritesheet = std::make_unique<Spritesheet>(
             "res/sprites/Sprite-0001.png",
             16,
@@ -55,8 +57,18 @@ namespace suicune
             "Hi-hi! Oh—sorry, I was just humming again, wasn't I? The market always makes me nervous and excited at the same time, like all the colors are whispering secrets and daring me to keep mine tucked safely away. Not that it's a bad secret, mind you—just a personal one, the kind you fold up carefully and keep close to your heart while you smile and help everyone find what they're looking for. I like being seen as just me: the girl who laughs too loud, trips over nothing, and always remembers your favorite candy. Sometimes I wonder if people can tell there's more to me than meets the eye, but then someone waves and asks about the weather, and I relax again. Maybe one day I'll be brave enough to share everything, or maybe I won't need to, because I'm happy like this—walking through town, cheeks warm, heart steady, knowing that even if the world doesn't know all of me, it still lets me belong.",
         }});
         nurse_joy->play_animation("still");
-
         add_entity(std::move(nurse_joy));
+
+        // pokeball
+        pokeball_spritesheet = std::make_unique<Spritesheet>(
+            "res/sprites/pokeball.png",
+            16,
+            16);
+        pokeball_spritesheet->define_animation("still", {{0}, 1.0f, true});
+        auto pokeball = std::make_unique<Entity>(*pokeball_spritesheet, 16, 16, 100, 32);
+        pokeball->set_bound_dimensions(8, 8);
+        pokeball->play_animation("still");
+        add_entity(std::move(pokeball));
     }
 
     TownScene::~TownScene() = default;
