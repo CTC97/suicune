@@ -78,4 +78,9 @@ namespace suicune
     {
         return bound_box;
     }
+
+    Direction Entity::get_current_direction()
+    {
+        return current_direction;
+    }
 }

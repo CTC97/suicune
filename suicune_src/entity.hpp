@@ -37,6 +37,8 @@ namespace suicune
         void set_bound_dimensions(int width, int height);
         BoundBox get_bound_box() const;
 
+        Direction get_current_direction();
+
     protected:
         Spritesheet &spritesheet;
         int width;
@@ -46,6 +48,8 @@ namespace suicune
         bool solid;
 
         BoundBox bound_box{0, 0, 0, 0};
+
+        Direction current_direction;
 
         DialogManager *dm = nullptr;             // Pointer to the shared DialogManager
         std::vector<DialogNode> dialog_sequence; // Entity-specific dialog

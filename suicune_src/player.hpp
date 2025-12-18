@@ -7,15 +7,6 @@
 
 namespace suicune
 {
-    // maybe this should go at entity level?
-    enum Direction
-    {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
-
     class Player : public Entity
     {
 
@@ -28,10 +19,5 @@ namespace suicune
 
         // put this at the Entity level if we want moving entities later --> more likely to be a Mob extension of Entity
         void update(float dt, const Tilemap &tilemap, const std::vector<BoundBox> &entity_bound_boxes);
-
-        Direction get_current_direction();
-
-    private:
-        Direction current_direction;
     };
 }

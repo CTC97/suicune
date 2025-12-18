@@ -63,12 +63,6 @@ namespace suicune
 
             // Compare player BoundBox to entity_bound_boxes:
 
-            for (const auto &b : entity_bound_boxes)
-            {
-                if (check_bound_box_collision(bound_box, b, 10))
-                    return false;
-            }
-
             return tilemap.is_tile_free(tx, ty);
         };
 
@@ -78,15 +72,22 @@ namespace suicune
             is_free_pixel(left, bottom) &&
             is_free_pixel(right, bottom);
 
+        BoundBox prev = {x, y, 16, 16};
+        BoundBox next = {new_x, new_y, 16, 16};
+
+        for (const auto &b : entity_bound_boxes)
+        {
+            if (check_directional_bound_box_collision(prev, next, b, current_direction))
+            {
+                can_move = false;
+                break;
+            }
+        }
+
         if (can_move)
         {
             x = new_x;
             y = new_y;
         }
-    }
-
-    Direction Player::get_current_direction()
-    {
-        return current_direction;
     }
 }
