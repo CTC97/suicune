@@ -208,7 +208,7 @@ namespace suicune
 
     void MainScene::update(float dt)
     {
-        (void)dt;
+        (void)dt; // uncomment if you want more advanced updating on your menu scene
     }
 
     void MainScene::draw()
