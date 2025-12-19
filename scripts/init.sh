@@ -59,7 +59,7 @@ cat > Makefile <<'MAKEFILE'
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra
 
-TARGET   ?= build/suicune
+TARGET   ?= build/app
 
 # Source layout (edit these globs if you move folders)
 SRC := $(wildcard *.cpp) \

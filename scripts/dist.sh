@@ -5,7 +5,7 @@ make
 
 # ---- config ----
 DIST_NAME="${1:-${DIST_NAME:-dist}}"  # Use the first argument, or environment variable, or default\
-BIN_PATH="${BIN_PATH:-build/$DIST_NAME}"  # your already-built binary
+BIN_PATH="build/app"  # hardcoded binary path
 RES_DIR="${RES_DIR:-res}"              # your resources folder
 DIST_DIR="${DIST_DIR:-dist}"           # output folder
 
