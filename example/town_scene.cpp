@@ -83,6 +83,7 @@ namespace suicune
 
     TownScene::~TownScene()
     {
+        // create an add spritesheet function at the scene level and unload all textures there
         UnloadTexture(tilemap_spritesheet->get_texture());
         UnloadTexture(player_spritesheet->get_texture());
         UnloadTexture(nurse_joy_spritesheet->get_texture());
@@ -91,16 +92,16 @@ namespace suicune
 
     void TownScene::update(float dt)
     {
-        if (IsKeyDown(KEY_RIGHT))
+        if (player->get_current_direction() == RIGHT)
             player->play_animation("walk_right");
-        else if (IsKeyDown(KEY_LEFT))
+        else if (player->get_current_direction() == LEFT)
             player->play_animation("walk_left");
-        else if (IsKeyDown(KEY_UP))
+        else if (player->get_current_direction() == UP)
             player->play_animation("walk_up");
-        else if (IsKeyDown(KEY_DOWN))
+        else if (player->get_current_direction() == DOWN)
             player->play_animation("walk_down");
-        else
-            player->play_animation("still");
+        // else
+        //     player->play_animation("still");
         PlayScene::update(dt);
     }
 

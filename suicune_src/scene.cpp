@@ -26,6 +26,7 @@ namespace suicune
     void Scene::draw()
     {
         DrawTexture(suicune_min, game.get_window_width() - 48, 4, WHITE);
+        DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 4 + suicune_min.height + 4, 10, WHITE);
     }
 
 }

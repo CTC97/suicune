@@ -8,26 +8,19 @@ namespace suicune
         set_bound_box_position(x, y);
         set_bound_box_dimensions(width, height);
         set_bound_box_offset((width - bound_box.width) / 2, (height - bound_box.height) / 2);
-
-        printf("BoundBox Dimensions: width=%d, height=%d\n", bound_box.width, bound_box.height);
-        printf("BoundBox Offset: offset_x=%d, offset_y=%d\n", bound_box.offset_x, bound_box.offset_y);
     }
 
     void Entity::update(float dt)
     {
         spritesheet.update_animation(dt);
         set_bound_box_position(x + bound_box.offset_x, y + bound_box.offset_y);
-        // bound_box.x = x; //+ (bound_box.offset_x);
-        // bound_box.y = y; //+ (bound_box.offset_y);
     }
 
     void Entity::draw()
     {
-        // printf("Entity Position: x=%d, y=%d\n", x, y);
         spritesheet.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
         // // Draw the bounding box as a rectangle
-        // printf("Entity BoundBox: x=%d, y=%d, w=%d, h=%d\n", bound_box.x, bound_box.y, bound_box.width, bound_box.height);
-        DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255}); // Red color
+        DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255});
     }
 
     void Entity::play_animation(const std::string &animation_name)
