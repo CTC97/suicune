@@ -72,8 +72,11 @@ namespace suicune
             is_free_pixel(left, bottom) &&
             is_free_pixel(right, bottom);
 
-        BoundBox prev = {x, y, 16, 16, bound_box.offset_x, bound_box.offset_y};
-        BoundBox next = {new_x, new_y, 16, 16, bound_box.offset_x, bound_box.offset_y};
+        BoundBox prev = get_bound_box();
+        BoundBox next = prev;
+
+        next.x += (new_x - x);
+        next.y += (new_y - y);
 
         for (const auto &b : entity_bound_boxes)
         {

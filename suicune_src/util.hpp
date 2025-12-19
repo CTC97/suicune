@@ -17,8 +17,8 @@ namespace suicune
         int y;
         int width;
         int height;
-        int offset_x;
-        int offset_y;
+        int offset_x = 0;
+        int offset_y = 0;
     };
 
     inline bool check_bound_box_collision(const BoundBox &a, const BoundBox &b, int slack = 0, int offset_x = 0, int offset_y = 0)

@@ -38,6 +38,16 @@ namespace suicune
         return {static_cast<float>(x), static_cast<float>(y)};
     }
 
+    int Entity::get_width()
+    {
+        return width;
+    }
+
+    int Entity::get_height()
+    {
+        return height;
+    }
+
     void Entity::set_solid(bool solid)
     {
         this->solid = solid;

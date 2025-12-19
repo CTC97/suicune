@@ -43,6 +43,8 @@ namespace suicune
 
         player = std::make_unique<Player>(*player_spritesheet, 16, 16, 16, 16);
         player->play_animation("still");
+        player->set_bound_box_dimensions(8, 4);
+        player->set_bound_box_offset(4, 12);
         camera.target = player->get_position();
 
         // nurse joy
@@ -75,8 +77,8 @@ namespace suicune
             32);
         tree_spritesheet->define_animation("still", {{0}, 1.0f, true});
         auto tree = std::make_unique<Entity>(*tree_spritesheet, 16, 32, 32, 32);
-        tree->set_bound_box_dimensions(16, 8);
-        tree->set_bound_box_offset(0, 24);
+        tree->set_bound_box_dimensions(2, 2);
+        tree->set_bound_box_offset(7, 30);
         tree->play_animation("still");
         add_entity(std::move(tree));
     }
