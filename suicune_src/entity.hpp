@@ -34,7 +34,9 @@ namespace suicune
         void set_dialog_manager(DialogManager *dialog_manager);
         void set_dialog(const std::vector<DialogNode> &dialog);
 
-        void set_bound_dimensions(int width, int height);
+        void set_bound_box_position(int x, int y);
+        void set_bound_box_dimensions(int width, int height);
+        void set_bound_box_offset(int offset_x, int offset_y);
         BoundBox get_bound_box() const;
 
         Direction get_current_direction();

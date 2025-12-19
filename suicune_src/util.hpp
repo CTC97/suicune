@@ -17,14 +17,16 @@ namespace suicune
         int y;
         int width;
         int height;
+        int offset_x;
+        int offset_y;
     };
 
-    inline bool check_bound_box_collision(const BoundBox &a, const BoundBox &b, int slack = 0)
+    inline bool check_bound_box_collision(const BoundBox &a, const BoundBox &b, int slack = 0, int offset_x = 0, int offset_y = 0)
     {
-        return (a.x < b.x + b.width - slack) &&
-               (a.x + a.width > b.x + slack) &&
-               (a.y < b.y + b.height - slack) &&
-               (a.y + a.height > b.y + slack);
+        return (a.x + offset_x < b.x + b.width - slack) &&
+               (a.x + a.width + offset_x > b.x + slack) &&
+               (a.y + offset_y < b.y + b.height - slack) &&
+               (a.y + a.height + offset_y > b.y + slack);
     }
 
     inline bool check_directional_bound_box_collision(
@@ -32,13 +34,15 @@ namespace suicune
         const BoundBox &next_a,
         const BoundBox &b,
         Direction dir,
-        int slack = 0)
+        int slack = 0,
+        int offset_x = 0,
+        int offset_y = 0)
     {
-        int aL = next_a.x, aR = next_a.x + next_a.width;
-        int aT = next_a.y, aB = next_a.y + next_a.height;
+        int aL = next_a.x + offset_x, aR = next_a.x + next_a.width + offset_x;
+        int aT = next_a.y + offset_y, aB = next_a.y + next_a.height + offset_y;
 
-        int paL = prev_a.x, paR = prev_a.x + prev_a.width;
-        int paT = prev_a.y, paB = prev_a.y + prev_a.height;
+        int paL = prev_a.x + offset_x, paR = prev_a.x + prev_a.width + offset_x;
+        int paT = prev_a.y + offset_y, paB = prev_a.y + prev_a.height + offset_y;
 
         int bL = b.x, bR = b.x + b.width;
         int bT = b.y, bB = b.y + b.height;

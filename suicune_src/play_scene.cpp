@@ -58,6 +58,7 @@ namespace suicune
             // Use a traditional for loop to populate entity_bound_boxes
             for (const auto &entity : entities)
             {
+                entity->update(dt);
                 entity_bound_boxes.push_back(entity->get_bound_box());
             }
 

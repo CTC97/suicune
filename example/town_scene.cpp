@@ -66,7 +66,7 @@ namespace suicune
             16);
         pokeball_spritesheet->define_animation("still", {{0}, 1.0f, true});
         auto pokeball = std::make_unique<Entity>(*pokeball_spritesheet, 16, 16, 100, 32);
-        pokeball->set_bound_dimensions(8, 8);
+        pokeball->set_bound_box_dimensions(8, 8);
         pokeball->play_animation("still");
         add_entity(std::move(pokeball));
     }

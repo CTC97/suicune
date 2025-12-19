@@ -5,23 +5,28 @@ namespace suicune
     Entity::Entity(Spritesheet &spritesheet, int width, int height, int x, int y, bool solid)
         : spritesheet(spritesheet), width(width), height(height), x(x), y(y), solid(solid)
     {
-        set_bound_dimensions(width, height);
+        set_bound_box_position(x, y);
+        set_bound_box_dimensions(width, height);
+        set_bound_box_offset((width - bound_box.width) / 2, (height - bound_box.height) / 2);
+
+        printf("BoundBox Dimensions: width=%d, height=%d\n", bound_box.width, bound_box.height);
+        printf("BoundBox Offset: offset_x=%d, offset_y=%d\n", bound_box.offset_x, bound_box.offset_y);
     }
 
     void Entity::update(float dt)
     {
         spritesheet.update_animation(dt);
-
-        bound_box.x = x + (width - bound_box.width) / 2;
-        bound_box.y = y + (height - bound_box.height) / 2;
+        set_bound_box_position(x + bound_box.offset_x, y + bound_box.offset_y);
+        // bound_box.x = x; //+ (bound_box.offset_x);
+        // bound_box.y = y; //+ (bound_box.offset_y);
     }
 
     void Entity::draw()
     {
-        printf("Entity Position: x=%d, y=%d\n", x, y);
+        // printf("Entity Position: x=%d, y=%d\n", x, y);
         spritesheet.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
-        // Draw the bounding box as a rectangle
-        printf("Entity BoundBox: x=%d, y=%d, w=%d, h=%d\n", bound_box.x, bound_box.y, bound_box.width, bound_box.height);
+        // // Draw the bounding box as a rectangle
+        // printf("Entity BoundBox: x=%d, y=%d, w=%d, h=%d\n", bound_box.x, bound_box.y, bound_box.width, bound_box.height);
         DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255}); // Red color
     }
 
@@ -68,12 +73,23 @@ namespace suicune
         dialog_sequence = dialog;
     }
 
-    void Entity::set_bound_dimensions(int bound_width, int bound_height)
+    void Entity::set_bound_box_position(int bound_x, int bound_y)
+    {
+        bound_box.x = bound_x;
+        bound_box.y = bound_y;
+    }
+
+    void Entity::set_bound_box_dimensions(int bound_width, int bound_height)
     {
         bound_box.width = bound_width;
         bound_box.height = bound_height;
-        bound_box.x = x + (width - bound_width) / 2;
-        bound_box.y = y + (height - bound_height) / 2;
+        set_bound_box_offset((width - bound_box.width) / 2, (height - bound_box.height) / 2);
+    }
+
+    void Entity::set_bound_box_offset(int offset_x, int offset_y)
+    {
+        bound_box.offset_x = offset_x;
+        bound_box.offset_y = offset_y;
     }
 
     BoundBox Entity::get_bound_box() const
