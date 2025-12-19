@@ -79,6 +79,7 @@ namespace suicune
         bound_box.y = bound_y;
     }
 
+    // note: this function also recenters the bound box offset
     void Entity::set_bound_box_dimensions(int bound_width, int bound_height)
     {
         bound_box.width = bound_width;

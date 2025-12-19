@@ -49,7 +49,7 @@ namespace suicune
         int y;
         bool solid;
 
-        BoundBox bound_box{0, 0, 0, 0};
+        BoundBox bound_box{0, 0, 0, 0, 0, 0};
 
         Direction current_direction;
 
