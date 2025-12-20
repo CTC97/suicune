@@ -14,7 +14,7 @@ echo -e "\t${LIGHT_BLUE}Done.${RESET}"
 
 # ---- config ----
 DIST_NAME="${1:-${DIST_NAME:-dist}}"  # Use the first argument, or environment variable, or default
-BIN_PATH="build/build"  # hardcoded binary path
+BIN_PATH="build/executable"  # hardcoded binary path
 RES_DIR="${RES_DIR:-res}"              # your resources folder
 DIST_DIR="${DIST_DIR:-dist}"           # output folder
 
