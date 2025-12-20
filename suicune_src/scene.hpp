@@ -18,8 +18,6 @@ namespace suicune
 
     protected:
         Game &game;
-
-        Texture2D suicune_min;
     };
 
 }
