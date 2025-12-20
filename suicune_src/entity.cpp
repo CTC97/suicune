@@ -67,9 +67,24 @@ namespace suicune
 
     void Entity::interact()
     {
-        if (dm && !dialog_sequence.empty())
+        if (interaction_callback)
         {
-            dm->start_dialog(dialog_sequence);
+            interaction_callback();
+        }
+        else
+        {
+            if (dm && !dialog_sequence.empty())
+            {
+                dm->start_dialog(dialog_sequence);
+            }
+        }
+    }
+
+    void Entity::collide()
+    {
+        if (collision_callback)
+        {
+            collision_callback();
         }
     }
 
@@ -116,5 +131,16 @@ namespace suicune
     Spritesheet &Entity::get_spritesheet() const
     {
         return animator.get_spritesheet();
+    }
+
+    // maybe theres a use for these somewhere?
+    void Entity::set_interaction_callback(std::function<void()> callback)
+    {
+        interaction_callback = callback;
+    }
+
+    void Entity::set_collision_callback(std::function<void()> callback)
+    {
+        collision_callback = callback;
     }
 }

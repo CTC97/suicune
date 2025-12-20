@@ -13,6 +13,16 @@ namespace suicune
     {
     }
 
+    void Scene::update(float dt)
+    {
+        (void)dt;
+        if (transitioning_scene)
+        {
+            TraceLog(LOG_INFO, "TRANSITIONING SCENE!!!");
+            return;
+        }
+    }
+
     void Scene::draw()
     {
         // change display of things like this and entity bound boxes to dev mode flag

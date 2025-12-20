@@ -73,14 +73,14 @@ namespace suicune
         next.x += (new_x - x);
         next.y += (new_y - y);
 
-        for (const auto &b : entity_bound_boxes)
-        {
-            if (check_directional_bound_box_collision(prev, next, b, current_direction))
-            {
-                can_move = false;
-                break;
-            }
-        }
+        // for (const auto &b : entity_bound_boxes)
+        // {
+        //     if (check_directional_bound_box_collision(prev, next, b, current_direction))
+        //     {
+        //         can_move = false;
+        //         break;
+        //     }
+        // }
 
         if (can_move)
         {

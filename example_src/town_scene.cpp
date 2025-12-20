@@ -1,6 +1,6 @@
 #include "town_scene.hpp"
 #include "../suicune_src/game.hpp"
-
+#include "main_menu.hpp"
 #include <memory>
 
 namespace suicune
@@ -72,9 +72,30 @@ namespace suicune
             tree->set_dialog({{"The tree is too tall to climb.", "--", {}}});
             trees.push_back(tree); // trees should be std::vector<Tree*> (non-owning handles)
         }
+
+        house_spritesheet = std::make_shared<Spritesheet>(
+            "res/sprites/house.png",
+            32,
+            32);
+        house_spritesheet->define_animation("still", {{0}, 1.0f, true});
+        Entity *house = spawn<Entity>(house_spritesheet, 32, 32, 100, 50);
+        house->set_bound_box_dimensions(28, 16);
+        house->set_bound_box_offset(2, 16);
+        house->play_animation("still");
+        house->set_collision_callback([this]()
+                                      {
+                                        TraceLog(LOG_INFO, "Transitioning to Main Menu Scene...");
+                                        transitioning_scene = true;
+                                         this->game.set_scene(std::make_unique<MainMenu>(this->game)); });
     }
 
-    TownScene::~TownScene() = default;
+    TownScene::~TownScene()
+    {
+        UnloadTexture(tilemap_spritesheet->get_texture());
+        UnloadTexture(player_spritesheet->get_texture());
+        UnloadTexture(tree_spritesheet->get_texture());
+        UnloadTexture(house_spritesheet->get_texture());
+    }
 
     void TownScene::update(float dt)
     {

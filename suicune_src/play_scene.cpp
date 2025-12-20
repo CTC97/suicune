@@ -16,15 +16,11 @@ namespace suicune
         {
             UnloadTexture(tilemap->get_spritesheet().get_texture());
         }
-
-        for (const auto &entity : entities)
-        {
-            UnloadTexture(entity->get_spritesheet().get_texture());
-        }
     }
 
     void PlayScene::update(float dt)
     {
+        Scene::update(dt);
         (void)dt;
 
         DialogManager *dialog_manager = &game.get_dialog_manager();
@@ -38,7 +34,13 @@ namespace suicune
             {
                 entity->update(dt);
                 if (entity->is_solid())
+                {
                     entity_bound_boxes.push_back(entity->get_bound_box());
+                    if (check_bound_box_collision(player->get_bound_box(), entity->get_bound_box()))
+                    {
+                        entity->collide();
+                    }
+                }
             }
 
             if (player)

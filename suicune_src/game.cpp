@@ -140,6 +140,7 @@ namespace suicune
 
     void Game::set_scene(std::unique_ptr<Scene> scene)
     {
+        current_scene.reset();
         current_scene = std::move(scene);
     }
 
