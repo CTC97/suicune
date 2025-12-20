@@ -2,12 +2,12 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra
 
-TARGET   ?= build/suicune
+TARGET   ?= build/build
 
 # Source layout (edit these globs if you move folders)
 SRC := $(wildcard *.cpp) \
-       $(wildcard ../suicune_src/*.cpp) \
-       $(wildcard ./src/*.cpp)
+       $(wildcard ./suicune_src/*.cpp) \
+       $(wildcard ./example_src/*.cpp)
 
 OBJDIR := build/obj
 OBJ := $(patsubst %.cpp,$(OBJDIR)/%.o,$(SRC))
@@ -83,3 +83,4 @@ print-config:
 	@echo "CPPFLAGS    = $(CPPFLAGS)"
 	@echo "LDFLAGS     = $(LDFLAGS)"
 	@echo "SRC         = $(SRC)"
+

@@ -110,7 +110,6 @@ namespace suicune
     void Game::quit()
     {
         running = false;
-        CloseWindow();
     }
 
     void Game::begin_frame()

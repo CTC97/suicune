@@ -1,5 +1,5 @@
-#include "../suicune_src/game.hpp"
-#include "main_menu.hpp"
+#include "suicune_src/game.hpp"
+#include "example_src/main_menu.hpp"
 
 using namespace suicune;
 

@@ -11,7 +11,12 @@ namespace suicune
     {
         if (dialog_font.texture.id != GetFontDefault().texture.id)
         {
-            UnloadFont(dialog_font); // Unload the custom font if it's not the default
+            UnloadFont(dialog_font);
+        }
+
+        if (dialog_box_texture.id != 0)
+        {
+            UnloadTexture(dialog_box_texture);
         }
     }
 

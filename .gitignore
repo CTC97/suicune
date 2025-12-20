@@ -1,4 +1,4 @@
-example/build
-example/dist
+build
+dist
 .vscode/
 .DS_Store
