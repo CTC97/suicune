@@ -64,4 +64,9 @@ namespace suicune
     {
         return map_height;
     }
+
+    Spritesheet &Tilemap::get_spritesheet() const
+    {
+        return spritesheet;
+    }
 }

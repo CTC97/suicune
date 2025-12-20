@@ -21,6 +21,8 @@ namespace suicune
         int get_map_width() const;
         int get_map_height() const;
 
+        Spritesheet &get_spritesheet() const;
+
     private:
         Spritesheet &spritesheet;
         int tile_size;

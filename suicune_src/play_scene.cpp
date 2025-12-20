@@ -10,7 +10,18 @@ namespace suicune
     {
     }
 
-    PlayScene::~PlayScene() = default;
+    PlayScene::~PlayScene()
+    {
+        if (tilemap)
+        {
+            UnloadTexture(tilemap->get_spritesheet().get_texture());
+        }
+
+        for (const auto &entity : entities)
+        {
+            UnloadTexture(entity->get_spritesheet().get_texture());
+        }
+    }
 
     void PlayScene::update(float dt)
     {

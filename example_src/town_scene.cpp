@@ -83,14 +83,7 @@ namespace suicune
         add_entity(std::move(tree));
     }
 
-    TownScene::~TownScene()
-    {
-        // create an add spritesheet function at the scene level and unload all textures there
-        UnloadTexture(tilemap_spritesheet->get_texture());
-        UnloadTexture(player_spritesheet->get_texture());
-        UnloadTexture(nurse_joy_spritesheet->get_texture());
-        UnloadTexture(pokeball_spritesheet->get_texture());
-    }
+    TownScene::~TownScene() = default;
 
     void TownScene::update(float dt)
     {

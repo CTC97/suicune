@@ -41,6 +41,8 @@ namespace suicune
 
         Direction get_current_direction();
 
+        Spritesheet &get_spritesheet() const;
+
     protected:
         Spritesheet &spritesheet;
         int width;

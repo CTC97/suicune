@@ -105,4 +105,9 @@ namespace suicune
     {
         return current_direction;
     }
+
+    Spritesheet &Entity::get_spritesheet() const
+    {
+        return spritesheet;
+    }
 }
