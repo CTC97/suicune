@@ -140,8 +140,19 @@ namespace suicune
 
     void Game::set_scene(std::unique_ptr<Scene> scene)
     {
+        if (!scene)
+        {
+            TraceLog(LOG_WARNING, "Attempted to set null scene!");
+            return;
+        }
+        TraceLog(LOG_WARNING, "Resetting current scene...");
         current_scene.reset();
+        TraceLog(LOG_WARNING, "Setting new scene...");
+
+        // ITS POSSIBLE THAT WE'VE LOST THE game OBJECT HERE WHEN THE CURRENT SCENE IS DESTROYED...LOOK INTO
+
         current_scene = std::move(scene);
+        TraceLog(LOG_WARNING, "Set new scene!");
     }
 
     DialogManager &Game::get_dialog_manager()

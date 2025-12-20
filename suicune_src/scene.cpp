@@ -18,13 +18,18 @@ namespace suicune
         (void)dt;
         if (transitioning_scene)
         {
-            TraceLog(LOG_INFO, "TRANSITIONING SCENE!!!");
+            TraceLog(LOG_INFO, "TRANSITIONING SCENE!!! [Update]");
             return;
         }
     }
 
     void Scene::draw()
     {
+        if (transitioning_scene)
+        {
+            TraceLog(LOG_INFO, "TRANSITIONING SCENE!!! [Draw]");
+            return;
+        }
         // change display of things like this and entity bound boxes to dev mode flag
         DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
     }
