@@ -29,13 +29,13 @@ fi
 
 echo -e "${MEDIUM_BLUE}Creating project ($project_name)${RESET}"
 mkdir -p "$project_name"
-echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
+echo -e "\t${LIGHT_BLUE}Done.${RESET}"
 cd "$project_name"
 
 echo -e "${PURPLE}Cloning source code...${RESET}"
 tmp_dir=".suicune_repo_tmp"
 git clone -q "$REPO_URL" "$tmp_dir"
-echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
+echo -e "\t${LIGHT_BLUE}Done.${RESET}"
 
 echo -e "${MEDIUM_BLUE}Extracting source code...${RESET}"
 if [[ ! -d "$tmp_dir/$SRC_FOLDER_IN_REPO" ]]; then
@@ -46,11 +46,11 @@ if [[ ! -d "$tmp_dir/$SRC_FOLDER_IN_REPO" ]]; then
 fi
 
 mv "$tmp_dir/$SRC_FOLDER_IN_REPO" "./suicune_src"
-echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
+echo -e "\t${LIGHT_BLUE}Done.${RESET}"
 
 echo -e "${MEDIUM_BLUE}Cleaning up...${RESET}"
 rm -rf "$tmp_dir"
-echo -e "\t${LIGHT_BLUE}Done.${RESET}\n"
+echo -e "\t${LIGHT_BLUE}Done.${RESET}"
 
 echo -e "${MEDIUM_BLUE}Creating project files...${RESET}"
 echo -e "\t\t${PURPLE}Makefile${RESET}"
@@ -224,6 +224,6 @@ namespace suicune
 CPP
 
 
-echo -e "\t${LIGHT_BLUE}Done${RESET}\n"
+echo -e "\t${LIGHT_BLUE}Done${RESET}"
 
 echo -e "${MEDIUM_BLUE}Have fun!${RESET}"
