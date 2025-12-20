@@ -44,12 +44,13 @@ namespace suicune
         player_spritesheet->define_animation("walk_up", {{7, 8}, 0.2f, true});
         player_spritesheet->define_animation("walk_right", {{4, 5}, 0.2f, true});
         player_spritesheet->define_animation("walk_left", {{9, 10}, 0.2f, true});
+        player_spritesheet->define_animation("inv", {{0, 11, 0, 11, 0, 11, 0, 11}, 0.25f, false});
 
         // Player now expects shared_ptr<Spritesheet>
         player = std::make_unique<Player>(player_spritesheet, 16, 16, 16, 16);
-        player->play_animation("still");
         player->set_bound_box_dimensions(8, 4);
         player->set_bound_box_offset(4, 12);
+        player->play_animation("still");
         camera.target = player->get_position();
 
         // tree spritesheet (shared asset)
@@ -79,6 +80,17 @@ namespace suicune
     {
         PlayScene::update(dt);
 
+        if (IsKeyPressed(KEY_I))
+        {
+            player->set_stop_movement(true);
+            player->play_animation("inv", [this]()
+                                   { 
+                                    TraceLog(LOG_INFO, "... animation finished.");
+                                    this->player->set_stop_movement(false); });
+        }
+
+        if (player->is_movement_stopped())
+            return;
         if (player->get_current_direction() == RIGHT)
             player->play_animation("walk_right");
         else if (player->get_current_direction() == LEFT)
@@ -87,8 +99,8 @@ namespace suicune
             player->play_animation("walk_up");
         else if (player->get_current_direction() == DOWN)
             player->play_animation("walk_down");
-        // else
-        //     player->play_animation("still");
+        else
+            player->play_animation("still");
     }
 
     void TownScene::draw()

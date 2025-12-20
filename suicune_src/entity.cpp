@@ -30,6 +30,11 @@ namespace suicune
         animator.play_animation(animation_name);
     }
 
+    void Entity::play_animation(const std::string &animation_name, std::function<void()> on_finished)
+    {
+        animator.play_animation(animation_name, std::move(on_finished));
+    }
+
     std::string Entity::get_current_animation() const
     {
         return animator.get_current_animation();

@@ -22,6 +22,7 @@ namespace suicune
         virtual void draw();
 
         void play_animation(const std::string &animation_name);
+        void play_animation(const std::string &animation_name, std::function<void()> on_finished);
         std::string get_current_animation() const;
 
         Vector2 get_position() const;

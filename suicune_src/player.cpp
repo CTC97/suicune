@@ -12,6 +12,9 @@ namespace suicune
     {
         Entity::update(dt);
 
+        if (stop_movement)
+            return;
+
         int new_x = x;
         int new_y = y;
 
@@ -84,5 +87,15 @@ namespace suicune
             x = new_x;
             y = new_y;
         }
+    }
+
+    void Player::set_stop_movement(bool stop)
+    {
+        stop_movement = stop;
+    }
+
+    bool Player::is_movement_stopped() const
+    {
+        return stop_movement;
     }
 }
