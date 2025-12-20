@@ -19,9 +19,9 @@ namespace suicune
     void Entity::draw()
     {
         animator.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
-        // Draw the bounding box as a rectangle
+
+        // bounding box debug draw
         DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255});
-        // Draw a yellow circle at the center of the bounding box
         DrawCircle(bound_box.x + bound_box.width / 2, bound_box.y + bound_box.height / 2, 0.5, {255, 255, 0, 255});
     }
 

@@ -18,9 +18,20 @@ namespace suicune
             UnloadTexture(texture);
     }
 
-    const Texture2D &Spritesheet::get_texture() const { return texture; }
-    int Spritesheet::get_frame_width() const { return frame_width; }
-    int Spritesheet::get_frame_height() const { return frame_height; }
+    const Texture2D &Spritesheet::get_texture() const
+    {
+        return texture;
+    }
+
+    int Spritesheet::get_frame_width() const
+    {
+        return frame_width;
+    }
+
+    int Spritesheet::get_frame_height() const
+    {
+        return frame_height;
+    }
 
     void Spritesheet::draw_sprite(int frame_index, float global_x, float global_y) const
     {

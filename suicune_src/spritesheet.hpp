@@ -21,6 +21,7 @@ namespace suicune
         explicit Spritesheet(const char *file_path, int frame_width, int frame_height);
         ~Spritesheet();
 
+        // disable copying.
         Spritesheet(const Spritesheet &) = delete;
         Spritesheet &operator=(const Spritesheet &) = delete;
 

@@ -44,8 +44,6 @@ namespace suicune
 
         Direction get_current_direction();
 
-        // For compatibility with existing code (e.g., PlayScene destructor or debugging).
-        // This returns the shared spritesheet asset.
         Spritesheet &get_spritesheet() const;
 
     protected:
@@ -61,7 +59,7 @@ namespace suicune
 
         Direction current_direction;
 
-        DialogManager *dm = nullptr;             // Pointer to the shared DialogManager
-        std::vector<DialogNode> dialog_sequence; // Entity-specific dialog
+        DialogManager *dm = nullptr; // pointer to the shared DialogManager
+        std::vector<DialogNode> dialog_sequence;
     };
 }
