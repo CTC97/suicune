@@ -2,7 +2,6 @@
 
 namespace suicune
 {
-
     Spritesheet::Spritesheet(const char *file_path, int frame_width, int frame_height)
         : frame_width(frame_width), frame_height(frame_height)
     {
@@ -15,32 +14,22 @@ namespace suicune
 
     Spritesheet::~Spritesheet()
     {
-        UnloadTexture(texture);
+        if (texture.id != 0)
+            UnloadTexture(texture);
     }
 
-    Texture2D &Spritesheet::get_texture()
-    {
-        return texture;
-    }
+    const Texture2D &Spritesheet::get_texture() const { return texture; }
+    int Spritesheet::get_frame_width() const { return frame_width; }
+    int Spritesheet::get_frame_height() const { return frame_height; }
 
-    int Spritesheet::get_frame_width()
-    {
-        return frame_width;
-    }
-
-    int Spritesheet::get_frame_height()
-    {
-        return frame_height;
-    }
-
-    void Spritesheet::draw_sprite(int frame_index, float global_x, float global_y)
+    void Spritesheet::draw_sprite(int frame_index, float global_x, float global_y) const
     {
         int columns = texture.width / frame_width;
         int frame_x = (frame_index % columns) * frame_width;
         int frame_y = (frame_index / columns) * frame_height;
 
-        Rectangle source = {static_cast<float>(frame_x), static_cast<float>(frame_y), static_cast<float>(frame_width), static_cast<float>(frame_height)};
-        Rectangle dest = {global_x, global_y, static_cast<float>(frame_width), static_cast<float>(frame_height)};
+        Rectangle source = {(float)frame_x, (float)frame_y, (float)frame_width, (float)frame_height};
+        Rectangle dest = {global_x, global_y, (float)frame_width, (float)frame_height};
         Vector2 origin = {0.0f, 0.0f};
 
         DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
@@ -51,58 +40,11 @@ namespace suicune
         animations[name] = animation;
     }
 
-    void Spritesheet::play_animation(const std::string &name)
+    const Animation *Spritesheet::get_animation(const std::string &name) const
     {
-        if (name == current_animation)
-            return;
-
-        if (animations.find(name) != animations.end())
-        {
-            current_animation = name;
-            animation_timer = 0.0f;
-            current_frame_index = 0;
-        }
-    }
-
-    void Spritesheet::update_animation(float dt)
-    {
-        if (animations.find(current_animation) == animations.end())
-            return;
-
-        const Animation &animation = animations[current_animation];
-        animation_timer += dt;
-
-        if (animation_timer >= animation.frame_duration)
-        {
-            animation_timer -= animation.frame_duration;
-            current_frame_index++;
-
-            if (current_frame_index >= static_cast<int>(animation.frame_indices.size()))
-            {
-                if (animation.loop)
-                {
-                    current_frame_index = 0;
-                }
-                else
-                {
-                    current_frame_index = animation.frame_indices.size() - 1; // Stay on the last frame
-                }
-            }
-        }
-    }
-
-    void Spritesheet::draw_current_frame(float x, float y)
-    {
-        if (animations.find(current_animation) == animations.end())
-            return;
-
-        const Animation &animation = animations[current_animation];
-        int frame_index = animation.frame_indices[current_frame_index];
-        draw_sprite(frame_index, x, y);
-    }
-
-    std::string Spritesheet::get_current_animation() const
-    {
-        return current_animation;
+        auto it = animations.find(name);
+        if (it == animations.end())
+            return nullptr;
+        return &it->second;
     }
 }

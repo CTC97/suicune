@@ -64,4 +64,34 @@ namespace suicune
 
         return false;
     }
+
+    inline float clampf(float v, float lo, float hi)
+    {
+        if (v < lo)
+            return lo;
+        if (v > hi)
+            return hi;
+        return v;
+    }
+
+    // Distance from point p to axis-aligned rectangle r (0 if inside)
+    inline float point_rect_distance(Vector2 p, BoundBox &r)
+    {
+        float rx = (float)r.x;
+        float ry = (float)r.y;
+        float rw = (float)r.width;
+        float rh = (float)r.height;
+
+        float cx = clampf(p.x, rx, rx + rw);
+        float cy = clampf(p.y, ry, ry + rh);
+
+        float dx = p.x - cx;
+        float dy = p.y - cy;
+        return sqrtf(dx * dx + dy * dy);
+    }
+
+    inline Vector2 bound_box_center(const BoundBox &b)
+    {
+        return Vector2{b.x + b.width / 2.0f, b.y + b.height / 2.0f};
+    }
 }

@@ -37,7 +37,8 @@ namespace suicune
             for (const auto &entity : entities)
             {
                 entity->update(dt);
-                entity_bound_boxes.push_back(entity->get_bound_box());
+                if (entity->is_solid())
+                    entity_bound_boxes.push_back(entity->get_bound_box());
             }
 
             if (player)
@@ -96,55 +97,76 @@ namespace suicune
 
     void PlayScene::check_interaction()
     {
+        if (!player)
+            return;
 
-        const int current_player_direction = player->get_current_direction();
-        Vector2 player_pos = player->get_position();
+        const BoundBox pb = player->get_bound_box();
 
-        int player_tile_x = static_cast<int>(player_pos.x) / game.get_tile_size();
-        int player_tile_y = static_cast<int>(player_pos.y) / game.get_tile_size();
-
-        int target_x = player_tile_x;
-        int target_y = player_tile_y;
-
-        switch (current_player_direction)
+        // Facing unit vector (pixel space)
+        Vector2 facing = {0.0f, 0.0f};
+        switch (player->get_current_direction())
         {
-        case 0:
-            target_y -= 1;
+        case UP:
+            facing = {0.0f, -1.0f};
             break;
-        case 1:
-            target_y += 1;
+        case DOWN:
+            facing = {0.0f, 1.0f};
             break;
-        case 2:
-            target_x -= 1;
+        case LEFT:
+            facing = {-1.0f, 0.0f};
             break;
-        case 3:
-            target_x += 1;
+        case RIGHT:
+            facing = {1.0f, 0.0f};
             break;
         }
 
-        auto target_search = std::find_if(
-            entities.begin(),
-            entities.end(),
-            [this, target_x, target_y](const std::unique_ptr<Entity> &e)
+        // Start at the center of the player's bound box
+        Vector2 p = {
+            pb.x + pb.width / 2.0f,
+            pb.y + pb.height / 2.0f};
+
+        // Move to the *front edge* of the player's bound box
+        float half_extent =
+            (facing.x != 0.0f) ? (pb.width / 2.0f) : (pb.height / 2.0f);
+
+        p.x += facing.x * half_extent;
+        p.y += facing.y * half_extent;
+
+        // Small reach beyond the edge (tune this)
+        const float reach_px = 4.0f;
+        p.x += facing.x * reach_px;
+        p.y += facing.y * reach_px;
+
+        // How forgiving to be around the interact point
+        const float max_interact_distance = 4.0f; // keep small now
+
+        Entity *best = nullptr;
+        float best_dist = max_interact_distance;
+
+        for (const auto &e : entities)
+        {
+            if (!e)
+                continue;
+
+            BoundBox bound_box = e->get_bound_box();
+            float d = point_rect_distance(p, bound_box);
+            if (d <= best_dist)
             {
-                const Vector2 pos = e->get_position();
-                int tile_x = static_cast<int>(pos.x) / game.get_tile_size();
-                int tile_y = static_cast<int>(pos.y) / game.get_tile_size();
-
-                return std::abs(tile_x - target_x) < 2 && std::abs(tile_y - target_y) < 2;
-            });
-
-        if (target_search != entities.end())
-        {
-            Entity &target_entity = **target_search;
-            target_entity.interact();
+                best_dist = d;
+                best = e.get();
+            }
         }
+
+        if (best)
+            best->interact();
     }
 
-    void PlayScene::add_entity(std::unique_ptr<Entity> entity)
+    Entity *PlayScene::add_entity(std::unique_ptr<Entity> entity)
     {
         entity->set_dialog_manager(&game.get_dialog_manager());
+        Entity *ptr = entity.get();
         entities.push_back(std::move(entity));
+        return ptr;
     }
 
     void PlayScene::remove_entity(Entity *entity)

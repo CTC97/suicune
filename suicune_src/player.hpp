@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
 #include "raylib.h"
 #include "spritesheet.hpp"
 #include "tilemap.hpp"
@@ -9,10 +12,9 @@ namespace suicune
 {
     class Player : public Entity
     {
-
     public:
-        Player(Spritesheet &spritesheet, int width, int height, int x, int y);
-        ~Player();
+        Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y);
+        ~Player() override = default;
 
         // suppresses hidden override warning
         using Entity::update;

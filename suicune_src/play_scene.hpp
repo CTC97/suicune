@@ -7,6 +7,7 @@
 #include "tilemap.hpp"
 #include "player.hpp"
 #include "entity.hpp"
+#include "util.hpp"
 
 namespace suicune
 {
@@ -20,7 +21,18 @@ namespace suicune
         void update(float dt) override;
         void draw() override;
 
-        void add_entity(std::unique_ptr<Entity> entity);
+        Entity *add_entity(std::unique_ptr<Entity> entity);
+        template <typename T, typename... Args>
+        T *spawn(Args &&...args)
+        {
+            static_assert(std::is_base_of_v<Entity, T>, "spawn<T> requires T to derive from Entity");
+            auto entity = std::make_unique<T>(std::forward<Args>(args)...);
+            T *ptr = entity.get();
+            add_entity(std::move(entity));
+
+            return ptr;
+        }
+
         void remove_entity(Entity *entity);
 
         void check_interaction();

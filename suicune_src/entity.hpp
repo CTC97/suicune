@@ -1,18 +1,21 @@
-// x, y, spritesheet, width, height
+// x, y, animator, width, height
 #pragma once
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "raylib.h"
-#include "spritesheet.hpp"
+#include "animator.hpp"
 #include "dialog_manager.hpp"
 #include "util.hpp"
 
 namespace suicune
 {
-
     class Entity
     {
     public:
-        Entity(Spritesheet &spritesheet, int width, int height, int x, int y, bool solid = true);
+        Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y);
         virtual ~Entity() = default;
 
         virtual void update(float dt);
@@ -41,15 +44,18 @@ namespace suicune
 
         Direction get_current_direction();
 
+        // For compatibility with existing code (e.g., PlayScene destructor or debugging).
+        // This returns the shared spritesheet asset.
         Spritesheet &get_spritesheet() const;
 
     protected:
-        Spritesheet &spritesheet;
+        Animator animator;
+
         int width;
         int height;
         int x;
         int y;
-        bool solid;
+        bool solid = true;
 
         BoundBox bound_box{0, 0, 0, 0, 0, 0};
 

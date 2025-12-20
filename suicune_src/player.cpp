@@ -2,13 +2,10 @@
 
 namespace suicune
 {
-    Player::Player(Spritesheet &spritesheet, int width, int height, int x, int y) : Entity(spritesheet, width, height, x, y)
+    Player::Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y)
+        : Entity(std::move(spritesheet), width, height, x, y)
     {
         current_direction = DOWN;
-    }
-
-    Player::~Player()
-    {
     }
 
     void Player::update(float dt, const Tilemap &tilemap, const std::vector<BoundBox> &entity_bound_boxes)
@@ -52,16 +49,11 @@ namespace suicune
 
         auto is_free_pixel = [&](int px, int py)
         {
-            // If the pixel is *outside* the map bounds, decide behavior.
-            // Option A: allow leaving the map
             if (px < 0 || py < 0 || px >= map_pixel_width || py >= map_pixel_height)
-                return false; // treat outside as not free
+                return false;
 
-            // Now safe to convert to tile coords
             int tx = px / tile_size;
             int ty = py / tile_size;
-
-            // Compare player BoundBox to entity_bound_boxes:
 
             return tilemap.is_tile_free(tx, ty);
         };

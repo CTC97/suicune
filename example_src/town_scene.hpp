@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../suicune_src/play_scene.hpp"
+#include "tree.hpp"
 
 namespace suicune
 {
@@ -19,11 +20,11 @@ namespace suicune
 
     private:
         Camera2D camera{};
-        std::unique_ptr<Spritesheet> tilemap_spritesheet;
-        std::unique_ptr<Spritesheet> nurse_joy_spritesheet;
-        std::unique_ptr<Spritesheet> player_spritesheet;
-        std::unique_ptr<Spritesheet> pokeball_spritesheet;
-        std::unique_ptr<Spritesheet> tree_spritesheet;
+        std::shared_ptr<Spritesheet> tilemap_spritesheet;
+        std::shared_ptr<Spritesheet> player_spritesheet;
+        std::shared_ptr<Spritesheet> tree_spritesheet;
+
+        std::vector<Tree *> trees;
     };
 
 }
