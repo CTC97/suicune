@@ -18,4 +18,4 @@ make > /dev/null;
 echo -e "\t${LIGHT_BLUE}Done.${RESET}"
 
 echo -e "${MEDIUM_BLUE}Running...${RESET}"
-build/build > /dev/null;
+build/executable > /dev/null;

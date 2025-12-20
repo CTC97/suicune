@@ -2,7 +2,7 @@
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra
 
-TARGET   ?= build/build
+TARGET   ?= build/executable
 
 # Source layout (edit these globs if you move folders)
 SRC := $(wildcard *.cpp) \
