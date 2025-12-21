@@ -91,14 +91,4 @@ namespace suicune
             y = new_y;
         }
     }
-
-    void Player::set_stop_movement(bool stop)
-    {
-        stop_movement = stop;
-    }
-
-    bool Player::is_movement_stopped() const
-    {
-        return stop_movement;
-    }
 }
