@@ -3,6 +3,7 @@
 
 namespace suicune
 {
+    // <----------------- Movement ----------------->
     enum Direction
     {
         UP,
@@ -11,6 +12,7 @@ namespace suicune
         RIGHT
     };
 
+    // <----------------- Bounding ----------------->
     struct BoundBox
     {
         int x;
@@ -93,5 +95,54 @@ namespace suicune
     inline Vector2 bound_box_center(const BoundBox &b)
     {
         return Vector2{b.x + b.width / 2.0f, b.y + b.height / 2.0f};
+    }
+
+    // <----------------- Tween ----------------->
+    struct Tween
+    {
+        bool active = false;
+
+        Vector2 start{0, 0};
+        Vector2 target{0, 0};
+
+        float duration = 0.0f;
+        float elapsed = 0.0f;
+    };
+
+    inline float lerpf(float a, float b, float t)
+    {
+        return a + (b - a) * t;
+    }
+
+    inline Vector2 lerp_v2(Vector2 a, Vector2 b, float t)
+    {
+        return Vector2{lerpf(a.x, b.x, t), lerpf(a.y, b.y, t)};
+    }
+
+    // Returns true while tween is still running; false when finished (or not active)
+    inline bool step_pos_tween(Tween &tw, float dt, Vector2 &out_pos)
+    {
+        if (!tw.active)
+            return false;
+
+        // handle instant or invalid durations gracefully
+        if (tw.duration <= 0.0f)
+        {
+            out_pos = tw.target;
+            tw.active = false;
+            return false;
+        }
+
+        tw.elapsed += dt;
+
+        float t = tw.elapsed / tw.duration;
+        if (t >= 1.0f)
+        {
+            t = 1.0f;
+            tw.active = false;
+        }
+
+        out_pos = lerp_v2(tw.start, tw.target, t);
+        return tw.active;
     }
 }

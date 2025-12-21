@@ -12,7 +12,7 @@ namespace suicune
     {
         Entity::update(dt);
 
-        if (stop_movement)
+        if (stop_movement || is_tweening())
             return;
 
         int new_x = x;

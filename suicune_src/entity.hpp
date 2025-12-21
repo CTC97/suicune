@@ -53,6 +53,10 @@ namespace suicune
 
         Spritesheet &get_spritesheet() const;
 
+        void tween_to(Vector2 target, float duration);
+        bool is_tweening() const;
+        void cancel_tween();
+
     protected:
         Animator animator;
 
@@ -72,5 +76,7 @@ namespace suicune
 
         std::function<void()> interaction_callback;
         std::function<void()> collision_callback;
+
+        Tween tween;
     };
 }

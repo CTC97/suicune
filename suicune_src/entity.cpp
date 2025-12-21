@@ -1,4 +1,5 @@
 #include "entity.hpp"
+#include "raymath.h"
 
 namespace suicune
 {
@@ -12,6 +13,19 @@ namespace suicune
 
     void Entity::update(float dt)
     {
+        if (tween.active)
+        {
+            Vector2 p;
+            step_pos_tween(tween, dt, p);
+
+            x = (int)p.x;
+            y = (int)p.y;
+
+            // keep bound box in sync if you're using offsets
+            bound_box.x = x + bound_box.offset_x;
+            bound_box.y = y + bound_box.offset_y;
+        }
+
         animator.update(dt);
         set_bound_box_position(x + bound_box.offset_x, y + bound_box.offset_y);
     }
@@ -152,5 +166,24 @@ namespace suicune
     bool Entity::is_movement_stopped() const
     {
         return stop_movement;
+    }
+
+    void Entity::tween_to(Vector2 target, float duration)
+    {
+        tween.active = true;
+        tween.start = Vector2{(float)x, (float)y};
+        tween.target = target;
+        tween.duration = duration;
+        tween.elapsed = 0.0f;
+    }
+
+    bool Entity::is_tweening() const
+    {
+        return tween.active;
+    }
+
+    void Entity::cancel_tween()
+    {
+        tween.active = false;
     }
 }
