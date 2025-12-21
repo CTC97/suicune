@@ -143,4 +143,14 @@ namespace suicune
     {
         collision_callback = callback;
     }
+
+    void Entity::set_stop_movement(bool stop)
+    {
+        stop_movement = stop;
+    }
+
+    bool Entity::is_movement_stopped() const
+    {
+        return stop_movement;
+    }
 }

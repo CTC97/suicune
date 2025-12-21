@@ -48,6 +48,8 @@ namespace suicune
         BoundBox get_bound_box() const;
 
         Direction get_current_direction();
+        void set_stop_movement(bool stop);
+        bool is_movement_stopped() const;
 
         Spritesheet &get_spritesheet() const;
 
@@ -63,6 +65,7 @@ namespace suicune
         BoundBox bound_box{0, 0, 0, 0, 0, 0};
 
         Direction current_direction;
+        bool stop_movement = false;
 
         DialogManager *dm = nullptr; // pointer to the shared DialogManager
         std::vector<DialogNode> dialog_sequence;
