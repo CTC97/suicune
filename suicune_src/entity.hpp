@@ -34,6 +34,10 @@ namespace suicune
         bool is_solid() const;
 
         virtual void interact();
+        void set_interaction_callback(std::function<void()> callback);
+
+        virtual void collide();
+        void set_collision_callback(std::function<void()> callback);
 
         void set_dialog_manager(DialogManager *dialog_manager);
         void set_dialog(const std::vector<DialogNode> &dialog);
@@ -62,5 +66,8 @@ namespace suicune
 
         DialogManager *dm = nullptr; // pointer to the shared DialogManager
         std::vector<DialogNode> dialog_sequence;
+
+        std::function<void()> interaction_callback;
+        std::function<void()> collision_callback;
     };
 }

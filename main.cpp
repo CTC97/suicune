@@ -7,7 +7,7 @@ int main()
 {
     Game game("suicune Test", 1200, 700, 16);
 
-    game.set_scene(std::make_unique<MainMenu>(game));
+    game.request_scene(std::make_unique<MainMenu>(game));
 
     game.get_dialog_manager().set_dialog_box_texture("res/sprites/dialog_box.png");
     game.get_dialog_manager().set_text_padding(40, 34);

@@ -13,11 +13,12 @@ namespace suicune
         explicit Scene(Game &game);
         virtual ~Scene();
 
-        virtual void update(float dt) = 0;
+        virtual void update(float dt);
         virtual void draw();
 
     protected:
         Game &game;
+        bool transitioning_scene = false;
     };
 
 }

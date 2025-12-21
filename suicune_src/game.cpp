@@ -101,6 +101,9 @@ namespace suicune
                 current_scene->draw();
             }
 
+            if (pending_scene)
+                current_scene = std::move(pending_scene);
+
             end_frame();
         }
 
@@ -138,9 +141,12 @@ namespace suicune
         return tile_size;
     }
 
-    void Game::set_scene(std::unique_ptr<Scene> scene)
+    void Game::request_scene(std::unique_ptr<Scene> scene)
     {
-        current_scene = std::move(scene);
+        if (!scene)
+            return;
+
+        pending_scene = std::move(scene);
     }
 
     DialogManager &Game::get_dialog_manager()
