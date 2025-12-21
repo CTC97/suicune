@@ -33,6 +33,9 @@ namespace suicune
 
         DialogManager &get_dialog_manager();
 
+        void set_dev_mode(bool enabled);
+        bool is_dev_mode() const;
+
     private:
         std::string title;
         int window_width;
@@ -53,6 +56,8 @@ namespace suicune
 
         void begin_frame();
         void end_frame();
+
+        bool dev_mode = false;
     };
 
 }

@@ -2,7 +2,7 @@
 
 namespace suicune
 {
-    Player::Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y)
+    Player::Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
         : Entity(std::move(spritesheet), width, height, x, y)
     {
         current_direction = DOWN;

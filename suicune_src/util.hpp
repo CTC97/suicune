@@ -15,15 +15,15 @@ namespace suicune
     // <----------------- Bounding ----------------->
     struct BoundBox
     {
-        int x;
-        int y;
+        float x;
+        float y;
         int width;
         int height;
-        int offset_x = 0;
-        int offset_y = 0;
+        float offset_x = 0;
+        float offset_y = 0;
     };
 
-    inline bool check_bound_box_collision(const BoundBox &a, const BoundBox &b, int slack = 0, int offset_x = 0, int offset_y = 0)
+    inline bool check_bound_box_collision(const BoundBox &a, const BoundBox &b, float slack = 0, int offset_x = 0, int offset_y = 0)
     {
         return (a.x + offset_x < b.x + b.width - slack) &&
                (a.x + a.width + offset_x > b.x + slack) &&
@@ -37,17 +37,17 @@ namespace suicune
         const BoundBox &b,
         Direction dir,
         int slack = 0,
-        int offset_x = 0,
-        int offset_y = 0)
+        float offset_x = 0,
+        float offset_y = 0)
     {
-        int aL = next_a.x + offset_x, aR = next_a.x + next_a.width + offset_x;
-        int aT = next_a.y + offset_y, aB = next_a.y + next_a.height + offset_y;
+        float aL = next_a.x + offset_x, aR = next_a.x + next_a.width + offset_x;
+        float aT = next_a.y + offset_y, aB = next_a.y + next_a.height + offset_y;
 
-        int paL = prev_a.x + offset_x, paR = prev_a.x + prev_a.width + offset_x;
-        int paT = prev_a.y + offset_y, paB = prev_a.y + prev_a.height + offset_y;
+        float paL = prev_a.x + offset_x, paR = prev_a.x + prev_a.width + offset_x;
+        float paT = prev_a.y + offset_y, paB = prev_a.y + prev_a.height + offset_y;
 
-        int bL = b.x, bR = b.x + b.width;
-        int bT = b.y, bB = b.y + b.height;
+        float bL = b.x, bR = b.x + b.width;
+        float bT = b.y, bB = b.y + b.height;
 
         bool overlap_x = (aL < bR - slack) && (aR > bL + slack);
         bool overlap_y = (aT < bB - slack) && (aB > bT + slack);
@@ -79,8 +79,8 @@ namespace suicune
     // Distance from point p to axis-aligned rectangle r (0 if inside)
     inline float point_rect_distance(Vector2 p, BoundBox &r)
     {
-        float rx = (float)r.x;
-        float ry = (float)r.y;
+        float rx = r.x;
+        float ry = r.y;
         float rw = (float)r.width;
         float rh = (float)r.height;
 

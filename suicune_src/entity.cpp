@@ -3,7 +3,7 @@
 
 namespace suicune
 {
-    Entity::Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y)
+    Entity::Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
         : animator(std::move(spritesheet)), width(width), height(height), x(x), y(y)
     {
         set_bound_box_position(x, y);
@@ -18,8 +18,8 @@ namespace suicune
             Vector2 p;
             step_pos_tween(tween, dt, p);
 
-            x = (int)p.x;
-            y = (int)p.y;
+            x = p.x;
+            y = p.y;
 
             // keep bound box in sync if you're using offsets
             bound_box.x = x + bound_box.offset_x;
@@ -59,12 +59,12 @@ namespace suicune
         return {static_cast<float>(x), static_cast<float>(y)};
     }
 
-    int Entity::get_width()
+    float Entity::get_width()
     {
         return width;
     }
 
-    int Entity::get_height()
+    float Entity::get_height()
     {
         return height;
     }
@@ -112,7 +112,7 @@ namespace suicune
         dialog_sequence = dialog;
     }
 
-    void Entity::set_bound_box_position(int bound_x, int bound_y)
+    void Entity::set_bound_box_position(float bound_x, float bound_y)
     {
         bound_box.x = bound_x;
         bound_box.y = bound_y;
@@ -126,7 +126,7 @@ namespace suicune
         set_bound_box_offset((width - bound_box.width) / 2, (height - bound_box.height) / 2);
     }
 
-    void Entity::set_bound_box_offset(int offset_x, int offset_y)
+    void Entity::set_bound_box_offset(float offset_x, float offset_y)
     {
         bound_box.offset_x = offset_x;
         bound_box.offset_y = offset_y;

@@ -15,7 +15,7 @@ namespace suicune
     class Entity
     {
     public:
-        Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y);
+        Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y);
         virtual ~Entity() = default;
 
         virtual void update(float dt);
@@ -27,8 +27,8 @@ namespace suicune
 
         Vector2 get_position() const;
 
-        int get_width();
-        int get_height();
+        float get_width();
+        float get_height();
 
         void set_solid(bool solid);
         bool is_solid() const;
@@ -42,9 +42,9 @@ namespace suicune
         void set_dialog_manager(DialogManager *dialog_manager);
         void set_dialog(const std::vector<DialogNode> &dialog);
 
-        void set_bound_box_position(int x, int y);
+        void set_bound_box_position(float x, float y);
         void set_bound_box_dimensions(int width, int height);
-        void set_bound_box_offset(int offset_x, int offset_y);
+        void set_bound_box_offset(float offset_x, float offset_y);
         BoundBox get_bound_box() const;
 
         Direction get_current_direction();
@@ -62,8 +62,8 @@ namespace suicune
 
         int width;
         int height;
-        int x;
-        int y;
+        float x;
+        float y;
         bool solid = true;
 
         BoundBox bound_box{0, 0, 0, 0, 0, 0};

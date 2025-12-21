@@ -153,4 +153,14 @@ namespace suicune
     {
         return dialog_manager;
     }
+
+    void Game::set_dev_mode(bool enabled)
+    {
+        dev_mode = enabled;
+    }
+
+    bool Game::is_dev_mode() const
+    {
+        return dev_mode;
+    }
 }

@@ -13,7 +13,7 @@ namespace suicune
     class Player : public Entity
     {
     public:
-        Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y);
+        Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y);
         ~Player() override = default;
 
         // suppresses hidden override warning
