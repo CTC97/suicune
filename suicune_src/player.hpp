@@ -20,7 +20,7 @@ namespace suicune
         using Entity::update;
 
         // put this at the Entity level if we want moving entities later --> more likely to be a Mob extension of Entity
-        void update(float dt, const Tilemap &tilemap, const std::vector<BoundBox> &entity_bound_boxes);
+        void update(float dt, const Tilemap &tilemap, const std::vector<std::unique_ptr<Entity>> &entities);
 
         void set_stop_movement(bool stop);
         bool is_movement_stopped() const;

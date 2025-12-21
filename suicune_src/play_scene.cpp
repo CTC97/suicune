@@ -27,24 +27,13 @@ namespace suicune
 
         if (!dialog_manager->is_active())
         {
-
-            std::vector<BoundBox> entity_bound_boxes;
-
             for (const auto &entity : entities)
             {
                 entity->update(dt);
-                if (entity->is_solid())
-                {
-                    entity_bound_boxes.push_back(entity->get_bound_box());
-                    if (check_bound_box_collision(player->get_bound_box(), entity->get_bound_box()))
-                    {
-                        entity->collide();
-                    }
-                }
             }
 
             if (player)
-                player->update(dt, *tilemap, entity_bound_boxes);
+                player->update(dt, *tilemap, entities);
 
             if (IsKeyPressed(KEY_ENTER))
                 check_interaction();

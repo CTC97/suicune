@@ -7,7 +7,6 @@ namespace suicune
     MainMenu::MainMenu(Game &game)
         : MenuScene(game)
     {
-        TraceLog(LOG_INFO, "MainMenu scene created.");
         play_texture = LoadTexture("res/sprites/play_sprite.png");
         add_transition_option<TownScene>(play_texture, (game.get_window_width() - play_texture.width) / 2, 200);
 
@@ -21,7 +20,6 @@ namespace suicune
 
     void MainMenu::draw()
     {
-        TraceLog(LOG_INFO, "Drawing MainMenu scene.");
         MenuScene::draw();
     }
 }

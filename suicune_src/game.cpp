@@ -144,12 +144,9 @@ namespace suicune
     void Game::request_scene(std::unique_ptr<Scene> scene)
     {
         if (!scene)
-        {
-            TraceLog(LOG_WARNING, "Attempted to request null scene!");
             return;
-        }
+
         pending_scene = std::move(scene);
-        TraceLog(LOG_INFO, "Scene change requested.");
     }
 
     DialogManager &Game::get_dialog_manager()

@@ -8,7 +8,7 @@ namespace suicune
         current_direction = DOWN;
     }
 
-    void Player::update(float dt, const Tilemap &tilemap, const std::vector<BoundBox> &entity_bound_boxes)
+    void Player::update(float dt, const Tilemap &tilemap, const std::vector<std::unique_ptr<Entity>> &entities)
     {
         Entity::update(dt);
 
@@ -73,14 +73,17 @@ namespace suicune
         next.x += (new_x - x);
         next.y += (new_y - y);
 
-        // for (const auto &b : entity_bound_boxes)
-        // {
-        //     if (check_directional_bound_box_collision(prev, next, b, current_direction))
-        //     {
-        //         can_move = false;
-        //         break;
-        //     }
-        // }
+        for (const auto &entity : entities)
+        {
+
+            if (check_directional_bound_box_collision(prev, next, entity->get_bound_box(), current_direction))
+            {
+                entity->collide();
+                if (entity->is_solid())
+                    can_move = false;
+                break;
+            }
+        }
 
         if (can_move)
         {
