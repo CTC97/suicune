@@ -86,7 +86,7 @@ namespace suicune
                                       {
                                         TraceLog(LOG_INFO, "Transitioning to Main Menu Scene...");
                                         transitioning_scene = true;
-                                         this->game.set_scene(std::make_unique<MainMenu>(this->game)); });
+                                         this->game.request_scene(std::make_unique<MainMenu>(this->game)); });
     }
 
     TownScene::~TownScene()

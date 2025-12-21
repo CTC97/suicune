@@ -29,7 +29,8 @@ namespace suicune
 
         int get_tile_size() const;
 
-        void set_scene(std::unique_ptr<Scene> scene);
+        void request_scene(std::unique_ptr<Scene> scene);
+        void apply_pending_scene();
 
         DialogManager &get_dialog_manager();
 
@@ -47,6 +48,7 @@ namespace suicune
         bool running = false;
 
         std::unique_ptr<Scene> current_scene;
+        std::unique_ptr<Scene> pending_scene;
 
         DialogManager dialog_manager;
 

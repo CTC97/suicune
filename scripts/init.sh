@@ -156,7 +156,7 @@ int main()
 {
     Game game("suicune Test", 1200, 700, 16);
 
-    game.set_scene(std::make_unique<MainScene>(game));
+    game.request_scene(std::make_unique<MainScene>(game));
 
     game.run();
 }

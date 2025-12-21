@@ -27,7 +27,7 @@ namespace suicune
         void add_transition_option(std::variant<std::string, Texture2D> label, int x, int y)
         {
             add_option(label, x, y, [this]()
-                       { this->game.set_scene(std::make_unique<SceneType>(this->game)); });
+                       { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
         }
 
         void add_quit_option(std::variant<std::string, Texture2D> label, int x, int y);

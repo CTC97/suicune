@@ -101,6 +101,8 @@ namespace suicune
                 current_scene->draw();
             }
 
+            apply_pending_scene();
+
             end_frame();
         }
 
@@ -138,21 +140,24 @@ namespace suicune
         return tile_size;
     }
 
-    void Game::set_scene(std::unique_ptr<Scene> scene)
+    void Game::request_scene(std::unique_ptr<Scene> scene)
     {
         if (!scene)
         {
-            TraceLog(LOG_WARNING, "Attempted to set null scene!");
+            TraceLog(LOG_WARNING, "Attempted to request null scene!");
             return;
         }
-        TraceLog(LOG_WARNING, "Resetting current scene...");
-        current_scene.reset();
-        TraceLog(LOG_WARNING, "Setting new scene...");
+        pending_scene = std::move(scene);
+        TraceLog(LOG_INFO, "Scene change requested.");
+    }
 
-        // ITS POSSIBLE THAT WE'VE LOST THE game OBJECT HERE WHEN THE CURRENT SCENE IS DESTROYED...LOOK INTO
+    void Game::apply_pending_scene()
+    {
+        if (!pending_scene)
+            return;
 
-        current_scene = std::move(scene);
-        TraceLog(LOG_WARNING, "Set new scene!");
+        TraceLog(LOG_INFO, "Applying pending scene...");
+        current_scene = std::move(pending_scene);
     }
 
     DialogManager &Game::get_dialog_manager()
