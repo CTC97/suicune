@@ -101,7 +101,8 @@ namespace suicune
                 current_scene->draw();
             }
 
-            apply_pending_scene();
+            if (pending_scene)
+                current_scene = std::move(pending_scene);
 
             end_frame();
         }
@@ -149,15 +150,6 @@ namespace suicune
         }
         pending_scene = std::move(scene);
         TraceLog(LOG_INFO, "Scene change requested.");
-    }
-
-    void Game::apply_pending_scene()
-    {
-        if (!pending_scene)
-            return;
-
-        TraceLog(LOG_INFO, "Applying pending scene...");
-        current_scene = std::move(pending_scene);
     }
 
     DialogManager &Game::get_dialog_manager()

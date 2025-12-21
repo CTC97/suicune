@@ -30,7 +30,6 @@ namespace suicune
         int get_tile_size() const;
 
         void request_scene(std::unique_ptr<Scene> scene);
-        void apply_pending_scene();
 
         DialogManager &get_dialog_manager();
 
