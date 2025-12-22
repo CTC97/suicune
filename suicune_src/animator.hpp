@@ -24,6 +24,9 @@ namespace suicune
 
         Spritesheet &get_spritesheet() const;
 
+        void set_shader(std::shared_ptr<Shader> shader);
+        void clear_shader();
+
     private:
         std::shared_ptr<Spritesheet> sheet;
 
@@ -33,5 +36,7 @@ namespace suicune
 
         bool finished = false;
         std::function<void()> finished_callback;
+
+        std::shared_ptr<Shader> shader;
     };
 }

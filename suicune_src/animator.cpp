@@ -76,7 +76,21 @@ namespace suicune
             return;
 
         int frame_index = anim->frame_indices[current_frame_index];
+
         sheet->draw_sprite(frame_index, x, y);
+
+        if (shader)
+        {
+            TraceLog(LOG_INFO, "Drawing with shader");
+            BeginShaderMode(*shader);
+        }
+
+        sheet->draw_sprite(frame_index, x, y);
+
+        if (shader)
+        {
+            EndShaderMode();
+        }
     }
 
     std::string Animator::get_current_animation() const
@@ -92,5 +106,15 @@ namespace suicune
     Spritesheet &Animator::get_spritesheet() const
     {
         return *sheet;
+    }
+
+    void Animator::set_shader(std::shared_ptr<Shader> shader)
+    {
+        this->shader = shader;
+    }
+
+    void Animator::clear_shader()
+    {
+        shader.reset();
     }
 }

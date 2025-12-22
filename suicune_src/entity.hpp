@@ -57,6 +57,9 @@ namespace suicune
         bool is_tweening() const;
         void cancel_tween();
 
+        void set_shader(Shader shader);
+        void clear_shader();
+
     protected:
         Animator animator;
 

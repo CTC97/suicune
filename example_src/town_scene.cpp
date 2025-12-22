@@ -88,6 +88,9 @@ namespace suicune
                                         transitioning_scene = true;
                                          this->game.request_scene(std::make_unique<MainMenu>(this->game)); });
 
+        Shader shader = LoadShader(0, TextFormat("res/shaders/turn_indicator.fs", GLSL_VERSION));
+        player->set_shader(shader);
+
         player->tween_to(Vector2{64.0f, 64.0f}, 1.0f);
     }
 

@@ -183,4 +183,14 @@ namespace suicune
     {
         tween.active = false;
     }
+
+    void Entity::set_shader(Shader shader)
+    {
+        animator.set_shader(std::make_shared<Shader>(shader));
+    }
+
+    void Entity::clear_shader()
+    {
+        animator.clear_shader();
+    }
 }
