@@ -101,12 +101,11 @@ namespace suicune
     struct Tween
     {
         bool active = false;
-
         Vector2 start{0, 0};
         Vector2 target{0, 0};
-
         float duration = 0.0f;
         float elapsed = 0.0f;
+        bool stop_movement = false;
     };
 
     inline float lerpf(float a, float b, float t)
@@ -120,7 +119,7 @@ namespace suicune
     }
 
     // Returns true while tween is still running; false when finished (or not active)
-    inline bool step_pos_tween(Tween &tw, float dt, Vector2 &out_pos)
+    inline bool step_tween(Tween &tw, float dt, Vector2 &out_pos)
     {
         if (!tw.active)
             return false;

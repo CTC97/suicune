@@ -16,14 +16,10 @@ namespace suicune
         if (tween.active)
         {
             Vector2 p;
-            step_pos_tween(tween, dt, p);
+            step_tween(tween, dt, p);
 
             x = p.x;
             y = p.y;
-
-            // keep bound box in sync if you're using offsets
-            bound_box.x = x + bound_box.offset_x;
-            bound_box.y = y + bound_box.offset_y;
         }
 
         animator.update(dt);
@@ -168,13 +164,14 @@ namespace suicune
         return stop_movement;
     }
 
-    void Entity::tween_to(Vector2 target, float duration)
+    void Entity::tween_to(Vector2 target, float duration, bool stop_movement)
     {
         tween.active = true;
         tween.start = Vector2{(float)x, (float)y};
         tween.target = target;
         tween.duration = duration;
         tween.elapsed = 0.0f;
+        tween.stop_movement = stop_movement;
     }
 
     bool Entity::is_tweening() const
