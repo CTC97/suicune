@@ -1,8 +1,9 @@
 #include "entity.hpp"
+#include "raymath.h"
 
 namespace suicune
 {
-    Entity::Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y)
+    Entity::Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
         : animator(std::move(spritesheet)), width(width), height(height), x(x), y(y)
     {
         set_bound_box_position(x, y);
@@ -12,6 +13,15 @@ namespace suicune
 
     void Entity::update(float dt)
     {
+        if (tween.active)
+        {
+            Vector2 p;
+            step_tween(tween, dt, p);
+
+            x = p.x;
+            y = p.y;
+        }
+
         animator.update(dt);
         set_bound_box_position(x + bound_box.offset_x, y + bound_box.offset_y);
     }
@@ -45,12 +55,12 @@ namespace suicune
         return {static_cast<float>(x), static_cast<float>(y)};
     }
 
-    int Entity::get_width()
+    float Entity::get_width()
     {
         return width;
     }
 
-    int Entity::get_height()
+    float Entity::get_height()
     {
         return height;
     }
@@ -98,7 +108,7 @@ namespace suicune
         dialog_sequence = dialog;
     }
 
-    void Entity::set_bound_box_position(int bound_x, int bound_y)
+    void Entity::set_bound_box_position(float bound_x, float bound_y)
     {
         bound_box.x = bound_x;
         bound_box.y = bound_y;
@@ -112,7 +122,7 @@ namespace suicune
         set_bound_box_offset((width - bound_box.width) / 2, (height - bound_box.height) / 2);
     }
 
-    void Entity::set_bound_box_offset(int offset_x, int offset_y)
+    void Entity::set_bound_box_offset(float offset_x, float offset_y)
     {
         bound_box.offset_x = offset_x;
         bound_box.offset_y = offset_y;
@@ -152,5 +162,25 @@ namespace suicune
     bool Entity::is_movement_stopped() const
     {
         return stop_movement;
+    }
+
+    void Entity::tween_to(Vector2 target, float duration, bool stop_movement)
+    {
+        tween.active = true;
+        tween.start = Vector2{(float)x, (float)y};
+        tween.target = target;
+        tween.duration = duration;
+        tween.elapsed = 0.0f;
+        tween.stop_movement = stop_movement;
+    }
+
+    bool Entity::is_tweening() const
+    {
+        return tween.active;
+    }
+
+    void Entity::cancel_tween()
+    {
+        tween.active = false;
     }
 }

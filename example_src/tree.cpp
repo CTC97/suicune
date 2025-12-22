@@ -2,7 +2,7 @@
 
 namespace suicune
 {
-    Tree::Tree(std::shared_ptr<Spritesheet> spritesheet, int width, int height, int x, int y)
+    Tree::Tree(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
         : Entity(std::move(spritesheet), width, height, x, y)
     {
     }

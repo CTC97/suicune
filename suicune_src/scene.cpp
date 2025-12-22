@@ -30,8 +30,9 @@ namespace suicune
             TraceLog(LOG_INFO, "TRANSITIONING SCENE!!! [Draw]");
             return;
         }
-        // change display of things like this and entity bound boxes to dev mode flag
-        DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
+
+        if (game.is_dev_mode())
+            DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
     }
 
 }
