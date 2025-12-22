@@ -91,6 +91,9 @@ namespace suicune
         Shader shader = LoadShader(0, TextFormat("res/shaders/turn_indicator.fs", GLSL_VERSION));
         player->set_shader(shader);
 
+        Shader snow_shader = LoadShader(0, TextFormat("res/shaders/snow_shimmer.fs", GLSL_VERSION));
+        set_shader(snow_shader);
+
         player->tween_to(Vector2{64.0f, 64.0f}, 1.0f);
     }
 
