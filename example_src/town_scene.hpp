@@ -15,11 +15,7 @@ namespace suicune
         void draw() override;
         void update(float dt) override;
 
-    protected:
-        Camera2D &get_camera() override;
-
     private:
-        Camera2D camera{};
         std::shared_ptr<Spritesheet> tilemap_spritesheet;
         std::shared_ptr<Spritesheet> player_spritesheet;
         std::shared_ptr<Spritesheet> tree_spritesheet;

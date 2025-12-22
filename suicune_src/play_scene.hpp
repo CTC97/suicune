@@ -37,10 +37,7 @@ namespace suicune
 
         void check_interaction();
 
-    protected:
-        // Derived scenes must provide a camera
-        virtual Camera2D &get_camera() = 0;
-
+        protected:
         std::unique_ptr<Tilemap> tilemap;
         std::unique_ptr<Player> player;
 

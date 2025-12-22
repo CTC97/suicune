@@ -21,7 +21,6 @@ namespace suicune
     void PlayScene::update(float dt)
     {
         Scene::update(dt);
-        (void)dt;
 
         DialogManager *dialog_manager = &game.get_dialog_manager();
 
@@ -48,9 +47,15 @@ namespace suicune
     {
         Scene::draw();
 
-        Camera2D &camera = get_camera();
-
         BeginMode2D(camera);
+
+        if (screen_shake.is_alive)
+        {
+            float shake_x = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
+            float shake_y = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
+            camera.target.x += shake_x;
+            camera.target.y += shake_y;
+        }
 
         if (tilemap)
             tilemap->draw();

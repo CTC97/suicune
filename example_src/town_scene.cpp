@@ -9,11 +9,7 @@ namespace suicune
     TownScene::TownScene(Game &game)
         : PlayScene(game)
     {
-        camera.target = {0.0f, 0.0f};
-        camera.offset = {0.0f, 0.0f};
-        camera.rotation = 0.0f;
         camera.zoom = 4.0f;
-
         // tilemap spritesheet (shared asset)
         tilemap_spritesheet = std::make_shared<Spritesheet>(
             "res/sprites/tilesheet.png",
@@ -84,7 +80,6 @@ namespace suicune
         house->play_animation("still");
         house->set_collision_callback([this]()
                                       {
-                                        TraceLog(LOG_INFO, "Transitioning to Main Menu Scene...");
                                         transitioning_scene = true;
                                          this->game.request_scene(std::make_unique<MainMenu>(this->game)); });
 
@@ -108,11 +103,11 @@ namespace suicune
 
         if (IsKeyPressed(KEY_I))
         {
+            shake(0.5f, 5.0f);
+
             player->set_stop_movement(true);
             player->play_animation("inv", [this]()
-                                   { 
-                                    TraceLog(LOG_INFO, "... animation finished.");
-                                    this->player->set_stop_movement(false); });
+                                   { this->player->set_stop_movement(false); });
         }
 
         if (player->is_movement_stopped())
@@ -131,14 +126,12 @@ namespace suicune
 
     void TownScene::draw()
     {
-        camera.target = player->get_position();
-        camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
         PlayScene::draw();
-    }
-
-    Camera2D &TownScene::get_camera()
-    {
-        return camera;
+        if (!screen_shake.is_alive)
+        {
+            camera.target = player->get_position();
+            camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
+        }
     }
 
 }
