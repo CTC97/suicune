@@ -28,6 +28,9 @@ namespace suicune
 
     void Entity::draw()
     {
+        if (!alive)
+            return;
+
         animator.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
 
         // bounding box debug draw
@@ -192,5 +195,15 @@ namespace suicune
     void Entity::clear_shader()
     {
         animator.clear_shader();
+    }
+
+    bool Entity::is_alive() const
+    {
+        return alive;
+    }
+
+    void Entity::destroy()
+    {
+        alive = false;
     }
 }

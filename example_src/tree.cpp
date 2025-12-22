@@ -15,6 +15,7 @@ namespace suicune
         {
             play_animation("inv");
             set_dialog({{"You've changed me.", "--", {}}});
+            destroy();
         }
         else
         {

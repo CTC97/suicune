@@ -45,6 +45,9 @@ namespace suicune
         std::unique_ptr<Player> player;
 
         std::vector<std::unique_ptr<Entity>> entities;
+
+    private:
+        void cleanup_eoframe();
     };
 
 }

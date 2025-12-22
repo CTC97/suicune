@@ -60,6 +60,9 @@ namespace suicune
         void set_shader(Shader shader);
         void clear_shader();
 
+        bool is_alive() const;
+        void destroy();
+
     protected:
         Animator animator;
 
@@ -68,6 +71,8 @@ namespace suicune
         float x;
         float y;
         bool solid = true;
+
+        bool alive = true;
 
         BoundBox bound_box{0, 0, 0, 0, 0, 0};
 

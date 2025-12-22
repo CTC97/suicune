@@ -46,6 +46,7 @@ namespace suicune
 
     void PlayScene::draw()
     {
+        Scene::draw();
 
         Camera2D &camera = get_camera();
 
@@ -83,7 +84,15 @@ namespace suicune
                 window_height - dialog_box_height - 20.0f);
         }
 
-        Scene::draw();
+        cleanup_eoframe();
+    }
+
+    void PlayScene::cleanup_eoframe()
+    {
+        entities.erase(std::remove_if(entities.begin(), entities.end(),
+                                      [](const std::unique_ptr<Entity> &e)
+                                      { return !e->is_alive(); }),
+                       entities.end());
     }
 
     void PlayScene::check_interaction()
