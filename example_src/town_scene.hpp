@@ -2,6 +2,7 @@
 
 #include "../suicune_src/play_scene.hpp"
 #include "tree.hpp"
+#include "house.hpp"
 
 namespace suicune
 {
@@ -10,7 +11,6 @@ namespace suicune
     {
     public:
         TownScene(Game &game);
-        ~TownScene() override;
 
         void draw() override;
         void update(float dt) override;
@@ -20,12 +20,6 @@ namespace suicune
 
     private:
         Camera2D camera{};
-        std::shared_ptr<Spritesheet> tilemap_spritesheet;
-        std::shared_ptr<Spritesheet> player_spritesheet;
-        std::shared_ptr<Spritesheet> tree_spritesheet;
-        std::shared_ptr<Spritesheet> house_spritesheet;
-
-        std::vector<Tree *> trees;
     };
 
 }

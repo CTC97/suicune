@@ -15,31 +15,20 @@ namespace suicune
         camera.rotation = 0.0f;
         camera.zoom = 4.0f;
 
-        // tilemap spritesheet (shared asset)
-        tilemap_spritesheet = std::make_shared<Spritesheet>(
-            "res/sprites/tilesheet.png",
-            16,
-            16);
-
-        std::vector<std::vector<int>> map_data = {
-            {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5},
-            {5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0},
-            {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5},
-            {5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0},
-            {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5},
-            {5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0},
-        };
-
-        // Tilemap still takes a Spritesheet& (asset), so deref shared_ptr
+        auto tilemap_spritesheet = define_spritesheet("res/sprites/tilesheet.png", 16, 16);
+        std::vector<std::vector<int>>
+            map_data = {
+                {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5},
+                {5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0},
+                {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5},
+                {5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0},
+                {0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5},
+                {5, 0, 5, 0, 5, 0, 5, 0, 5, 0, 5, 0},
+            };
         tilemap = std::make_unique<Tilemap>(*tilemap_spritesheet, 16, map_data[0].size(), map_data.size(), map_data);
         tilemap->set_collision_tiles({3});
 
-        // player spritesheet (shared asset)
-        player_spritesheet = std::make_shared<Spritesheet>(
-            "res/sprites/bw_player.png",
-            16,
-            16);
-
+        auto player_spritesheet = define_spritesheet("res/sprites/bw_player.png", 16, 16);
         player_spritesheet->define_animation("still", {{0}, 1.0f, true});
         player_spritesheet->define_animation("walk_down", {{1, 2}, 0.2f, true});
         player_spritesheet->define_animation("walk_up", {{7, 8}, 0.2f, true});
@@ -47,7 +36,7 @@ namespace suicune
         player_spritesheet->define_animation("walk_left", {{9, 10}, 0.2f, true});
         player_spritesheet->define_animation("inv", {{0, 11, 0, 11, 0, 11, 0, 11}, 0.25f, false});
 
-        // Player now expects shared_ptr<Spritesheet>
+        // change this to a define syntax too
         player = std::make_unique<Player>(player_spritesheet, 16, 16, 16, 16);
         player->set_bound_box_dimensions(8, 4);
         player->set_bound_box_offset(4, 12);
@@ -55,29 +44,19 @@ namespace suicune
         camera.target = player->get_position();
 
         // tree spritesheet (shared asset)
-        tree_spritesheet = std::make_shared<Spritesheet>(
-            "res/sprites/tree.png",
-            16,
-            32);
-
+        auto tree_spritesheet = define_spritesheet("res/sprites/tree.png", 16, 32);
         tree_spritesheet->define_animation("still", {{0}, 1.0f, true});
         tree_spritesheet->define_animation("inv", {{1}, 0.5f, true});
 
         for (int i = 0; i < 5; ++i)
         {
-            Tree *tree = spawn<Tree>(tree_spritesheet, 16, 32, 32 + i * 32, 32);
-            trees.push_back(tree);
+            define_entity<Tree>(tree_spritesheet, 16, 32, 32 + i * 32, 32);
         }
 
-        house_spritesheet = std::make_shared<Spritesheet>(
-            "res/sprites/house.png",
-            32,
-            32);
+        auto house_spritesheet = define_spritesheet("res/sprites/house.png", 32, 32);
         house_spritesheet->define_animation("still", {{0}, 1.0f, true});
-        Entity *house = spawn<Entity>(house_spritesheet, 32, 32, 100, 50);
-        house->set_bound_box_dimensions(28, 16);
-        house->set_bound_box_offset(2, 16);
-        house->play_animation("still");
+        auto house = define_entity<House>(house_spritesheet, 32, 32, 100, 50);
+
         house->set_collision_callback([this]()
                                       {
                                         TraceLog(LOG_INFO, "Transitioning to Main Menu Scene...");
@@ -88,14 +67,6 @@ namespace suicune
         player->set_shader(shader);
 
         player->tween_to(Vector2{64.0f, 64.0f}, 1.0f);
-    }
-
-    TownScene::~TownScene()
-    {
-        UnloadTexture(tilemap_spritesheet->get_texture());
-        UnloadTexture(player_spritesheet->get_texture());
-        UnloadTexture(tree_spritesheet->get_texture());
-        UnloadTexture(house_spritesheet->get_texture());
     }
 
     void TownScene::update(float dt)

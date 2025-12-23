@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raylib.h"
+#include "spritesheet.hpp"
 
 namespace suicune
 {
@@ -21,6 +22,12 @@ namespace suicune
     protected:
         Game &game;
         bool transitioning_scene = false;
+
+        virtual std::shared_ptr<Spritesheet> define_spritesheet(const char *file_path, int frame_width, int frame_height);
+
+    private:
+        std::unordered_map<std::string, std::shared_ptr<Spritesheet>> spritesheets;
+        void unload_spritesheets();
     };
 
 }

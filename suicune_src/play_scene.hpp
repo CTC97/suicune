@@ -23,7 +23,7 @@ namespace suicune
 
         Entity *add_entity(std::unique_ptr<Entity> entity);
         template <typename T, typename... Args>
-        T *spawn(Args &&...args)
+        T *define_entity(Args &&...args)
         {
             static_assert(std::is_base_of_v<Entity, T>, "spawn<T> requires T to derive from Entity");
             auto entity = std::make_unique<T>(std::forward<Args>(args)...);

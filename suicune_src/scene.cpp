@@ -11,6 +11,7 @@ namespace suicune
 
     Scene::~Scene()
     {
+        unload_spritesheets();
     }
 
     void Scene::update(float dt)
@@ -35,4 +36,22 @@ namespace suicune
             DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
     }
 
+    std::shared_ptr<Spritesheet> Scene::define_spritesheet(const char *file_path, int frame_width, int frame_height)
+    {
+        spritesheets[file_path] = std::make_shared<Spritesheet>(
+            file_path,
+            frame_width,
+            frame_height);
+
+        return spritesheets[file_path];
+    }
+
+    void Scene::unload_spritesheets()
+    {
+        for (auto &pair : spritesheets)
+        {
+            UnloadTexture(pair.second->get_texture());
+        }
+        spritesheets.clear();
+    }
 }
