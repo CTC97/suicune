@@ -3,8 +3,8 @@
 
 namespace suicune
 {
-    Entity::Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
-        : animator(std::move(spritesheet)), width(width), height(height), x(x), y(y)
+    Entity::Entity(Scene *scene, std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
+        : scene(scene), animator(std::move(spritesheet)), width(width), height(height), x(x), y(y)
     {
         set_bound_box_position(x, y);
         set_bound_box_dimensions(width, height);

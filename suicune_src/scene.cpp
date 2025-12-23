@@ -14,6 +14,17 @@ namespace suicune
         unload_spritesheets();
     }
 
+    Game &Scene::get_game()
+    {
+        return game;
+    }
+
+    void Scene::request_scene(std::unique_ptr<Scene> new_scene)
+    {
+        transitioning_scene = true;
+        game.request_scene(std::move(new_scene));
+    }
+
     void Scene::update(float dt)
     {
         (void)dt;

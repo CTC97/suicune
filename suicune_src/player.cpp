@@ -2,8 +2,8 @@
 
 namespace suicune
 {
-    Player::Player(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
-        : Entity(std::move(spritesheet), width, height, x, y)
+    Player::Player(Scene *scene, std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
+        : Entity(scene, std::move(spritesheet), width, height, x, y)
     {
         current_direction = DOWN;
     }

@@ -9,13 +9,14 @@
 #include "animator.hpp"
 #include "dialog_manager.hpp"
 #include "util.hpp"
+#include "scene.hpp"
 
 namespace suicune
 {
     class Entity
     {
     public:
-        Entity(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y);
+        Entity(Scene *scene, std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y);
         virtual ~Entity() = default;
 
         virtual void update(float dt);
@@ -64,6 +65,7 @@ namespace suicune
         void destroy();
 
     protected:
+        Scene *scene;
         Animator animator;
 
         int width;

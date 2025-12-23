@@ -19,6 +19,10 @@ namespace suicune
 
         virtual void cleanup_eoframe() = 0;
 
+        void request_scene(std::unique_ptr<Scene> new_scene);
+
+        Game &get_game();
+
     protected:
         Game &game;
         bool transitioning_scene = false;

@@ -26,7 +26,7 @@ namespace suicune
         T *define_entity(Args &&...args)
         {
             static_assert(std::is_base_of_v<Entity, T>, "spawn<T> requires T to derive from Entity");
-            auto entity = std::make_unique<T>(std::forward<Args>(args)...);
+            auto entity = std::make_unique<T>(this, std::forward<Args>(args)...);
             T *ptr = entity.get();
             add_entity(std::move(entity));
 

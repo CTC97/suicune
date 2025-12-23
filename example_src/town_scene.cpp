@@ -37,7 +37,7 @@ namespace suicune
         player_spritesheet->define_animation("inv", {{0, 11, 0, 11, 0, 11, 0, 11}, 0.25f, false});
 
         // change this to a define syntax too
-        player = std::make_unique<Player>(player_spritesheet, 16, 16, 16, 16);
+        player = std::make_unique<Player>(this, player_spritesheet, 16, 16, 16, 16);
         player->set_bound_box_dimensions(8, 4);
         player->set_bound_box_offset(4, 12);
         player->play_animation("still");
@@ -56,12 +56,6 @@ namespace suicune
         auto house_spritesheet = define_spritesheet("res/sprites/house.png", 32, 32);
         house_spritesheet->define_animation("still", {{0}, 1.0f, true});
         auto house = define_entity<House>(house_spritesheet, 32, 32, 100, 50);
-
-        house->set_collision_callback([this]()
-                                      {
-                                        TraceLog(LOG_INFO, "Transitioning to Main Menu Scene...");
-                                        transitioning_scene = true;
-                                         this->game.request_scene(std::make_unique<MainMenu>(this->game)); });
 
         Shader shader = LoadShader(0, TextFormat("res/shaders/turn_indicator.fs", GLSL_VERSION));
         player->set_shader(shader);

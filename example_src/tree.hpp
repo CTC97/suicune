@@ -10,7 +10,7 @@ namespace suicune
     class Tree : public Entity
     {
     public:
-        Tree(std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y);
+        Tree(Scene *scene, std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y);
 
     private:
         bool inverted = false;
