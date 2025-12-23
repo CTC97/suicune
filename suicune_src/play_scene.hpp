@@ -39,6 +39,8 @@ namespace suicune
 
         void cleanup_eoframe() override;
 
+        void shake(float strength, float duration);
+
     protected:
         // Derived scenes must provide a camera
         virtual Camera2D &get_camera() = 0;
@@ -47,6 +49,8 @@ namespace suicune
         std::unique_ptr<Player> player;
 
         std::vector<std::unique_ptr<Entity>> entities;
+
+        Shake screen_shake;
     };
 
 }

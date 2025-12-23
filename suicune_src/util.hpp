@@ -150,4 +150,12 @@ namespace suicune
         out_pos = lerp_v2(tw.start, tw.target, t);
         return tw.active;
     }
+
+    // <----------------- Shake ----------------->
+    struct Shake
+    {
+        float timer = 0.0f;
+        float strength = 0.0f;
+        bool is_alive = false;
+    };
 }

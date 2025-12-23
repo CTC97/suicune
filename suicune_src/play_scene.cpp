@@ -21,7 +21,14 @@ namespace suicune
     void PlayScene::update(float dt)
     {
         Scene::update(dt);
-        (void)dt;
+
+        if (screen_shake.timer > 0.0f)
+        {
+            printf("Shake: %.2f\n", screen_shake.timer);
+            screen_shake.timer -= dt;
+            if (screen_shake.timer < 0.0f)
+                screen_shake.is_alive = false;
+        }
 
         DialogManager *dialog_manager = &game.get_dialog_manager();
 
@@ -173,6 +180,13 @@ namespace suicune
                                       [entity](const std::unique_ptr<Entity> &e)
                                       { return e.get() == entity; }),
                        entities.end());
+    }
+
+    void PlayScene::shake(float strength, float duration)
+    {
+        screen_shake.is_alive = true;
+        screen_shake.strength = strength;
+        screen_shake.timer = duration;
     }
 
 }

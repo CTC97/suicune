@@ -67,13 +67,17 @@ namespace suicune
     {
         PlayScene::update(dt);
 
+        if (screen_shake.is_alive)
+        {
+            float shake_x = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
+            float shake_y = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
+            camera.target.x += shake_x;
+            camera.target.y += shake_y;
+        }
+
         if (IsKeyPressed(KEY_I))
         {
-            player->set_stop_movement(true);
-            player->play_animation("inv", [this]()
-                                   { 
-                                    TraceLog(LOG_INFO, "... animation finished.");
-                                    this->player->set_stop_movement(false); });
+            shake(1, 0.5);
         }
 
         if (player->is_movement_stopped())
