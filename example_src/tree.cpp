@@ -5,6 +5,8 @@ namespace suicune
     Tree::Tree(Scene *scene, std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
         : Entity(scene, std::move(spritesheet), width, height, x, y)
     {
+        type = "tree";
+
         set_bound_box_dimensions(2, 2);
         set_bound_box_offset(7, 30);
 

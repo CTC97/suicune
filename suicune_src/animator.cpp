@@ -79,9 +79,8 @@ namespace suicune
 
         sheet->draw_sprite(frame_index, x, y);
 
-                if (shader)
+        if (shader)
         {
-            TraceLog(LOG_INFO, "Drawing with shader");
             float t = GetTime();
             int timeLoc = GetShaderLocation(*shader, "time");
             SetShaderValue(*shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);

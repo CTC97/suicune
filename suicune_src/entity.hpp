@@ -65,6 +65,7 @@ namespace suicune
         void destroy();
 
     protected:
+        std::string type = "";
         Scene *scene;
         Animator animator;
 
