@@ -65,13 +65,8 @@ namespace suicune
 
         for (int i = 0; i < 5; ++i)
         {
-            // spawn<Tree> now should pass shared_ptr<Spritesheet> into Tree/Entity
             Tree *tree = spawn<Tree>(tree_spritesheet, 16, 32, 32 + i * 32, 32);
-            tree->set_bound_box_dimensions(2, 2);
-            tree->set_bound_box_offset(7, 30);
-            tree->play_animation("still");
-            tree->set_dialog({{"The tree is too tall to climb.", "--", {}}});
-            trees.push_back(tree); // trees should be std::vector<Tree*> (non-owning handles)
+            trees.push_back(tree);
         }
 
         house_spritesheet = std::make_shared<Spritesheet>(
