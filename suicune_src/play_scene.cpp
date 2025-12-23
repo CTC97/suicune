@@ -49,6 +49,17 @@ namespace suicune
 
         Camera2D &camera = get_camera();
 
+        if (scene_shader)
+        {
+            float t = GetTime();
+            int timeLoc = GetShaderLocation(*scene_shader, "time");
+            SetShaderValue(*scene_shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
+            Vector2 res = {(float)game.get_window_width(), (float)game.get_window_height()};
+            int resLoc = GetShaderLocation(*scene_shader, "resolution");
+            SetShaderValue(*scene_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
+            BeginShaderMode(*scene_shader);
+        }
+
         BeginMode2D(camera);
 
         if (tilemap)
@@ -69,6 +80,11 @@ namespace suicune
             entity.second->draw();
 
         EndMode2D();
+
+        if (scene_shader)
+        {
+            EndShaderMode();
+        }
 
         DialogManager *dialog_manager = &game.get_dialog_manager();
         if (dialog_manager->is_active())

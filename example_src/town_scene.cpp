@@ -61,6 +61,8 @@ namespace suicune
         player->set_shader(shader);
 
         player->tween_to(Vector2{64.0f, 64.0f}, 1.0f);
+
+        set_scene_shader(shader);
     }
 
     void TownScene::update(float dt)

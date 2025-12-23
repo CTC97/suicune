@@ -92,4 +92,14 @@ namespace suicune
         screen_shake.strength = strength;
         screen_shake.timer = duration;
     }
+
+    void Scene::set_scene_shader(Shader shader)
+    {
+        scene_shader = std::make_unique<Shader>(shader);
+    }
+
+    void Scene::clear_scene_shader()
+    {
+        scene_shader.reset();
+    }
 }
