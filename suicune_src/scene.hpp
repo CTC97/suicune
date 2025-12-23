@@ -2,6 +2,7 @@
 
 #include "raylib.h"
 #include "spritesheet.hpp"
+#include "util.hpp"
 
 namespace suicune
 {
@@ -23,11 +24,18 @@ namespace suicune
 
         Game &get_game();
 
+        Camera2D &get_camera();
+
     protected:
         Game &game;
+        Camera2D camera;
+
         bool transitioning_scene = false;
 
         virtual std::shared_ptr<Spritesheet> define_spritesheet(const char *file_path, int frame_width, int frame_height);
+
+        Shake screen_shake;
+        void shake(float strength, float duration);
 
     private:
         std::unordered_map<std::string, std::shared_ptr<Spritesheet>> spritesheets;

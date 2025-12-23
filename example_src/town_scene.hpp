@@ -14,12 +14,6 @@ namespace suicune
 
         void draw() override;
         void update(float dt) override;
-
-    protected:
-        Camera2D &get_camera() override;
-
-    private:
-        Camera2D camera{};
     };
 
 }

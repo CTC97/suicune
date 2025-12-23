@@ -67,14 +67,6 @@ namespace suicune
     {
         PlayScene::update(dt);
 
-        if (screen_shake.is_alive)
-        {
-            float shake_x = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
-            float shake_y = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
-            camera.target.x += shake_x;
-            camera.target.y += shake_y;
-        }
-
         if (IsKeyPressed(KEY_I))
         {
             shake(1, 0.5);
@@ -100,11 +92,6 @@ namespace suicune
 
         camera.target = Vector2Add(player->get_position(), Vector2{player->get_width() / 2.0f, player->get_height() / 2.0f});
         camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
-    }
-
-    Camera2D &TownScene::get_camera()
-    {
-        return camera;
     }
 
 }

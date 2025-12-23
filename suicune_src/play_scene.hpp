@@ -7,7 +7,6 @@
 #include "tilemap.hpp"
 #include "player.hpp"
 #include "entity.hpp"
-#include "util.hpp"
 
 namespace suicune
 {
@@ -39,18 +38,11 @@ namespace suicune
 
         void cleanup_eoframe() override;
 
-        void shake(float strength, float duration);
-
     protected:
-        // Derived scenes must provide a camera
-        virtual Camera2D &get_camera() = 0;
-
         std::unique_ptr<Tilemap> tilemap;
         std::unique_ptr<Player> player;
 
         std::vector<std::unique_ptr<Entity>> entities;
-
-        Shake screen_shake;
     };
 
 }

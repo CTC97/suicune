@@ -13,7 +13,8 @@ namespace suicune
         ~MainMenu() override;
 
         void draw() override;
-        using MenuScene::update;
+        void update(float dt) override;
+        // using MenuScene::update;
 
     private:
         Texture2D play_texture;

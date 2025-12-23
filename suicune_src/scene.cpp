@@ -7,6 +7,10 @@ namespace suicune
 
     Scene::Scene(Game &game) : game(game)
     {
+        camera.target = {0.0f, 0.0f};
+        camera.offset = {0.0f, 0.0f};
+        camera.rotation = 0.0f;
+        camera.zoom = 1.0f;
     }
 
     Scene::~Scene()
@@ -27,11 +31,22 @@ namespace suicune
 
     void Scene::update(float dt)
     {
-        (void)dt;
         if (transitioning_scene)
-        {
-            TraceLog(LOG_INFO, "TRANSITIONING SCENE!!! [Update]");
             return;
+
+        if (screen_shake.timer > 0.0f)
+        {
+            screen_shake.timer -= dt;
+            if (screen_shake.timer < 0.0f)
+                screen_shake.is_alive = false;
+        }
+
+        if (screen_shake.is_alive)
+        {
+            float shake_x = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
+            float shake_y = ((float)GetRandomValue(-100, 100) / 100.0f) * screen_shake.strength;
+            camera.target.x += shake_x;
+            camera.target.y += shake_y;
         }
     }
 
@@ -64,5 +79,17 @@ namespace suicune
             UnloadTexture(pair.second->get_texture());
         }
         spritesheets.clear();
+    }
+
+    Camera2D &Scene::get_camera()
+    {
+        return camera;
+    }
+
+    void Scene::shake(float strength, float duration)
+    {
+        screen_shake.is_alive = true;
+        screen_shake.strength = strength;
+        screen_shake.timer = duration;
     }
 }

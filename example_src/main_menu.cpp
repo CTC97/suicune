@@ -22,4 +22,14 @@ namespace suicune
     {
         MenuScene::draw();
     }
+
+    void MainMenu::update(float dt)
+    {
+        MenuScene::update(dt);
+
+        if (IsKeyPressed(KEY_P))
+        {
+            shake(0.5f, 5.0f);
+        }
+    }
 }
