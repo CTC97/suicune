@@ -16,6 +16,7 @@ namespace suicune
     Scene::~Scene()
     {
         unload_spritesheets();
+        unload_shaders();
     }
 
     Game &Scene::get_game()
@@ -93,13 +94,28 @@ namespace suicune
         screen_shake.timer = duration;
     }
 
-    void Scene::set_scene_shader(Shader shader)
+    std::shared_ptr<Shader> Scene::define_shader(const char *file_path)
     {
-        scene_shader = std::make_unique<Shader>(shader);
+        shaders[file_path] = std::make_shared<Shader>(LoadShader(0, TextFormat(file_path, GLSL_VERSION)));
+        return shaders[file_path];
+    }
+
+    void Scene::set_scene_shader(std::shared_ptr<Shader> shader)
+    {
+        scene_shader = shader;
     }
 
     void Scene::clear_scene_shader()
     {
         scene_shader.reset();
+    }
+
+    void Scene::unload_shaders()
+    {
+        for (auto &pair : shaders)
+        {
+            UnloadShader(*pair.second);
+        }
+        shaders.clear();
     }
 }

@@ -37,13 +37,18 @@ namespace suicune
         Shake screen_shake;
         void shake(float strength, float duration);
 
-        std::unique_ptr<Shader> scene_shader;
-        void set_scene_shader(Shader shader);
+        virtual std::shared_ptr<Shader> define_shader(const char *file_path);
+
+        std::shared_ptr<Shader> scene_shader;
+        void set_scene_shader(std::shared_ptr<Shader> shader);
         void clear_scene_shader();
 
     private:
         std::unordered_map<std::string, std::shared_ptr<Spritesheet>> spritesheets;
         void unload_spritesheets();
+
+        std::unordered_map<std::string, std::shared_ptr<Shader>> shaders;
+        void unload_shaders();
     };
 
 }

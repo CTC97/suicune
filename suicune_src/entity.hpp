@@ -58,7 +58,7 @@ namespace suicune
         bool is_tweening() const;
         void cancel_tween();
 
-        void set_shader(Shader shader);
+        void set_shader(std::shared_ptr<Shader> shader);
         void clear_shader();
 
         bool is_alive() const;
