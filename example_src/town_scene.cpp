@@ -2,6 +2,7 @@
 #include "../suicune_src/game.hpp"
 #include "main_menu.hpp"
 #include <memory>
+#include "raymath.h" // Include the header for Vector2Add and other vector math functions
 
 namespace suicune
 {
@@ -131,9 +132,12 @@ namespace suicune
 
     void TownScene::draw()
     {
-        camera.target = player->get_position();
-        camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
         PlayScene::draw();
+
+        camera.target = Vector2Add(player->get_position(), Vector2{player->get_width() / 2.0f, player->get_height() / 2.0f});
+        camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
+
+        cleanup_eoframe();
     }
 
     Camera2D &TownScene::get_camera()

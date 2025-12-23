@@ -83,8 +83,6 @@ namespace suicune
                 (window_width - dialog_box_width) / 2.0f,
                 window_height - dialog_box_height - 20.0f);
         }
-
-        cleanup_eoframe();
     }
 
     void PlayScene::cleanup_eoframe()

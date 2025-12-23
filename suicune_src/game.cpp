@@ -1,6 +1,10 @@
 #include "game.hpp"
 #include "scene.hpp"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 void set_cwd_to_app_resources_if_present()
 {
     const char *exe_dir = GetApplicationDirectory(); // .../Contents/MacOS when bundled
@@ -89,6 +93,41 @@ namespace suicune
 
     void Game::run()
     {
+#if defined(PLATFORM_WEB)
+        // Web: the browser owns the loop. We register a callback instead of blocking.
+        static Game *g = nullptr;
+        g = this;
+
+        auto frame = []()
+        {
+            if (!g)
+                return;
+
+            // allow quit()
+            if (!g->running)
+            {
+                emscripten_cancel_main_loop();
+                return;
+            }
+
+            float dt = GetFrameTime();
+
+            g->begin_frame();
+
+            if (g->current_scene)
+            {
+                g->current_scene->update(dt);
+                g->current_scene->draw();
+            }
+
+            if (g->pending_scene)
+                g->current_scene = std::move(g->pending_scene);
+
+            g->end_frame();
+        };
+
+        emscripten_set_main_loop(frame, 0, 1);
+#else
         while (is_running())
         {
             float dt = GetFrameTime();
@@ -108,6 +147,7 @@ namespace suicune
         }
 
         running = false;
+#endif
     }
 
     void Game::quit()

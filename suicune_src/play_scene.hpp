@@ -46,7 +46,6 @@ namespace suicune
 
         std::vector<std::unique_ptr<Entity>> entities;
 
-    private:
         void cleanup_eoframe();
     };
 
