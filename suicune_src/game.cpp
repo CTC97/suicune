@@ -123,6 +123,7 @@ namespace suicune
             if (g->pending_scene)
                 g->current_scene = std::move(g->pending_scene);
 
+            current_scene->cleanup_eoframe();
             g->end_frame();
         };
 
@@ -143,6 +144,7 @@ namespace suicune
             if (pending_scene)
                 current_scene = std::move(pending_scene);
 
+            current_scene->cleanup_eoframe();
             end_frame();
         }
 

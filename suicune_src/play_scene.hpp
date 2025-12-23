@@ -37,6 +37,8 @@ namespace suicune
 
         void check_interaction();
 
+        void cleanup_eoframe() override;
+
     protected:
         // Derived scenes must provide a camera
         virtual Camera2D &get_camera() = 0;
@@ -45,8 +47,6 @@ namespace suicune
         std::unique_ptr<Player> player;
 
         std::vector<std::unique_ptr<Entity>> entities;
-
-        void cleanup_eoframe();
     };
 
 }

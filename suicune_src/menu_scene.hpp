@@ -21,6 +21,8 @@ namespace suicune
         void update(float dt) override;
         void draw() override;
 
+        void cleanup_eoframe() override;
+
     protected:
         void add_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback);
         template <typename SceneType>

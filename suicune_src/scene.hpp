@@ -16,6 +16,8 @@ namespace suicune
         virtual void update(float dt);
         virtual void draw();
 
+        virtual void cleanup_eoframe() = 0;
+
     protected:
         Game &game;
         bool transitioning_scene = false;

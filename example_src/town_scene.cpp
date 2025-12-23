@@ -136,8 +136,6 @@ namespace suicune
 
         camera.target = Vector2Add(player->get_position(), Vector2{player->get_width() / 2.0f, player->get_height() / 2.0f});
         camera.offset = (Vector2){game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
-
-        cleanup_eoframe();
     }
 
     Camera2D &TownScene::get_camera()
