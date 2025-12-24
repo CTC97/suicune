@@ -54,7 +54,8 @@ namespace suicune
 
         Spritesheet &get_spritesheet() const;
 
-        void tween_to(Vector2 target, float duration, bool stop_movement = true);
+        void tween_to(Vector2 target, float duration);
+        void tween_to(Vector2 target, float duration, std::function<void()> on_finished);
         bool is_tweening() const;
         void cancel_tween();
 

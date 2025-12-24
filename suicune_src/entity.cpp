@@ -170,14 +170,20 @@ namespace suicune
         return stop_movement;
     }
 
-    void Entity::tween_to(Vector2 target, float duration, bool stop_movement)
+    void Entity::tween_to(Vector2 target, float duration)
     {
         tween.active = true;
         tween.start = Vector2{(float)x, (float)y};
         tween.target = target;
         tween.duration = duration;
         tween.elapsed = 0.0f;
-        tween.stop_movement = stop_movement;
+        tween.stop_movement = true;
+    }
+
+    void Entity::tween_to(Vector2 target, float duration, std::function<void()> on_finished)
+    {
+        tween_to(target, duration);
+        tween.on_finished = std::move(on_finished);
     }
 
     bool Entity::is_tweening() const

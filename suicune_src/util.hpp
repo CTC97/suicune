@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdio>
+#include <functional>
 
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION 330
@@ -111,7 +112,8 @@ namespace suicune
         Vector2 target{0, 0};
         float duration = 0.0f;
         float elapsed = 0.0f;
-        bool stop_movement = false;
+        bool stop_movement = true;
+        std::function<void()> on_finished = nullptr;
     };
 
     inline float lerpf(float a, float b, float t)
@@ -145,6 +147,11 @@ namespace suicune
         {
             t = 1.0f;
             tw.active = false;
+            if (tw.on_finished)
+            {
+                tw.on_finished();
+                tw.on_finished = nullptr;
+            }
         }
 
         out_pos = lerp_v2(tw.start, tw.target, t);

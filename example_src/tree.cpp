@@ -25,7 +25,10 @@ namespace suicune
         {
             play_animation("inv");
             set_dialog({{"You've changed me.", "--", {}}});
-            destroy();
+            tween_to({0, 0}, 2.0f, [this]()
+                     { scene->shake(1.0f, 0.5f); });
+
+            // destroy();
         }
         else
         {

@@ -66,7 +66,13 @@ namespace suicune
 
         if (IsKeyPressed(KEY_I))
         {
-            shake(1, 0.5);
+            player->set_stop_movement(true);
+            player->play_animation("inv", [this]()
+                                   { 
+                                    TraceLog(LOG_INFO, "... animation finished.");
+                                    this->player->set_stop_movement(false);
+                                    shake(0.5f, 2.0f);
+                                    player->tween_to({50, 50}, 2.0f); });
         }
 
         if (player->is_movement_stopped())
