@@ -15,6 +15,7 @@ namespace suicune
 
     Scene::~Scene()
     {
+        printf("Unloading scene resources...\n");
         unload_spritesheets();
         unload_shaders();
     }
@@ -49,12 +50,15 @@ namespace suicune
             camera.target.x += shake_x;
             camera.target.y += shake_y;
         }
+
+        if (IsKeyPressed(KEY_LEFT_CONTROL))
+        {
+            game.set_dev_mode(!game.is_dev_mode());
+        }
     }
 
     void Scene::setup_draw()
     {
-        Camera2D &camera = get_camera();
-        BeginMode2D(camera);
 
         if (scene_shader)
         {
@@ -66,24 +70,15 @@ namespace suicune
             SetShaderValue(*scene_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
             BeginShaderMode(*scene_shader);
         }
+
+        Camera2D &camera = get_camera();
+        BeginMode2D(camera);
     }
 
     void Scene::draw()
     {
-
-        if (transitioning_scene)
-        {
-            TraceLog(LOG_INFO, "TRANSITIONING SCENE!!! [Draw]");
-            return;
-        }
-
         if (game.is_dev_mode())
             DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
-
-        if (scene_shader)
-        {
-            EndShaderMode();
-        }
     }
 
     void Scene::cleanup_draw()
@@ -91,9 +86,7 @@ namespace suicune
         EndMode2D();
 
         if (scene_shader)
-        {
             EndShaderMode();
-        }
     }
 
     std::shared_ptr<Spritesheet> Scene::define_spritesheet(const char *file_path, int frame_width, int frame_height)
@@ -145,10 +138,11 @@ namespace suicune
 
     void Scene::unload_shaders()
     {
-        for (auto &pair : shaders)
-        {
-            UnloadShader(*pair.second);
-        }
-        shaders.clear();
+        // for (auto &pair : shaders)
+        // {
+        //     printf("Unloading shader: %s\n", pair.first.c_str());
+        //     UnloadShader(*pair.second);
+        // }
+        // shaders.clear();
     }
 }

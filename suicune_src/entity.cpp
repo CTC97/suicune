@@ -34,8 +34,11 @@ namespace suicune
         animator.draw_current_frame(static_cast<float>(x), static_cast<float>(y));
 
         // bounding box debug draw
-        DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255});
-        DrawCircle(bound_box.x + bound_box.width / 2, bound_box.y + bound_box.height / 2, 0.5, {255, 255, 0, 255});
+        if (scene->get_game().is_dev_mode())
+        {
+            DrawRectangleLines(bound_box.x, bound_box.y, bound_box.width, bound_box.height, {255, 0, 0, 255});
+            DrawCircle(bound_box.x + bound_box.width / 2, bound_box.y + bound_box.height / 2, 0.5, {255, 255, 0, 255});
+        }
     }
 
     void Entity::play_animation(const std::string &animation_name)

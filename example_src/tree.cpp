@@ -17,7 +17,9 @@ namespace suicune
 
     void Tree::interact()
     {
+
         inverted = !inverted;
+        scene->shake(2.0f, 0.3f);
 
         if (inverted)
         {

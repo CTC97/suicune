@@ -3,11 +3,12 @@
 #include "raylib.h"
 #include "spritesheet.hpp"
 #include "util.hpp"
+#include "game.hpp"
 
 namespace suicune
 {
 
-    class Game;
+    // class Game;
 
     class Scene
     {
@@ -26,6 +27,8 @@ namespace suicune
 
         Camera2D &get_camera();
 
+        void shake(float strength, float duration);
+
     protected:
         Game &game;
         Camera2D camera;
@@ -38,7 +41,6 @@ namespace suicune
         virtual std::shared_ptr<Spritesheet> define_spritesheet(const char *file_path, int frame_width, int frame_height);
 
         Shake screen_shake;
-        void shake(float strength, float duration);
 
         virtual std::shared_ptr<Shader> define_shader(const char *file_path);
 

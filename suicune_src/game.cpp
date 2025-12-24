@@ -20,8 +20,10 @@ namespace suicune
 
     Game::~Game()
     {
-        UnloadShader(*global_shader);
-        CloseWindow();
+        global_shader.reset();
+
+        if (IsWindowReady())
+            CloseWindow();
     }
 
     void Game::set_fullscreen(bool enabled)

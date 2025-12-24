@@ -15,7 +15,7 @@ namespace suicune
     {
     public:
         explicit PlayScene(Game &game);
-        ~PlayScene() override;
+        ~PlayScene();
 
         void update(float dt) override;
         void draw() override;

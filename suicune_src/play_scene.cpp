@@ -12,10 +12,6 @@ namespace suicune
 
     PlayScene::~PlayScene()
     {
-        if (tilemap)
-        {
-            UnloadTexture(tilemap->get_spritesheet().get_texture());
-        }
     }
 
     void PlayScene::update(float dt)
@@ -45,7 +41,6 @@ namespace suicune
 
     void PlayScene::draw()
     {
-        Scene::draw();
         Scene::setup_draw();
 
         if (tilemap)

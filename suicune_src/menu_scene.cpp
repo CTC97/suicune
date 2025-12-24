@@ -63,7 +63,7 @@ namespace suicune
 
     void MenuScene::update(float dt)
     {
-        (void)dt;
+        Scene::update(dt);
 
         auto &items = get_items();
         if (items.empty())
@@ -116,8 +116,6 @@ namespace suicune
 
     void MenuScene::draw()
     {
-        Scene::draw();
-
         Scene::setup_draw();
 
         const auto &items = get_items();
