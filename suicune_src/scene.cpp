@@ -138,11 +138,11 @@ namespace suicune
 
     void Scene::unload_shaders()
     {
-        // for (auto &pair : shaders)
-        // {
-        //     printf("Unloading shader: %s\n", pair.first.c_str());
-        //     UnloadShader(*pair.second);
-        // }
-        // shaders.clear();
+        for (auto &pair : shaders)
+        {
+            printf("Unloading shader: %s\n", pair.first.c_str());
+            UnloadShader(*pair.second);
+        }
+        shaders.clear();
     }
 }

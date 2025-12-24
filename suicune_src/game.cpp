@@ -153,7 +153,7 @@ namespace suicune
             SetShaderValue(*global_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
             BeginShaderMode(*global_shader);
         }
-        Color custom_color = {100, 149, 237, 255}; // Cornflower Blue
+        Color custom_color = {180, 203, 240, 255};
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), custom_color);
     }
 
