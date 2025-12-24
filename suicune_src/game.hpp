@@ -36,6 +36,9 @@ namespace suicune
         void set_dev_mode(bool enabled);
         bool is_dev_mode() const;
 
+        void set_global_shader(std::shared_ptr<Shader> shader);
+        void clear_global_shader();
+
     private:
         std::string title;
         int window_width;
@@ -45,7 +48,7 @@ namespace suicune
 
         bool fullscreen = false;
         bool resizable = false;
-        int targetFps = 60;
+        int target_fps = 60;
 
         bool running = false;
 
@@ -58,6 +61,8 @@ namespace suicune
         void end_frame();
 
         bool dev_mode = false;
+
+        std::shared_ptr<Shader> global_shader;
     };
 
 }

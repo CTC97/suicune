@@ -30,6 +30,9 @@ namespace suicune
         Game &game;
         Camera2D camera;
 
+        void setup_draw();
+        void cleanup_draw();
+
         bool transitioning_scene = false;
 
         virtual std::shared_ptr<Spritesheet> define_spritesheet(const char *file_path, int frame_width, int frame_height);

@@ -158,4 +158,28 @@ namespace suicune
         float strength = 0.0f;
         bool is_alive = false;
     };
+
+    // <----------------- File Loading ----------------->
+    inline void set_cwd_to_app_resources_if_present()
+    {
+        const char *exe_dir = GetApplicationDirectory(); // .../Contents/MacOS when bundled
+
+        if (!exe_dir)
+            return;
+
+        // If we're in a macOS .app, this folder should exist:
+        //   <App>.app/Contents/Resources
+        const char *resources_dir = TextFormat("%s/../Resources", exe_dir);
+
+        if (DirectoryExists(resources_dir))
+        {
+            ChangeDirectory(exe_dir);
+            ChangeDirectory("../Resources");
+            TraceLog(LOG_INFO, "Changed CWD to bundle Resources: %s", GetWorkingDirectory());
+        }
+        else
+        {
+            TraceLog(LOG_INFO, "Not a bundle run; keeping CWD: %s", GetWorkingDirectory());
+        }
+    }
 }

@@ -118,6 +118,8 @@ namespace suicune
     {
         Scene::draw();
 
+        Scene::setup_draw();
+
         const auto &items = get_items();
 
         for (const auto &item : items)
@@ -136,6 +138,8 @@ namespace suicune
                 DrawText(">", item.get_x() - 30, item.get_y(), 20, WHITE);
             }
         }
+
+        Scene::cleanup_draw();
     }
 
     void MenuScene::cleanup_eoframe()

@@ -5,29 +5,6 @@
 #include <emscripten/emscripten.h>
 #endif
 
-void set_cwd_to_app_resources_if_present()
-{
-    const char *exe_dir = GetApplicationDirectory(); // .../Contents/MacOS when bundled
-
-    if (!exe_dir)
-        return;
-
-    // If we're in a macOS .app, this folder should exist:
-    //   <App>.app/Contents/Resources
-    const char *resources_dir = TextFormat("%s/../Resources", exe_dir);
-
-    if (DirectoryExists(resources_dir))
-    {
-        ChangeDirectory(exe_dir);
-        ChangeDirectory("../Resources");
-        TraceLog(LOG_INFO, "Changed CWD to bundle Resources: %s", GetWorkingDirectory());
-    }
-    else
-    {
-        TraceLog(LOG_INFO, "Not a bundle run; keeping CWD: %s", GetWorkingDirectory());
-    }
-}
-
 namespace suicune
 {
     Game::Game(const std::string &title, int window_width, int window_height, int tile_size)
@@ -38,11 +15,12 @@ namespace suicune
 
         running = true;
 
-        SetTargetFPS(targetFps);
+        SetTargetFPS(target_fps);
     }
 
     Game::~Game()
     {
+        UnloadShader(*global_shader);
         CloseWindow();
     }
 
@@ -82,7 +60,7 @@ namespace suicune
 
     void Game::set_fps(int fps)
     {
-        targetFps = fps;
+        target_fps = fps;
         SetTargetFPS(fps);
     }
 
@@ -159,12 +137,30 @@ namespace suicune
 
     void Game::begin_frame()
     {
+
         BeginDrawing();
         ClearBackground(BLACK);
+
+        if (global_shader)
+        {
+            float t = GetTime();
+            int timeLoc = GetShaderLocation(*global_shader, "time");
+            SetShaderValue(*global_shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
+            Vector2 res = {(float)get_window_width(), (float)get_window_height()};
+            int resLoc = GetShaderLocation(*global_shader, "resolution");
+            SetShaderValue(*global_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
+            BeginShaderMode(*global_shader);
+        }
+        Color custom_color = {100, 149, 237, 255}; // Cornflower Blue
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), custom_color);
     }
 
     void Game::end_frame()
     {
+        if (global_shader)
+        {
+            EndShaderMode();
+        }
         EndDrawing();
     }
 
@@ -204,5 +200,15 @@ namespace suicune
     bool Game::is_dev_mode() const
     {
         return dev_mode;
+    }
+
+    void Game::set_global_shader(std::shared_ptr<Shader> shader)
+    {
+        global_shader = std::move(shader);
+    }
+
+    void Game::clear_global_shader()
+    {
+        global_shader.reset();
     }
 }

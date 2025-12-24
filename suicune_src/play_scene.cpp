@@ -46,21 +46,7 @@ namespace suicune
     void PlayScene::draw()
     {
         Scene::draw();
-
-        Camera2D &camera = get_camera();
-
-        if (scene_shader)
-        {
-            float t = GetTime();
-            int timeLoc = GetShaderLocation(*scene_shader, "time");
-            SetShaderValue(*scene_shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
-            Vector2 res = {(float)game.get_window_width(), (float)game.get_window_height()};
-            int resLoc = GetShaderLocation(*scene_shader, "resolution");
-            SetShaderValue(*scene_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
-            BeginShaderMode(*scene_shader);
-        }
-
-        BeginMode2D(camera);
+        Scene::setup_draw();
 
         if (tilemap)
             tilemap->draw();
@@ -79,12 +65,7 @@ namespace suicune
         for (const auto &entity : entity_draw_list)
             entity.second->draw();
 
-        EndMode2D();
-
-        if (scene_shader)
-        {
-            EndShaderMode();
-        }
+        Scene::cleanup_draw();
 
         DialogManager *dialog_manager = &game.get_dialog_manager();
         if (dialog_manager->is_active())

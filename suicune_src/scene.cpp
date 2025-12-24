@@ -51,8 +51,26 @@ namespace suicune
         }
     }
 
+    void Scene::setup_draw()
+    {
+        Camera2D &camera = get_camera();
+        BeginMode2D(camera);
+
+        if (scene_shader)
+        {
+            float t = GetTime();
+            int timeLoc = GetShaderLocation(*scene_shader, "time");
+            SetShaderValue(*scene_shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
+            Vector2 res = {(float)game.get_window_width(), (float)game.get_window_height()};
+            int resLoc = GetShaderLocation(*scene_shader, "resolution");
+            SetShaderValue(*scene_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
+            BeginShaderMode(*scene_shader);
+        }
+    }
+
     void Scene::draw()
     {
+
         if (transitioning_scene)
         {
             TraceLog(LOG_INFO, "TRANSITIONING SCENE!!! [Draw]");
@@ -61,6 +79,21 @@ namespace suicune
 
         if (game.is_dev_mode())
             DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
+
+        if (scene_shader)
+        {
+            EndShaderMode();
+        }
+    }
+
+    void Scene::cleanup_draw()
+    {
+        EndMode2D();
+
+        if (scene_shader)
+        {
+            EndShaderMode();
+        }
     }
 
     std::shared_ptr<Spritesheet> Scene::define_spritesheet(const char *file_path, int frame_width, int frame_height)

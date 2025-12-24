@@ -55,14 +55,7 @@ namespace suicune
 
         auto house_spritesheet = define_spritesheet("res/sprites/house.png", 32, 32);
         house_spritesheet->define_animation("still", {{0}, 1.0f, true});
-        auto house = define_entity<House>(house_spritesheet, 32, 32, 100, 50);
-
-        auto turn_shader = define_shader("res/shaders/turn_indicator.fs");
-        player->set_shader(turn_shader);
-        player->tween_to(Vector2{64.0f, 64.0f}, 1.0f);
-
-        auto snow_shader = define_shader("res/shaders/snow.fs");
-        set_scene_shader(snow_shader);
+        define_entity<House>(house_spritesheet, 32, 32, 100, 50);
     }
 
     void TownScene::update(float dt)
