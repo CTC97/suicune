@@ -7,10 +7,9 @@ namespace suicune
 
     Scene::Scene(Game &game) : game(game)
     {
-        camera.target = {0.0f, 0.0f};
-        camera.offset = {0.0f, 0.0f};
-        camera.rotation = 0.0f;
         camera.zoom = 1.0f;
+        camera.target = {game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
+        camera.offset = {game.get_window_width() / 2.0f, game.get_window_height() / 2.0f};
     }
 
     Scene::~Scene()

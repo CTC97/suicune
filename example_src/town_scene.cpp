@@ -10,9 +10,6 @@ namespace suicune
     TownScene::TownScene(Game &game)
         : PlayScene(game)
     {
-        camera.target = {0.0f, 0.0f};
-        camera.offset = {0.0f, 0.0f};
-        camera.rotation = 0.0f;
         camera.zoom = 4.0f;
 
         auto tilemap_spritesheet = define_spritesheet("res/sprites/tilesheet.png", 16, 16);
