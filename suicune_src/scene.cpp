@@ -76,13 +76,13 @@ namespace suicune
 
     void Scene::draw()
     {
-        if (game.is_dev_mode())
-            DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
     }
 
     void Scene::cleanup_draw()
     {
         EndMode2D();
+        if (game.is_dev_mode())
+            DrawText(TextFormat("FPS: %i", GetFPS()), game.get_window_width() - 48, 8, 10, WHITE);
 
         if (scene_shader)
             EndShaderMode();

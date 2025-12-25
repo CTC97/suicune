@@ -1,6 +1,7 @@
 #include "play_scene.hpp"
 #include "game.hpp"
 #include "raylib.h"
+#include "raymath.h"
 
 namespace suicune
 {
@@ -164,6 +165,19 @@ namespace suicune
                                       [entity](const std::unique_ptr<Entity> &e)
                                       { return e.get() == entity; }),
                        entities.end());
+    }
+
+    void PlayScene::center_on_entity(Entity *entity)
+    {
+        if (!entity)
+            return;
+
+        camera.target = Vector2Add(entity->get_position(), Vector2{entity->get_width() / 2.0f, entity->get_height() / 2.0f});
+    }
+
+    void PlayScene::center_on_player()
+    {
+        center_on_entity(player.get());
     }
 
 }

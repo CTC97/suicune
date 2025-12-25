@@ -38,6 +38,9 @@ namespace suicune
 
         void cleanup_eoframe() override;
 
+        void center_on_entity(Entity *entity);
+        void center_on_player();
+
     protected:
         std::unique_ptr<Tilemap> tilemap;
         std::unique_ptr<Player> player;
