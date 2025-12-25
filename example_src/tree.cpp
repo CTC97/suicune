@@ -16,6 +16,12 @@ namespace suicune
         set_clicked_callback([]()
                              { TraceLog(LOG_INFO, "You clicked on the tree."); });
 
+        hoverable = true;
+        set_hovered_callback([this]()
+                             { play_animation("inv"); });
+        set_unhovered_callback([this]()
+                               { play_animation("still"); });
+
         play_animation("still");
     }
 

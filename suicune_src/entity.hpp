@@ -69,6 +69,12 @@ namespace suicune
         bool is_clickable() const;
         void set_clicked_callback(std::function<void()> callback);
 
+        void set_hoverable(bool hoverable);
+        bool is_hoverable() const;
+        void set_hovered_callback(std::function<void()> callback);
+        bool is_hovered_over() const;
+        void set_unhovered_callback(std::function<void()> callback);
+
     protected:
         std::string type = "";
         Scene *scene;
@@ -93,9 +99,13 @@ namespace suicune
         std::function<void()> interaction_callback;
         std::function<void()> collision_callback;
         std::function<void()> clicked_callback;
+        std::function<void()> hovered_callback;
+        std::function<void()> unhovered_callback;
 
         Tween tween;
 
         bool clickable = false;
+        bool hoverable = false;
+        bool hovered_over = false;
     };
 }

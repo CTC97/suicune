@@ -13,16 +13,29 @@ namespace suicune
 
     void Entity::update(float dt)
     {
-        if (clickable)
+        if (hoverable || clickable)
         {
             Vector2 mouse_pos_world = GetScreenToWorld2D(GetMousePosition(), scene->get_camera());
             if (CheckCollisionPointRec(mouse_pos_world, {x, y, (float)width, (float)height}))
             {
-                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                if (hoverable)
+                {
+                    if (!hovered_over && hovered_callback)
+                        hovered_callback();
+                    hovered_over = true;
+                }
+
+                if (clickable && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
                 {
                     if (clicked_callback)
                         clicked_callback();
                 }
+            }
+            else if (hoverable)
+            {
+                if (hovered_over && unhovered_callback)
+                    unhovered_callback();
+                hovered_over = false;
             }
         }
 
@@ -242,5 +255,30 @@ namespace suicune
     void Entity::set_clicked_callback(std::function<void()> callback)
     {
         clicked_callback = callback;
+    }
+
+    void Entity::set_hoverable(bool hoverable)
+    {
+        this->hoverable = hoverable;
+    }
+
+    bool Entity::is_hoverable() const
+    {
+        return hoverable;
+    }
+
+    void Entity::set_hovered_callback(std::function<void()> callback)
+    {
+        hovered_callback = callback;
+    }
+
+    bool Entity::is_hovered_over() const
+    {
+        return hovered_over;
+    }
+
+    void Entity::set_unhovered_callback(std::function<void()> callback)
+    {
+        unhovered_callback = callback;
     }
 }
