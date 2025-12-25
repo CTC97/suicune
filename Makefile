@@ -1,6 +1,7 @@
 # -------- project config --------
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -Wall -Wextra
+CXXFLAGS += -isystem /opt/homebrew/Cellar/raylib/5.5/include
 
 TARGET   ?= build/executable
 
