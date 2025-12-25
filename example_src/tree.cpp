@@ -12,6 +12,10 @@ namespace suicune
 
         set_dialog({{"The tree is too tall to climb.", "--", {}}});
 
+        clickable = true;
+        set_clicked_callback([]()
+                             { TraceLog(LOG_INFO, "You clicked on the tree."); });
+
         play_animation("still");
     }
 

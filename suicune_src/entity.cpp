@@ -13,6 +13,19 @@ namespace suicune
 
     void Entity::update(float dt)
     {
+        if (clickable)
+        {
+            Vector2 mouse_pos_world = GetScreenToWorld2D(GetMousePosition(), scene->get_camera());
+            if (CheckCollisionPointRec(mouse_pos_world, {x, y, (float)width, (float)height}))
+            {
+                if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                {
+                    if (clicked_callback)
+                        clicked_callback();
+                }
+            }
+        }
+
         if (tween.active)
         {
             Vector2 p;
@@ -214,5 +227,20 @@ namespace suicune
     void Entity::destroy()
     {
         alive = false;
+    }
+
+    void Entity::set_clickable(bool clickable)
+    {
+        this->clickable = clickable;
+    }
+
+    bool Entity::is_clickable() const
+    {
+        return clickable;
+    }
+
+    void Entity::set_clicked_callback(std::function<void()> callback)
+    {
+        clicked_callback = callback;
     }
 }

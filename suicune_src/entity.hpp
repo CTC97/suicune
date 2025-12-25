@@ -65,6 +65,10 @@ namespace suicune
         bool is_alive() const;
         void destroy();
 
+        void set_clickable(bool clickable);
+        bool is_clickable() const;
+        void set_clicked_callback(std::function<void()> callback);
+
     protected:
         std::string type = "";
         Scene *scene;
@@ -88,7 +92,10 @@ namespace suicune
 
         std::function<void()> interaction_callback;
         std::function<void()> collision_callback;
+        std::function<void()> clicked_callback;
 
         Tween tween;
+
+        bool clickable = false;
     };
 }

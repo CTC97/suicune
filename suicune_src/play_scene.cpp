@@ -24,9 +24,7 @@ namespace suicune
         if (!dialog_manager->is_active())
         {
             for (const auto &entity : entities)
-            {
                 entity->update(dt);
-            }
 
             if (player)
                 player->update(dt, *tilemap, entities);
