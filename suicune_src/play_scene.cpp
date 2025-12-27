@@ -97,8 +97,20 @@ namespace suicune
         case UP:
             facing = {0.0f, -1.0f};
             break;
+        case UP_LEFT:
+            facing = {-0.7071f, -0.7071f};
+            break;
+        case UP_RIGHT:
+            facing = {0.7071f, -0.7071f};
+            break;
         case DOWN:
             facing = {0.0f, 1.0f};
+            break;
+        case DOWN_LEFT:
+            facing = {-0.7071f, 0.7071f};
+            break;
+        case DOWN_RIGHT:
+            facing = {0.7071f, 0.7071f};
             break;
         case LEFT:
             facing = {-1.0f, 0.0f};
