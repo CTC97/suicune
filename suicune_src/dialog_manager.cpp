@@ -35,6 +35,11 @@ namespace suicune
         font_spacing = spacing;
     }
 
+    int DialogManager::get_font_size()
+    {
+        return font_size;
+    }
+
     float DialogManager::line_height() const
     {
         return MeasureTextEx(dialog_font, "A", static_cast<float>(font_size), font_spacing).y;

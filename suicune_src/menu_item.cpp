@@ -2,8 +2,44 @@
 
 namespace suicune
 {
-    MenuItem::MenuItem(std::variant<std::string, Texture2D> label, int x, int y, std::function<void()> callback)
-        : label(std::move(label)), x(x), y(y), callback(std::move(callback)) {}
+
+    std::pair<int, int> calculateDimensions(const std::variant<std::string, Texture2D> &input, int fontSize)
+    {
+        if (std::holds_alternative<std::string>(input))
+        {
+            const std::string &text = std::get<std::string>(input);
+            int width = MeasureText(text.c_str(), fontSize); // Calculate text width
+            int height = fontSize;                           // Font size as height
+            return {width, height};
+        }
+        else if (std::holds_alternative<Texture2D>(input))
+        {
+            const Texture2D &texture = std::get<Texture2D>(input);
+            return {texture.width, texture.height}; // Use texture dimensions
+        }
+        return {0, 0}; // Default fallback
+    }
+
+    MenuItem::MenuItem(Scene *scene, std::variant<std::string, Texture2D> label, int x, int y, std::function<void()> callback)
+        : label(std::move(label)), x(x), y(y), callback(std::move(callback)), interactable(scene, 0, 0, x, y)
+    {
+        std::tie(width, height) = calculateDimensions(this->label, scene->get_game().get_dialog_manager().get_font_size());
+
+        interactable.set_clickable(true);
+    }
+
+    MenuItem::~MenuItem()
+    {
+        if (is_image())
+        {
+            UnloadTexture(std::get<Texture2D>(label));
+        }
+    };
+
+    void MenuItem::update()
+    {
+        interactable.update(width, height, x, y);
+    }
 
     bool MenuItem::is_selected() const
     {
@@ -43,5 +79,10 @@ namespace suicune
     const std::function<void()> &MenuItem::get_callback() const
     {
         return callback;
+    }
+
+    void MenuItem::set_clicked_callback(std::function<void()> callback)
+    {
+        interactable.set_clicked_callback(std::move(callback));
     }
 }

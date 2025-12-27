@@ -10,6 +10,7 @@
 #include "dialog_manager.hpp"
 #include "util.hpp"
 #include "scene.hpp"
+#include "interactable.hpp"
 
 namespace suicune
 {
@@ -100,14 +101,8 @@ namespace suicune
 
         std::function<void()> interaction_callback;
         std::function<void()> collision_callback;
-        std::function<void()> clicked_callback;
-        std::function<void()> hovered_callback;
-        std::function<void()> unhovered_callback;
-
         Tween tween;
 
-        bool clickable = false;
-        bool hoverable = false;
-        bool hovered_over = false;
+        Interactable interactable;
     };
 }

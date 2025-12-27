@@ -19,15 +19,16 @@ namespace suicune
         }
     }
 
-    void MenuScene::add_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback)
+    MenuItem *MenuScene::define_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback)
     {
-        items.emplace_back(label, x, y, callback);
+        items.emplace_back(this, label, x, y, callback);
+        return &items.back();
     }
 
-    void MenuScene::add_quit_option(std::variant<std::string, Texture2D> label, int x, int y)
+    MenuItem *MenuScene::define_quit_option(std::variant<std::string, Texture2D> label, int x, int y)
     {
-        add_option(label, x, y, [this]()
-                   { this->game.quit(); });
+        return define_option(label, x, y, [this]()
+                             { this->game.quit(); });
     }
 
     const std::vector<MenuItem> &MenuScene::get_items() const
@@ -93,6 +94,7 @@ namespace suicune
         // Update selection states
         for (size_t i = 0; i < items.size(); ++i)
         {
+            items[i].update();
             if (static_cast<int>(i) != get_selected_index())
             {
                 items[i].set_selected(false);

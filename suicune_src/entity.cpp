@@ -4,7 +4,7 @@
 namespace suicune
 {
     Entity::Entity(Scene *scene, std::shared_ptr<Spritesheet> spritesheet, int width, int height, float x, float y)
-        : scene(scene), animator(std::move(spritesheet)), width(width), height(height), x(x), y(y)
+        : scene(scene), animator(std::move(spritesheet)), width(width), height(height), x(x), y(y), interactable(scene, width, height, x, y)
     {
         set_bound_box_position(x, y);
         set_bound_box_dimensions(width, height);
@@ -13,31 +13,7 @@ namespace suicune
 
     void Entity::update(float dt)
     {
-        if (hoverable || clickable)
-        {
-            Vector2 mouse_pos_world = GetScreenToWorld2D(GetMousePosition(), scene->get_camera());
-            if (CheckCollisionPointRec(mouse_pos_world, {x, y, (float)width, (float)height}))
-            {
-                if (hoverable)
-                {
-                    if (!hovered_over && hovered_callback)
-                        hovered_callback();
-                    hovered_over = true;
-                }
-
-                if (clickable && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-                {
-                    if (clicked_callback)
-                        clicked_callback();
-                }
-            }
-            else if (hoverable)
-            {
-                if (hovered_over && unhovered_callback)
-                    unhovered_callback();
-                hovered_over = false;
-            }
-        }
+        interactable.update(width, height, x, y);
 
         if (tween.active)
         {
@@ -244,41 +220,41 @@ namespace suicune
 
     void Entity::set_clickable(bool clickable)
     {
-        this->clickable = clickable;
+        interactable.set_clickable(clickable);
     }
 
     bool Entity::is_clickable() const
     {
-        return clickable;
+        return interactable.is_clickable();
     }
 
     void Entity::set_clicked_callback(std::function<void()> callback)
     {
-        clicked_callback = callback;
+        interactable.set_clicked_callback(std::move(callback));
     }
 
     void Entity::set_hoverable(bool hoverable)
     {
-        this->hoverable = hoverable;
+        interactable.set_hoverable(hoverable);
     }
 
     bool Entity::is_hoverable() const
     {
-        return hoverable;
+        return interactable.is_hoverable();
     }
 
     void Entity::set_hovered_callback(std::function<void()> callback)
     {
-        hovered_callback = callback;
+        interactable.set_hovered_callback(std::move(callback));
     }
 
     bool Entity::is_hovered_over() const
     {
-        return hovered_over;
+        return interactable.is_hovered_over();
     }
 
     void Entity::set_unhovered_callback(std::function<void()> callback)
     {
-        unhovered_callback = callback;
+        interactable.set_unhovered_callback(std::move(callback));
     }
 }

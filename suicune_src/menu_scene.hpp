@@ -24,15 +24,15 @@ namespace suicune
         void cleanup_eoframe() override;
 
     protected:
-        void add_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback);
+        MenuItem *define_option(std::variant<std::string, Texture2D> label, int x, int y, const std::function<void()> &callback);
         template <typename SceneType>
-        void add_transition_option(std::variant<std::string, Texture2D> label, int x, int y)
+        MenuItem *define_transition_option(std::variant<std::string, Texture2D> label, int x, int y)
         {
-            add_option(label, x, y, [this]()
-                       { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
+            return define_option(label, x, y, [this]()
+                                 { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
         }
 
-        void add_quit_option(std::variant<std::string, Texture2D> label, int x, int y);
+        MenuItem *define_quit_option(std::variant<std::string, Texture2D> label, int x, int y);
 
         const std::vector<MenuItem> &get_items() const;
         std::vector<MenuItem> &get_items();

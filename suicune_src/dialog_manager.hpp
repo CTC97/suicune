@@ -45,6 +45,8 @@ namespace suicune
 
         void set_font(const std::string &font_path, int font_size, float spacing = 1.0f);
 
+        int get_font_size();
+
     private:
         std::vector<DialogNode> dialog_nodes;
         int current_node_index;

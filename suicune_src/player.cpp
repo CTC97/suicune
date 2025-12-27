@@ -14,9 +14,6 @@ namespace suicune
         if (stop_movement || (tween.active && tween.stop_movement))
             return;
 
-        int new_x = x;
-        int new_y = y;
-
         DIRECTIONAL_MODE directional_mode = scene->get_game().get_direction_mode();
 
         bool right_key_down = IsKeyDown(KEY_RIGHT);
