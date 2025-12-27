@@ -15,6 +15,7 @@ namespace suicune
     Scene::~Scene()
     {
         printf("Unloading scene resources...\n");
+        unload_textures();
         unload_spritesheets();
         unload_shaders();
     }
@@ -143,5 +144,20 @@ namespace suicune
             UnloadShader(*pair.second);
         }
         shaders.clear();
+    }
+
+    std::shared_ptr<Texture2D> Scene::define_texture(const char *file_path)
+    {
+        textures[file_path] = std::make_shared<Texture2D>(LoadTexture(file_path));
+        return textures[file_path];
+    }
+
+    void Scene::unload_textures()
+    {
+        for (auto &pair : textures)
+        {
+            UnloadTexture(*pair.second);
+        }
+        textures.clear();
     }
 }

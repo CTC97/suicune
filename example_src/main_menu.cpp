@@ -7,18 +7,13 @@ namespace suicune
     MainMenu::MainMenu(Game &game)
         : MenuScene(game)
     {
-        play_texture = LoadTexture("res/sprites/play_sprite.png");
-        auto play_button = define_transition_option<TownScene>(play_texture, (game.get_window_width() - play_texture.width) / 2, 200);
-        play_button->set_clicked_callback(
-            []() {
-
-            });
+        auto play_texture = define_texture("res/sprites/play_button.png");
+        define_transition_option<TownScene>(*play_texture, (game.get_window_width() - play_texture->width) / 2, 200);
         define_quit_option("Quit", (game.get_window_width() - MeasureText("Quit", 20)) / 2, 300);
     }
 
     MainMenu::~MainMenu()
     {
-        UnloadTexture(play_texture);
     }
 
     void MainMenu::draw()

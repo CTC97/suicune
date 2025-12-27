@@ -28,8 +28,10 @@ namespace suicune
         template <typename SceneType>
         MenuItem *define_transition_option(std::variant<std::string, Texture2D> label, int x, int y)
         {
-            return define_option(label, x, y, [this]()
-                                 { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
+            auto o = define_option(label, x, y, [this]()
+                                   { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
+            o->set_clicked_callback([this]()
+                                    { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
         }
 
         MenuItem *define_quit_option(std::variant<std::string, Texture2D> label, int x, int y);

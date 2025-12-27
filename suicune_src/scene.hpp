@@ -8,8 +8,6 @@
 namespace suicune
 {
 
-    // class Game;
-
     class Scene
     {
     public:
@@ -38,6 +36,8 @@ namespace suicune
 
         bool transitioning_scene = false;
 
+        virtual std::shared_ptr<Texture2D> define_texture(const char *file_path);
+
         virtual std::shared_ptr<Spritesheet> define_spritesheet(const char *file_path, int frame_width, int frame_height);
 
         Shake screen_shake;
@@ -49,9 +49,14 @@ namespace suicune
         void clear_scene_shader();
 
     private:
+        // probably doesn't need to be shared
+        std::unordered_map<std::string, std::shared_ptr<Texture2D>> textures;
+        void unload_textures();
+
         std::unordered_map<std::string, std::shared_ptr<Spritesheet>> spritesheets;
         void unload_spritesheets();
 
+        // probably doesn't need to be shared
         std::unordered_map<std::string, std::shared_ptr<Shader>> shaders;
         void unload_shaders();
     };
