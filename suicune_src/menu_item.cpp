@@ -28,13 +28,7 @@ namespace suicune
         interactable.set_clickable(true);
     }
 
-    MenuItem::~MenuItem()
-    {
-        if (is_image())
-        {
-            UnloadTexture(std::get<Texture2D>(label));
-        }
-    };
+    MenuItem::~MenuItem() {};
 
     void MenuItem::update()
     {
