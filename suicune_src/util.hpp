@@ -14,7 +14,11 @@ namespace suicune
     enum Direction
     {
         UP,
+        UP_RIGHT,
+        UP_LEFT,
         DOWN,
+        DOWN_RIGHT,
+        DOWN_LEFT,
         LEFT,
         RIGHT
     };
@@ -59,16 +63,39 @@ namespace suicune
         bool overlap_x = (aL < bR - slack) && (aR > bL + slack);
         bool overlap_y = (aT < bB - slack) && (aB > bT + slack);
 
+        // Cardinal collision checks (your existing logic)
+        auto hit_right = [&]()
+        { return overlap_y && (paR <= bL) && (aR > bL); };
+        auto hit_left = [&]()
+        { return overlap_y && (paL >= bR) && (aL < bR); };
+        auto hit_down = [&]()
+        { return overlap_x && (paB <= bT) && (aB > bT); };
+        auto hit_up = [&]()
+        { return overlap_x && (paT >= bB) && (aT < bB); };
+
+        // Optional: only consider components we actually moved in
+        float dx = (next_a.x - prev_a.x);
+        float dy = (next_a.y - prev_a.y);
+
         switch (dir)
         {
         case RIGHT:
-            return overlap_y && (paR <= bL) && (aR > bL);
+            return hit_right();
         case LEFT:
-            return overlap_y && (paL >= bR) && (aL < bR);
+            return hit_left();
         case DOWN:
-            return overlap_x && (paB <= bT) && (aB > bT);
+            return hit_down();
         case UP:
-            return overlap_x && (paT >= bB) && (aT < bB);
+            return hit_up();
+
+        case UP_RIGHT:
+            return ((dx > 0.0f) && hit_right()) || ((dy < 0.0f) && hit_up());
+        case UP_LEFT:
+            return ((dx < 0.0f) && hit_left()) || ((dy < 0.0f) && hit_up());
+        case DOWN_RIGHT:
+            return ((dx > 0.0f) && hit_right()) || ((dy > 0.0f) && hit_down());
+        case DOWN_LEFT:
+            return ((dx < 0.0f) && hit_left()) || ((dy > 0.0f) && hit_down());
         }
 
         return false;

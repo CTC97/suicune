@@ -213,4 +213,14 @@ namespace suicune
     {
         global_shader.reset();
     }
+
+    DIRECTIONAL_MODE Game::get_direction_mode() const
+    {
+        return direction_mode;
+    }
+
+    void Game::set_direction_mode(DIRECTIONAL_MODE mode)
+    {
+        direction_mode = mode;
+    }
 }

@@ -88,6 +88,8 @@ namespace suicune
 
         bool alive = true;
 
+        int speed = 1;
+
         BoundBox bound_box{0, 0, 0, 0, 0, 0};
 
         Direction current_direction;

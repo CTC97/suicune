@@ -10,6 +10,12 @@ namespace suicune
 
     class Scene;
 
+    enum DIRECTIONAL_MODE
+    {
+        OCTAGONAL,
+        CARDINAL
+    };
+
     class Game
     {
     public:
@@ -39,10 +45,15 @@ namespace suicune
         void set_global_shader(std::shared_ptr<Shader> shader);
         void clear_global_shader();
 
+        DIRECTIONAL_MODE get_direction_mode() const;
+        void set_direction_mode(DIRECTIONAL_MODE mode);
+
     private:
         std::string title;
         int window_width;
         int window_height;
+
+        DIRECTIONAL_MODE direction_mode = CARDINAL;
 
         int tile_size;
 
