@@ -32,6 +32,7 @@ namespace suicune
                                    { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
             o->set_clicked_callback([this]()
                                     { this->game.request_scene(std::make_unique<SceneType>(this->game)); });
+            return o;
         }
 
         MenuItem *define_quit_option(std::variant<std::string, Texture2D> label, int x, int y);
