@@ -230,6 +230,7 @@ namespace suicune
 
     void Entity::set_clicked_callback(std::function<void()> callback)
     {
+        set_clickable(true);
         interactable.set_clicked_callback(std::move(callback));
     }
 
@@ -245,6 +246,7 @@ namespace suicune
 
     void Entity::set_hovered_callback(std::function<void()> callback)
     {
+        set_hoverable(true);
         interactable.set_hovered_callback(std::move(callback));
     }
 
@@ -255,6 +257,7 @@ namespace suicune
 
     void Entity::set_unhovered_callback(std::function<void()> callback)
     {
+        set_hoverable(true);
         interactable.set_unhovered_callback(std::move(callback));
     }
 }
