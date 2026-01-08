@@ -4,6 +4,7 @@
 #include "spritesheet.hpp"
 #include "util.hpp"
 #include "game.hpp"
+#include "scene_camera.hpp"
 
 namespace suicune
 {
@@ -23,16 +24,20 @@ namespace suicune
 
         Game &get_game();
 
-        Camera2D &get_camera();
+        SceneCamera &get_camera();
 
         void shake(float strength, float duration);
 
     protected:
         Game &game;
-        Camera2D camera;
+        SceneCamera camera;
 
-        void setup_draw();
+        void setup_draw_world();  // begins shader (optional) + BeginMode2D
+        void setup_draw_screen(); // begins shader (optional) + NO BeginMode2D
+        void setup_scene_shader();
         void cleanup_draw();
+
+        bool mode2d_active = false;
 
         bool transitioning_scene = false;
 

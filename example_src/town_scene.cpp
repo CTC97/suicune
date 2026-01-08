@@ -10,7 +10,7 @@ namespace suicune
     TownScene::TownScene(Game &game)
         : PlayScene(game)
     {
-        camera.zoom = 4.0f;
+        camera.get_ray_camera().zoom = 4.0f;
 
         auto tilemap_spritesheet = define_spritesheet("res/sprites/tilesheet.png", 16, 16);
         std::vector<std::vector<int>>
@@ -38,7 +38,7 @@ namespace suicune
         player->set_bound_box_dimensions(8, 4);
         player->set_bound_box_offset(4, 12);
         player->play_animation("still");
-        camera.target = player->get_position();
+        camera.set_target(player->get_position());
 
         // tree spritesheet (shared asset)
         auto tree_spritesheet = define_spritesheet("res/sprites/tree.png", 16, 32);
@@ -71,6 +71,12 @@ namespace suicune
                                     player->tween_to({50, 50}, 2.0f); });
         }
 
+        if (IsKeyPressed(KEY_O))
+        {
+            camera.tween_to({100, 100}, 2.0f, [this]()
+                            { this->camera.tween_to(this->player->get_position(), 2.0f); });
+        }
+
         if (player->is_movement_stopped())
             return;
         if (player->get_current_direction() == RIGHT)
@@ -83,12 +89,13 @@ namespace suicune
             player->play_animation("walk_down");
         else
             player->play_animation("still");
+
+        center_on_player();
     }
 
     void TownScene::draw()
     {
         PlayScene::draw();
-        center_on_player();
-    }
+        }
 
 }
