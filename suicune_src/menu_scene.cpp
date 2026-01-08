@@ -118,7 +118,7 @@ namespace suicune
 
     void MenuScene::draw()
     {
-        Scene::setup_draw();
+        Scene::setup_draw_screen();
 
         const auto &items = get_items();
 

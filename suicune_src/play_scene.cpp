@@ -40,7 +40,7 @@ namespace suicune
 
     void PlayScene::draw()
     {
-        Scene::setup_draw();
+        Scene::setup_draw_world();
 
         if (tilemap)
             tilemap->draw();
@@ -182,7 +182,8 @@ namespace suicune
         if (!entity)
             return;
 
-        camera.target = Vector2Add(entity->get_position(), Vector2{entity->get_width() / 2.0f, entity->get_height() / 2.0f});
+        camera.set_target(Vector2Add(entity->get_position(), Vector2{entity->get_width() / 2.0f, entity->get_height() / 2.0f}));
+        // camera.get_ray_camera().target = Vector2Add(entity->get_position(), Vector2{entity->get_width() / 2.0f, entity->get_height() / 2.0f});
     }
 
     void PlayScene::center_on_player()

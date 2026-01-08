@@ -77,7 +77,7 @@ namespace suicune
         {
             // Assuming `GetScreenToWorld2D`, `GetMousePosition`, `CheckCollisionPointRec`, and `IsMouseButtonPressed`
             // are functions provided by an external library, e.g., Raylib.
-            Vector2 mouse_pos_world = GetScreenToWorld2D(GetMousePosition(), scene->get_camera());
+            Vector2 mouse_pos_world = GetScreenToWorld2D(GetMousePosition(), scene->get_camera().get_ray_camera());
             if (CheckCollisionPointRec(mouse_pos_world, {x, y, (float)width, (float)height}))
             {
                 if (hoverable)
