@@ -26,7 +26,7 @@ namespace suicune
         int get_y() const;
         const std::function<void()> &get_callback() const;
 
-        virtual void update();
+        virtual void update(float dt);
 
         void set_clicked_callback(std::function<void()> callback);
 

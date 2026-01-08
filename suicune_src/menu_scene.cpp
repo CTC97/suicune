@@ -94,7 +94,7 @@ namespace suicune
         // Update selection states
         for (size_t i = 0; i < items.size(); ++i)
         {
-            items[i].update();
+            items[i].update(dt);
             if (static_cast<int>(i) != get_selected_index())
             {
                 items[i].set_selected(false);

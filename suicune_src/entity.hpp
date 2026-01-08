@@ -101,7 +101,6 @@ namespace suicune
 
         std::function<void()> interaction_callback;
         std::function<void()> collision_callback;
-        Tween tween;
 
         Interactable interactable;
     };

@@ -13,16 +13,9 @@ namespace suicune
 
     void Entity::update(float dt)
     {
-        interactable.update(width, height, x, y);
-
-        if (tween.active)
-        {
-            Vector2 p;
-            step_tween(tween, dt, p);
-
-            x = p.x;
-            y = p.y;
-        }
+        interactable.update(dt, width, height, x, y);
+        x = interactable.get_x();
+        y = interactable.get_y();
 
         animator.update(dt);
         set_bound_box_position(x + bound_box.offset_x, y + bound_box.offset_y);
@@ -174,28 +167,22 @@ namespace suicune
 
     void Entity::tween_to(Vector2 target, float duration)
     {
-        tween.active = true;
-        tween.start = Vector2{(float)x, (float)y};
-        tween.target = target;
-        tween.duration = duration;
-        tween.elapsed = 0.0f;
-        tween.stop_movement = true;
+        interactable.tween_to(target, duration);
     }
 
     void Entity::tween_to(Vector2 target, float duration, std::function<void()> on_finished)
     {
-        tween_to(target, duration);
-        tween.on_finished = std::move(on_finished);
+        interactable.tween_to(target, duration, std::move(on_finished));
     }
 
     bool Entity::is_tweening() const
     {
-        return tween.active;
+        return interactable.is_tweening();
     }
 
     void Entity::cancel_tween()
     {
-        tween.active = false;
+        interactable.cancel_tween();
     }
 
     void Entity::set_shader(std::shared_ptr<Shader> shader)

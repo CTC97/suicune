@@ -11,7 +11,7 @@ namespace suicune
     {
         Entity::update(dt);
 
-        if (stop_movement || (tween.active && tween.stop_movement))
+        if (stop_movement || (is_tweening() && interactable.does_tween_stop_movement()))
             return;
 
         DIRECTIONAL_MODE directional_mode = scene->get_game().get_direction_mode();

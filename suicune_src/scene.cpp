@@ -140,7 +140,6 @@ namespace suicune
     {
         for (auto &pair : shaders)
         {
-            printf("Unloading shader: %s\n", pair.first.c_str());
             UnloadShader(*pair.second);
         }
         shaders.clear();

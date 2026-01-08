@@ -30,9 +30,9 @@ namespace suicune
 
     MenuItem::~MenuItem() {};
 
-    void MenuItem::update()
+    void MenuItem::update(float dt)
     {
-        interactable.update(width, height, x, y);
+        interactable.update(dt, width, height, x, y);
     }
 
     bool MenuItem::is_selected() const
