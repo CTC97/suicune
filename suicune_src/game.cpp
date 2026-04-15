@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "scene.hpp"
+#include "util.hpp"
 
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
@@ -71,6 +72,25 @@ namespace suicune
         return running && !WindowShouldClose();
     }
 
+    void Game::tick(float dt)
+    {
+        begin_frame();
+
+        if (current_scene)
+        {
+            current_scene->update(dt);
+            current_scene->draw();
+        }
+
+        if (pending_scene)
+            current_scene = std::move(pending_scene);
+
+        if (current_scene)
+            current_scene->cleanup_eoframe();
+
+        end_frame();
+    }
+
     void Game::run()
     {
 #if defined(PLATFORM_WEB)
@@ -90,43 +110,13 @@ namespace suicune
                 return;
             }
 
-            float dt = GetFrameTime();
-
-            g->begin_frame();
-
-            if (g->current_scene)
-            {
-                g->current_scene->update(dt);
-                g->current_scene->draw();
-            }
-
-            if (g->pending_scene)
-                g->current_scene = std::move(g->pending_scene);
-
-            current_scene->cleanup_eoframe();
-            g->end_frame();
+            g->tick(GetFrameTime());
         };
 
         emscripten_set_main_loop(frame, 0, 1);
 #else
         while (is_running())
-        {
-            float dt = GetFrameTime();
-
-            begin_frame();
-
-            if (current_scene)
-            {
-                current_scene->update(dt);
-                current_scene->draw();
-            }
-
-            if (pending_scene)
-                current_scene = std::move(pending_scene);
-
-            current_scene->cleanup_eoframe();
-            end_frame();
-        }
+            tick(GetFrameTime());
 
         running = false;
 #endif
@@ -144,15 +134,7 @@ namespace suicune
         ClearBackground(BLACK);
 
         if (global_shader)
-        {
-            float t = GetTime();
-            int timeLoc = GetShaderLocation(*global_shader, "time");
-            SetShaderValue(*global_shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
-            Vector2 res = {(float)get_window_width(), (float)get_window_height()};
-            int resLoc = GetShaderLocation(*global_shader, "resolution");
-            SetShaderValue(*global_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
-            BeginShaderMode(*global_shader);
-        }
+            begin_timed_shader_mode(*global_shader, (float)get_window_width(), (float)get_window_height());
         Color custom_color = {180, 203, 240, 255};
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), custom_color);
     }

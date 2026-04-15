@@ -98,13 +98,13 @@ namespace suicune
             return tilemap.is_tile_free(tx, ty);
         };
 
-        // checks the 4 corners for the player's 16x16 at a candidate position
+        // checks the 4 corners of the player's sprite footprint (width x height) at a candidate position
         auto can_move_to = [&](int cx, int cy)
         {
             int left = cx;
-            int right = cx + 16 - 1;
+            int right = cx + width - 1;
             int top = cy;
-            int bottom = cy + 16 - 1;
+            int bottom = cy + height - 1;
 
             return is_free_pixel(left, top) &&
                    is_free_pixel(right, top) &&

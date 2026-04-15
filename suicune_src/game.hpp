@@ -68,6 +68,7 @@ namespace suicune
 
         DialogManager dialog_manager;
 
+        void tick(float dt);
         void begin_frame();
         void end_frame();
 

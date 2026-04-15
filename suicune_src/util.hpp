@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdio>
 #include <functional>
+#include "raylib.h"
 
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION 330
@@ -192,6 +193,19 @@ namespace suicune
         float strength = 0.0f;
         bool is_alive = false;
     };
+
+    // <----------------- Shader Helpers ----------------->
+    // Sets time/resolution uniforms and begins shader mode. Caller must EndShaderMode() when done.
+    inline void begin_timed_shader_mode(Shader &shader, float width, float height)
+    {
+        float t = GetTime();
+        int timeLoc = GetShaderLocation(shader, "time");
+        SetShaderValue(shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
+        Vector2 res = {width, height};
+        int resLoc = GetShaderLocation(shader, "resolution");
+        SetShaderValue(shader, resLoc, &res, SHADER_UNIFORM_VEC2);
+        BeginShaderMode(shader);
+    }
 
     // <----------------- File Loading ----------------->
     inline void set_cwd_to_app_resources_if_present()

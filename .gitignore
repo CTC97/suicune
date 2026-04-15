@@ -2,3 +2,4 @@ build
 dist
 .vscode/
 .DS_Store
+todo_list.md
