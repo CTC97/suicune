@@ -1,4 +1,5 @@
 #include "animator.hpp"
+#include "util.hpp"
 
 namespace suicune
 {
@@ -77,18 +78,8 @@ namespace suicune
 
         int frame_index = anim->frame_indices[current_frame_index];
 
-        sheet->draw_sprite(frame_index, x, y);
-
         if (shader)
-        {
-            float t = GetTime();
-            int timeLoc = GetShaderLocation(*shader, "time");
-            SetShaderValue(*shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
-            Vector2 res = {(float)sheet->get_frame_width(), (float)sheet->get_frame_height()};
-            int resLoc = GetShaderLocation(*shader, "resolution");
-            SetShaderValue(*shader, resLoc, &res, SHADER_UNIFORM_VEC2);
-            BeginShaderMode(*shader);
-        }
+            begin_timed_shader_mode(*shader, (float)sheet->get_frame_width(), (float)sheet->get_frame_height());
 
         sheet->draw_sprite(frame_index, x, y);
 

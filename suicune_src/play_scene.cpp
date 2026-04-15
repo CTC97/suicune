@@ -183,6 +183,22 @@ namespace suicune
             return;
 
         camera.target = Vector2Add(entity->get_position(), Vector2{entity->get_width() / 2.0f, entity->get_height() / 2.0f});
+
+        // Clamp camera so the viewport never extends beyond the tilemap bounds.
+        if (tilemap && camera.zoom > 0.0f)
+        {
+            float world_w = (float)(tilemap->get_map_width() * tilemap->get_tile_size());
+            float world_h = (float)(tilemap->get_map_height() * tilemap->get_tile_size());
+
+            // Half the visible world area (camera.offset is already screen centre)
+            float half_view_w = camera.offset.x / camera.zoom;
+            float half_view_h = camera.offset.y / camera.zoom;
+
+            if (world_w > 2.0f * half_view_w)
+                camera.target.x = clampf(camera.target.x, half_view_w, world_w - half_view_w);
+            if (world_h > 2.0f * half_view_h)
+                camera.target.y = clampf(camera.target.y, half_view_h, world_h - half_view_h);
+        }
     }
 
     void PlayScene::center_on_player()

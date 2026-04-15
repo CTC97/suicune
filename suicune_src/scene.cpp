@@ -1,6 +1,5 @@
 #include "scene.hpp"
 #include "game.hpp"
-#include <iostream>
 
 namespace suicune
 {
@@ -14,7 +13,7 @@ namespace suicune
 
     Scene::~Scene()
     {
-        printf("Unloading scene resources...\n");
+        TraceLog(LOG_INFO, "Unloading scene resources...");
         unload_textures();
         unload_spritesheets();
         unload_shaders();
@@ -61,15 +60,7 @@ namespace suicune
     {
 
         if (scene_shader)
-        {
-            float t = GetTime();
-            int timeLoc = GetShaderLocation(*scene_shader, "time");
-            SetShaderValue(*scene_shader, timeLoc, &t, SHADER_UNIFORM_FLOAT);
-            Vector2 res = {(float)game.get_window_width(), (float)game.get_window_height()};
-            int resLoc = GetShaderLocation(*scene_shader, "resolution");
-            SetShaderValue(*scene_shader, resLoc, &res, SHADER_UNIFORM_VEC2);
-            BeginShaderMode(*scene_shader);
-        }
+            begin_timed_shader_mode(*scene_shader, (float)game.get_window_width(), (float)game.get_window_height());
 
         Camera2D &camera = get_camera();
         BeginMode2D(camera);

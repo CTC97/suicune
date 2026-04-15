@@ -73,6 +73,7 @@ namespace suicune
 
         std::string visible_text;
         int reveal_char_index = 0;
+        int selected_option_index = 0;
 
         void step_dialog();
 

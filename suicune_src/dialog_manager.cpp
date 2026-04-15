@@ -22,8 +22,13 @@ namespace suicune
 
     void DialogManager::set_font(const std::string &font_path, int size, float spacing)
     {
-        // Unload the previous font if it was custom
         Font font = LoadFontEx(font_path.c_str(), size, nullptr, 0);
+
+        if (font.texture.id == 0)
+        {
+            TraceLog(LOG_WARNING, "DialogManager: failed to load font '%s', keeping current font", font_path.c_str());
+            return;
+        }
 
         if (dialog_font.texture.id != GetFontDefault().texture.id)
         {
@@ -65,6 +70,7 @@ namespace suicune
         dialog_nodes = nodes;
         current_node_index = 0;
         active = true;
+        selected_option_index = 0;
 
         build_pages_for_current_node();
 
@@ -97,37 +103,49 @@ namespace suicune
     // Word-wrap text into lines. Preserves explicit '\n' as forced line breaks.
     std::vector<std::string> DialogManager::wrap_text_to_lines(const std::string &text, float max_width) const
     {
-        std::vector<std::string> lines;
-        std::string current_line;
-        std::istringstream words(text);
-        std::string word;
+        std::vector<std::string> all_lines;
 
-        while (words >> word)
+        // Split on explicit newlines first, then word-wrap each resulting segment.
+        size_t segment_start = 0;
+        for (size_t i = 0; i <= text.size(); ++i)
         {
-            std::string test_line = current_line.empty() ? word : current_line + " " + word;
-
-            // Use MeasureTextEx to calculate the width of the text
-            float text_width = MeasureTextEx(dialog_font, test_line.c_str(), static_cast<float>(font_size), font_spacing).x;
-
-            if (text_width > max_width)
+            if (i == text.size() || text[i] == '\n')
             {
-                // Add the current line to the list and start a new line
-                lines.push_back(current_line);
-                current_line = word;
-            }
-            else
-            {
-                current_line = test_line;
+                std::string segment = text.substr(segment_start, i - segment_start);
+                segment_start = i + 1;
+
+                std::string current_line;
+                std::istringstream words(segment);
+                std::string word;
+
+                while (words >> word)
+                {
+                    std::string test_line = current_line.empty() ? word : current_line + " " + word;
+                    float text_width = MeasureTextEx(dialog_font, test_line.c_str(), static_cast<float>(font_size), font_spacing).x;
+
+                    if (text_width > max_width)
+                    {
+                        all_lines.push_back(current_line);
+                        current_line = word;
+                    }
+                    else
+                    {
+                        current_line = test_line;
+                    }
+                }
+
+                all_lines.push_back(current_line);
             }
         }
 
-        // Add the last line
-        if (!current_line.empty())
-        {
-            lines.push_back(current_line);
-        }
+        // Strip trailing empty lines added by a trailing '\n'.
+        while (all_lines.size() > 1 && all_lines.back().empty())
+            all_lines.pop_back();
 
-        return lines;
+        if (all_lines.empty())
+            all_lines.push_back("");
+
+        return all_lines;
     }
     // Groups N lines per page and joins them with '\n'
     std::vector<std::string> DialogManager::split_lines_into_pages(const std::vector<std::string> &lines, int max_lines) const
@@ -197,7 +215,19 @@ namespace suicune
             return;
         }
 
-        // Page is fully revealed: Enter advances page or node
+        // Page is fully revealed
+        const bool on_last_page = (current_page_index == (int)pages.size() - 1);
+        const DialogNode &node = dialog_nodes[current_node_index];
+
+        // Navigate options with up/down when on the last page
+        if (on_last_page && !node.options.empty())
+        {
+            if (IsKeyPressed(KEY_UP))
+                selected_option_index = (selected_option_index - 1 + (int)node.options.size()) % (int)node.options.size();
+            if (IsKeyPressed(KEY_DOWN))
+                selected_option_index = (selected_option_index + 1) % (int)node.options.size();
+        }
+
         if (IsKeyPressed(KEY_ENTER))
         {
             // If more pages in this same node, go next page.
@@ -210,7 +240,7 @@ namespace suicune
                 return;
             }
 
-            // Otherwise, advance to next node
+            // Otherwise, advance to next node (uses selected_option_index if options present)
             step_dialog();
         }
     }
@@ -226,16 +256,17 @@ namespace suicune
         }
         else
         {
-            throw std::runtime_error("Dialog box texture missing.");
+            TraceLog(LOG_WARNING, "DialogManager::draw: dialog box texture missing, skipping draw");
+            return;
         }
 
         DrawTextEx(
-            dialog_font,                                        // Use the custom font
-            visible_text.c_str(),                               // The text to draw
-            {base_x + text_padding_x, base_y + text_padding_y}, // Position
-            static_cast<float>(font_size),                      // Font size
-            font_spacing,                                       // Spacing between characters
-            WHITE                                               // Text color
+            dialog_font,
+            visible_text.c_str(),
+            {base_x + text_padding_x, base_y + text_padding_y},
+            static_cast<float>(font_size),
+            font_spacing,
+            WHITE
         );
 
         if (current_page_index < static_cast<int>(pages.size()) - 1)
@@ -243,29 +274,30 @@ namespace suicune
             // add animations for more pages indicator
         }
 
-        // Options: only show when node is on its final page and fully revealed
-        // const DialogNode &node = dialog_nodes[current_node_index];
-        // const bool on_last_page = (current_page_index == (int)pages.size() - 1);
+        // Options: show when on the final page and fully revealed
+        const bool on_last_page = (current_page_index == (int)pages.size() - 1);
+        if (on_last_page && current_node_index >= 0 && current_node_index < (int)dialog_nodes.size())
+        {
+            const DialogNode &node = dialog_nodes[current_node_index];
+            const std::string &page_text = pages[current_page_index];
+            const bool page_fully_revealed = (reveal_char_index >= (int)page_text.size());
 
-        // if (!node.options.empty() && on_last_page)
-        // {
-        //     const std::string &page_text = pages[current_page_index];
-        //     const bool page_fully_revealed = (reveal_char_index >= (int)page_text.size());
-
-        //     if (page_fully_revealed)
-        //     {
-        //         int y_offset = (int)(text_padding_y + (compute_max_lines_per_page() + 1) * line_height());
-        //         for (const auto &option : node.options)
-        //         {
-        //             DrawText(option.label.c_str(),
-        //                      (int)(base_x + text_padding_x),
-        //                      (int)(base_y + y_offset),
-        //                      font_size,
-        //                      GRAY);
-        //             y_offset += (int)line_height();
-        //         }
-        //     }
-        // }
+            if (!node.options.empty() && page_fully_revealed)
+            {
+                float y_offset = text_padding_y + (compute_max_lines_per_page() + 1) * line_height();
+                for (int i = 0; i < (int)node.options.size(); i++)
+                {
+                    Color option_color = (i == selected_option_index) ? WHITE : GRAY;
+                    DrawTextEx(dialog_font,
+                               node.options[i].label.c_str(),
+                               {base_x + text_padding_x, base_y + y_offset},
+                               static_cast<float>(font_size),
+                               font_spacing,
+                               option_color);
+                    y_offset += line_height();
+                }
+            }
+        }
     }
 
     bool DialogManager::is_active() const
@@ -285,8 +317,8 @@ namespace suicune
 
         if (!current_node.options.empty())
         {
-            // placeholder selection
-            current_node_index = current_node.options[0].next_node_index;
+            current_node_index = current_node.options[selected_option_index].next_node_index;
+            selected_option_index = 0;
         }
         else
         {

@@ -96,7 +96,8 @@ namespace suicune
         Direction current_direction;
         bool stop_movement = false;
 
-        DialogManager *dm = nullptr; // pointer to the shared DialogManager
+        // Non-owning observer. Lifetime guaranteed: Game owns DialogManager and outlives all scenes/entities.
+        DialogManager *dm = nullptr;
         std::vector<DialogNode> dialog_sequence;
 
         std::function<void()> interaction_callback;
