@@ -1,4 +1,4 @@
-## <img width="64" height="64" alt="suicune" src="https://github.com/user-attachments/assets/c538753c-3c3d-455a-a399-9c908e29326c" /> suicune [an approachable c++ game engine] <img width="64" height="64" alt="suicune" src="https://github.com/user-attachments/assets/c538753c-3c3d-455a-a399-9c908e29326c" />
+## <img width="64" height="64" alt="suicune" src="https://github.com/user-attachments/assets/c538753c-3c3d-455a-a399-9c908e29326c" /> suicune [an approachable c++ game engine]
 
 ### Ethos:
 suicune is designed to make spinning up a c++ game quick and intuitive, prioritizing simple syntax but allowing for heavy customization.  
