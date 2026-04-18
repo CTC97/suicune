@@ -32,6 +32,23 @@ make
 build/suicune
 ```
 
+### Exporting a project:
+
+**macOS** — packages your project as a `.app` bundle:
+```
+suicune_dist --mac [name]
+```
+Outputs to `dist/<name>.app`. Name defaults to `dist` if omitted.
+
+**Web** — compiles to WebAssembly using Emscripten:
+```
+suicune_dist --web
+```
+Outputs to `dist/web/`. Requires [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) (`em++`) to be installed and activated. Once built, serve locally with:
+```
+cd dist/web && python3 -m http.server 8080
+```
+
 ---
 
 ### Repository Directory:
