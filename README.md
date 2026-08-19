@@ -1,72 +1,12 @@
-## <img width="75" height="75" alt="EfLr7czXYAE7K6Y (1)" src="https://github.com/user-attachments/assets/991634d0-4826-40be-93bc-3c96eadc2b29" /> suicune [an approachable c++ game engine]
+Hi,
 
-### Ethos:
-suicune is designed to make spinning up a c++ game quick and intuitive, prioritizing simple syntax but allowing for heavy customization.  
+I hope you're doing well.
 
-### Installation:
-```
-brew tap ctc97/suicune-tap
-brew install suicune
-```
+I'd like to schedule a brief call to discuss a potential project collaboration. If you're interested, please feel free to book a time that works for you using the link below:
 
-### Creating a project:
-Running the following command:
-```
-suicune_create myproject
-```
-Will create the following tree:
-```
-myproject
-├── Makefile
-├── main.cpp
-├── res
-├── src
-│   ├── main_scene.cpp
-│   └── main_scene.hpp
-└── suicune_src
-    ├── ...
-```
-You can then build your project by running:
-```
-make
-build/suicune
-```
+Book a meeting: https://calendly.com/charljustineompoc/interview
 
-### Exporting a project:
+I look forward to connecting with you.
 
-**macOS** — packages your project as a `.app` bundle:
-```
-suicune_dist --mac [name]
-```
-Outputs to `dist/<name>.app`. Name defaults to `dist` if omitted.
-
-**Web** — compiles to WebAssembly using Emscripten:
-```
-suicune_dist --web
-```
-Outputs to `dist/web/`. Requires [Emscripten](https://emscripten.org/docs/getting_started/downloads.html) (`em++`) to be installed and activated. Once built, serve locally with:
-```
-cd dist/web && python3 -m http.server 8080
-```
-
----
-
-### Repository Directory:
-
-`example`: A working example of a suicune project with most existing functionalities implemented.
-
-`scripts`: bash scripts used for suicune project creation and management.
-
-`suicune_src`: the suicune engine source code, detailed below.
-- `dialog_manager`: responsible for displaying in-game dialog, can be customized.
-- `entity`: basic container for overworld entities
-- `game`: a basic game container, manages `scenes`
-- `menu_item`: an individual menu option
-- `menu_scene`: a `scene` extension, contains `menu_items`
-- `play_scene`: a `scene` extension that manages a player
-- `player`: a basic player container, can/should be extended
-- `scene`: a basic scene container, managed by a `game`
-- `spritesheet`: manages images and animations
-- `tilemap`: a basic tilemap container
-
-
+Best regards,
+Charl
